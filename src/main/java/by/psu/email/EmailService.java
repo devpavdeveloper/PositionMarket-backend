@@ -101,9 +101,9 @@ public class EmailService {
                 while((line = br.readLine())!=null){
                     htmlTemplate.append(line);
                 }
-                parsedResult = parsedResult.replace("${user}", order.getFullName() + order.getLastName());
+                parsedResult = parsedResult.replace("${user}", order.getFirstName() + order.getLastName());
                 parsedResult = parsedResult.replace("${order_date}",
-                        Util.convertDateToReadableLocalFormat(order.getDate()));
+                        Util.convertDateToReadableLocalFormat(order.getDate(), Util.dateFormatTypes.DATE_ONLY));
                 htmlTemplate = new StringBuilder();
                 htmlTemplate.append(parsedResult);
                 String mainTable = HtmlBuilder.createOrderTable(order);
