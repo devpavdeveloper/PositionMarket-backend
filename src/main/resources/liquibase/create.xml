@@ -5,84 +5,163 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                              http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="20171207_time20_04" author="devpav" runOnChange="true">
+    <changeSet id="20180607_time11_59" author="devpav" runOnChange="true">
         <comment>Создание таблиц для хранения данных</comment>
         <sql>
-            DROP TABLE IF EXISTS roles CASCADE;
-            DROP TABLE IF EXISTS users CASCADE;
-            DROP TABLE IF EXISTS user_role CASCADE;
-            DROP TABLE IF EXISTS attraction CASCADE;
-            DROP TABLE IF EXISTS type_attraction CASCADE;
-            DROP TABLE IF EXISTS attraction_to_type_attraction CASCADE;
-            DROP TABLE IF EXISTS verification_tokens CASCADE;
-
-            CREATE TABLE roles (
-            id    SERIAL PRIMARY KEY,
-            title VARCHAR(100)
-            );
-
-            CREATE TABLE users (
-            id                       SERIAL PRIMARY KEY,
-            login                    VARCHAR(100) NOT NULL,
-            password                 VARCHAR(255) NOT NULL,
-            email                    VARCHAR(255) NULL,
-            phone                    VARCHAR(255) NULL,
-            enabled                  BOOLEAN      NOT NULL,
-            last_password_reset_date TIMESTAMP    NOT NULL,
-            discount                 INTEGER      NOT NULL DEFAULT 10
-            );
-
-            CREATE TABLE user_role (
-            id_user BIGINT REFERENCES users (id) ON DELETE CASCADE,
-            id_role BIGINT REFERENCES roles (id) ON DELETE CASCADE
-            );
+            create table if not exists attractions
+            (
+            id uuid not null
+            constraint attractions_pkey
+            primary key,
+            image varchar(255),
+            link_source varchar(255),
+            title varchar(255)
+            )
+            ;
 
 
-            CREATE TABLE attraction (
-            id SERIAL PRIMARY KEY,
-            title_attraction            TEXT    NOT NULL,
-            attraction_information_link TEXT    NULL,
-            side_image                  TEXT    NULL,
-            pickup_service_price        numeric NULL,
-            delivery_service_price      numeric NULL,
-            installation_service_price  numeric NULL,
-            full_service_price          numeric NULL,
-            UNIQUE (attraction_information_link)
-            );
+            create table if not exists roles
+            (
+            id uuid not null
+            constraint roles_pkey
+            primary key,
+            title varchar(50)
+            )
+            ;
 
-            CREATE TABLE type_attraction (
-            id       SERIAL PRIMARY KEY,
-            ru_title VARCHAR(150),
-            en_title VARCHAR(150),
-            UNIQUE (ru_title)
-            );
-
-            CREATE TABLE tags (
-            id       SERIAL PRIMARY KEY,
-            ru_title VARCHAR(150),
-            en_title VARCHAR(150),
-            UNIQUE (ru_title)
-            );
-
-            CREATE TABLE attraction_to_type_attraction (
-            id_attraction      BIGINT NOT NULL REFERENCES attraction (id) ON DELETE CASCADE,
-            id_attraction_type BIGINT NOT NULL REFERENCES type_attraction (id) ON DELETE CASCADE,
-            UNIQUE (id_attraction, id_attraction_type)
-            );
-
-            CREATE TABLE attraction_to_tag (
-            id_attraction      BIGINT NOT NULL REFERENCES attraction (id) ON DELETE CASCADE,
-            id_tag BIGINT NOT NULL REFERENCES tags (id) ON DELETE CASCADE,
-            UNIQUE (id_attraction, id_tag)
-            );
+            create table if not exists translate
+            (
+            id uuid not null
+            constraint translate_pkey
+            primary key
+            )
+            ;
 
 
-            CREATE TABLE verification_tokens (
-            id              SERIAL PRIMARY KEY,
-            token           TEXT      NOT NULL,
-            expiration_date TIMESTAMP NOT NULL,
-            user_id         BIGINT REFERENCES users (id) ON DELETE CASCADE
-            );
+            create table if not exists string_values
+            (
+            id uuid not null
+            constraint string_values_pkey
+            primary key,
+            language uuid not null,
+            value varchar(255) not null,
+            translate_id uuid
+            constraint fksnt5nmoqr6j2mjeu7ae61bc5p
+            references translate
+            )
+            ;
+
+            create table if not exists tags
+            (
+            id uuid not null
+            constraint tags_pkey
+            primary key,
+            title uuid not null
+            constraint fkcf1v0sjodvyv3kkoh42hkfxw3
+            references translate
+            )
+            ;
+
+            create table if not exists attraction_tag
+            (
+            attraction uuid not null
+            constraint fkju79re617ev0f1qsahg6gypyo
+            references attractions,
+            tag uuid not null
+            constraint fk8nsttgdubm36fkutru96bp5po
+            references tags
+            )
+            ;
+
+            create table if not exists type_service
+            (
+            id uuid not null
+            constraint type_service_pkey
+            primary key,
+            title uuid not null
+            constraint fki23eflj82kllsa94otgjvaqk
+            references translate
+            )
+            ;
+
+
+            create table if not exists products
+            (
+            id uuid not null
+            constraint products_pkey
+            primary key,
+            price numeric(19,2),
+            id_service uuid not null
+            constraint fkb0i5sdu7n6vurqs54vqxyic2v
+            references type_service,
+            attraction uuid
+            constraint fk7lqagw1qny7cikooc914cmi4m
+            references attractions
+            )
+            ;
+
+            create table if not exists types
+            (
+            id uuid not null
+            constraint types_pkey
+            primary key,
+            title uuid not null
+            constraint fk1cq1rf2wy2khmdaceyywkvrqb
+            references translate
+            )
+            ;
+
+
+            create table if not exists attraction_type
+            (
+            attraction uuid not null
+            constraint fkioass2blokum8layldxs8agee
+            references attractions,
+            type uuid not null
+            constraint fknnp7kkvsdt4v83xwdia3ojwub
+            references types
+            )
+            ;
+
+            create table if not exists users
+            (
+            id uuid not null
+            constraint users_pkey
+            primary key,
+            email varchar(255) not null,
+            enabled boolean not null,
+            last_password_reset_date timestamp,
+            login varchar(50) not null
+            constraint uk_ow0gan20590jrb00upg3va2fn
+            unique,
+            password varchar(100) not null,
+            phone varchar(255)
+            )
+            ;
+
+            create table if not exists user_role
+            (
+            id_user uuid not null
+            constraint fkr53t650tbjk5yipcm228wf1nc
+            references users,
+            id_role uuid not null
+            constraint fk2yqlxhjhgilevh7qvt2ve6udh
+            references roles
+            )
+            ;
+
+            create table if not exists verification_tokens
+            (
+            id bigserial not null
+            constraint verification_tokens_pkey
+            primary key,
+            expiration_date timestamp,
+            token varchar(255),
+            user_id uuid
+            constraint fk54y8mqsnq1rtyf581sfmrbp4f
+            references users
+            )
+            ;
         </sql>
     </changeSet>
 </databaseChangeLog>

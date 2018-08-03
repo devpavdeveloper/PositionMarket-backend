@@ -1,0 +1,11 @@
+spring:
+  #Profile setting
+  profiles:
+    active: local
+
+  #DataSource settings
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/project-01
+    username: artteam
+    password: artteam

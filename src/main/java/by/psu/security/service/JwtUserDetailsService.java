@@ -1,8 +1,8 @@
 package by.psu.security.service;
 
+import by.psu.exceptions.authorization.UserNotFoundException;
 import by.psu.security.JwtUserFactory;
 import by.psu.security.model.User;
-import by.psu.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +26,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         User user = userRepository.findByLogin(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+            throw new UserNotFoundException();
         } else {
             return JwtUserFactory.create(user);
         }

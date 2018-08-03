@@ -1,0 +1,57 @@
+server:
+  port: 8081
+
+spring:
+
+  #JPA settings
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        show_sql: true
+    hibernate:
+      ddl-auto: update
+
+  main:
+    banner-mode: log
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  #Liquibase settings
+  liquibase:
+    change-log: classpath:/liquibase/main.xml
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    enabled: true
+
+  #Mail settings
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: minskjavadeveloper@gmail.com
+    password: nauinuyssldqicwm
+    port: 587
+    protocol: smtp
+    test-connection: false
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+jwt:
+  header: Authorization
+  secret: attractionprojectsumoby
+  expiration: 604800
+  route:
+    authentication:
+      path: /auth/login
+      refresh: /refresh

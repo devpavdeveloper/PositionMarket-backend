@@ -6,7 +6,6 @@ import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -65,7 +64,7 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(clock.now());
     }
 
-    private Boolean isCreatedAfteLastPasswordReset(Date created, Date lastPasswordReset) {
+    private Boolean isCreatedAfterLastPasswordReset(Date created, Date lastPasswordReset) {
         return (lastPasswordReset != null && (created.after(lastPasswordReset)));
     }
 
@@ -95,7 +94,7 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getIssuedAtDateFromToken(token);
-        return !isCreatedAfteLastPasswordReset(created, lastPasswordReset)
+        return !isCreatedAfterLastPasswordReset(created, lastPasswordReset)
             && (!isTokenExpired(token) || ignoreTokenExpiration(token));
     }
 
@@ -121,7 +120,7 @@ public class JwtTokenUtil implements Serializable {
         return (
             username.equals(user.getUsername())
                 && !isTokenExpired(token)
-                && isCreatedAfteLastPasswordReset(created, user.getLastPasswordResetDate())
+                && isCreatedAfterLastPasswordReset(created, user.getLastPasswordResetDate())
         );
     }
 

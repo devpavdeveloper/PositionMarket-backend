@@ -1,64 +1,50 @@
 package by.psu.controllers;
 
-import by.psu.model.Attraction;
-import by.psu.service.AttractionService;
+import by.psu.service.dto.AttractionDTO;
+import by.psu.service.facade.AttractionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/attractions")
 public class AttractionController {
 
-    private final AttractionService attractionService;
+    private final AttractionFacade attractionFacade;
 
     @Autowired
-    public AttractionController(AttractionService attractionService) {
-        this.attractionService = attractionService;
+    public AttractionController(AttractionFacade attractionFacade) {
+        this.attractionFacade = attractionFacade;
     }
+
 
     @GetMapping()
-    public ResponseEntity getAttractions(){
-        return ResponseEntity.ok(attractionService.findAll());
+    public ResponseEntity getAll(){
+        return ResponseEntity.ok(attractionFacade.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getAttraction(@PathVariable("id") Long id){
-        return ResponseEntity.ok(attractionService.findById(id));
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity getAttractionByTypes(@RequestParam(value = "type", required = false) Long[] indexsAttractions,
-                                               @RequestParam(value = "tag", required = false) Long[] indexsTags,
-                                               @RequestParam(defaultValue = "0",value = "priceField", required = false) Integer priceField,
-                                               @RequestParam(defaultValue = "0",value = "direction", required = false) Integer direction){
-        return ResponseEntity.ok(attractionService.findAllFilter(indexsAttractions, indexsTags, priceField, direction));
+    @GetMapping("/{uuid}")
+    public ResponseEntity getOne(@PathVariable UUID uuid){
+        return ResponseEntity.ok(attractionFacade.getOne(uuid));
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Attraction> createAttraction(@RequestBody Attraction attraction){
-        return ResponseEntity.ok(attractionService.saveOrFind(attraction));
+    public ResponseEntity<AttractionDTO> create(@RequestBody AttractionDTO attraction){
+        return ResponseEntity.ok(attractionFacade.save(attraction));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity updateAttraction(@RequestBody Attraction attraction, @PathVariable("id") Long id){
-        return ResponseEntity.ok(attractionService.update(attraction, id));
+    @PutMapping
+    public ResponseEntity<AttractionDTO> update(@RequestBody AttractionDTO attraction){
+        return ResponseEntity.ok(attractionFacade.update(attraction));
     }
 
-    @PostMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity createAllAttraction(@RequestBody Attraction[] attraction){
-        return ResponseEntity.ok(attractionService.saveOrFind(attraction));
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity deleteAttraction(@PathVariable("id") Long id){
-        attractionService.remove(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity delete(@PathVariable UUID uuid) {
+        attractionFacade.delete(uuid);
         return ResponseEntity.ok().build();
     }
+
 }

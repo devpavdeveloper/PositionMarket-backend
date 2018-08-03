@@ -1,6 +1,7 @@
 package by.psu.security.model;
 
 import by.psu.model.Basic;
+import by.psu.model.postgres.BasicEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 @Getter @Setter
-public class Role extends Basic {
+public class Role extends BasicEntity {
 
     @Column(name = "title", length = 50)
     private String title;
