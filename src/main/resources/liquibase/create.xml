@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="20171207_time20_04" author="devpav" runOnChange="true">
+        <comment>Создание таблиц для хранения данных</comment>
+        <sql>
+            DROP TABLE IF EXISTS roles CASCADE;
+            DROP TABLE IF EXISTS users CASCADE;
+            DROP TABLE IF EXISTS user_role CASCADE;
+            DROP TABLE IF EXISTS attraction CASCADE;
+            DROP TABLE IF EXISTS type_attraction CASCADE;
+            DROP TABLE IF EXISTS attraction_to_type_attraction CASCADE;
+            DROP TABLE IF EXISTS verification_tokens CASCADE;
+
+            CREATE TABLE roles (
+            id    SERIAL PRIMARY KEY,
+            title VARCHAR(100)
+            );
+
+            CREATE TABLE users (
+            id                       SERIAL PRIMARY KEY,
+            login                    VARCHAR(100) NOT NULL,
+            password                 VARCHAR(255) NOT NULL,
+            email                    VARCHAR(255) NULL,
+            phone                    VARCHAR(255) NULL,
+            enabled                  BOOLEAN      NOT NULL,
+            last_password_reset_date TIMESTAMP    NOT NULL,
+            discount                 INTEGER      NOT NULL DEFAULT 10
+            );
+
+            CREATE TABLE user_role (
+            id_user BIGINT REFERENCES users (id) ON DELETE CASCADE,
+            id_role BIGINT REFERENCES roles (id) ON DELETE CASCADE
+            );
+
+
+            CREATE TABLE attraction (
+            id SERIAL PRIMARY KEY,
+            title_attraction            TEXT    NOT NULL,
+            attraction_information_link TEXT    NULL,
+            side_image                  TEXT    NULL,
+            pickup_service_price        numeric NULL,
+            delivery_service_price      numeric NULL,
+            installation_service_price  numeric NULL,
+            full_service_price          numeric NULL,
+            UNIQUE (attraction_information_link)
+            );
+
+            CREATE TABLE type_attraction (
+            id       SERIAL PRIMARY KEY,
+            ru_title VARCHAR(150),
+            en_title VARCHAR(150),
+            UNIQUE (ru_title)
+            );
+
+            CREATE TABLE tags (
+            id       SERIAL PRIMARY KEY,
+            ru_title VARCHAR(150),
+            en_title VARCHAR(150),
+            UNIQUE (ru_title)
+            );
+
+            CREATE TABLE attraction_to_type_attraction (
+            id_attraction      BIGINT NOT NULL REFERENCES attraction (id) ON DELETE CASCADE,
+            id_attraction_type BIGINT NOT NULL REFERENCES type_attraction (id) ON DELETE CASCADE,
+            UNIQUE (id_attraction, id_attraction_type)
+            );
+
+            CREATE TABLE attraction_to_tag (
+            id_attraction      BIGINT NOT NULL REFERENCES attraction (id) ON DELETE CASCADE,
+            id_tag BIGINT NOT NULL REFERENCES tags (id) ON DELETE CASCADE,
+            UNIQUE (id_attraction, id_tag)
+            );
+
+
+            CREATE TABLE verification_tokens (
+            id              SERIAL PRIMARY KEY,
+            token           TEXT      NOT NULL,
+            expiration_date TIMESTAMP NOT NULL,
+            user_id         BIGINT REFERENCES users (id) ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
