@@ -95,9 +95,9 @@ public class UserController {
         Mail mail = new Mail();
         mail.setTo("jsdeveloper@yahoo.com");
         mail.setFrom("minskjavadeveloper@gmail.com");
-        mail.setSubject("Заказ на " + order.toString());
-        mail.setContent(order.toString());
-        emailService.sendSimpleMessage(mail);
+        mail.setSubject("Заказ на Sumo.by");
+        mail.setContent(emailService.createOrderEmail(order));
+        emailService.sendHtmlMessage(mail);
         return ResponseEntity.ok().build();
     }
 }
