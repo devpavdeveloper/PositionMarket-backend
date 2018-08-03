@@ -1,74 +1,72 @@
 package by.psu.reporting;
 
+import by.psu.model.Order;
+
+import java.util.Iterator;
+
 public class HtmlBuilder {
-    public enum TABLE_TYPES{MAIN_TABLE, TOTALS_TABLE};
-    private static String[] footerHeaders = {"Стоимость до скидки","Скидка","К оплате"};
-    public static String createOrderTable(TABLE_TYPES tt){
+    public static String createOrderTable(Order order){
         StringBuilder sb = new StringBuilder();
-        /*switch(tt){
-            case MAIN_TABLE:{
-                Set<Product> orderedProducts = orderIssue.getProducts();
-                sb.append("<tbody>");
-                for(Product product:orderedProducts){
-                    sb.append("<tr>");
-                        sb.append("<td>");
-                        sb.append(product.getAttraction().getTitle());
-                        sb.append("</td");
-                        sb.append("<td>");
-                        sb.append(product.getTypePrice().getTitle());
-                        sb.append("</td");
-                        sb.append("<th>");
-                        sb.append(product.getPrice());
-                        sb.append("</th");
-                    sb.append("</tr>");
-                }
-                sb.append("</tbody>");
-                break;
-            }
-            case TOTALS_TABLE:{
-                sb.append("<tfoot>");
-                for(int x = 0;x<3;x++){
-                    sb.append("<tr>");
+        sb.append("<tbody>");
+        sb.append("<tr>");
 
-                    switch(x){
-                        case 0:{
-                            sb.append("<th colspan=\"2\">");
-                            sb.append(footerHeaders[x]);
-                            sb.append("</th");
-                            sb.append("<th style=\"background-color: #2E86C1; color: white;\"\">");
-                            sb.append(6000);
-                            sb.append("</th");
-                            break;
-                        }
-                        case 1:{
-                            sb.append("<th>");
-                            sb.append(footerHeaders[x]);
-                            sb.append("</th");
-                            sb.append("<th>");
-                            sb.append(orderIssue.getUser().getDiscount()+"%");
-                            sb.append("</th");
-                            sb.append("<th style=\"background-color: #E74C3C; color: white;\"\">");
-                            sb.append(600);
-                            sb.append("</th");
-                            break;
-                        }
-                        case 2:{
-                            sb.append("<th colspan=\"2\">");
-                            sb.append(footerHeaders[x]);
-                            sb.append("</th");
-                            sb.append("<th style=\"background-color: #2ECC71; color: white;\"\">");
-                            sb.append(5400);
-                            sb.append("</th");
+        sb.append("<td>");
+        sb.append(order.getFullName() + order.getLastName());
+        sb.append("</td>");
 
-                            break;
-                        }
-                    }
-                    sb.append("</tr>");
-                }
-                sb.append("</tfoot>");
-                break;
+        sb.append("<td>");
+        sb.append(order.getCompany());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getAddress());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getPostCode());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getPhoneNumber());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getEmail());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getComments());
+        sb.append("</td>");
+
+        sb.append("<td>");
+        Iterator<String> iter = null;
+        for(iter = order.getAttractions();iter.hasNext();){
+            sb.append(iter.next());
+            if(iter.hasNext()){
+                sb.append(", ");
             }
-        }*/
+        }
+        sb.append("</td>");
+
+        sb.append("<td>");
+        sb.append(order.getTotal());
+        sb.append("</td>");
+
+        sb.append("</tr>");
+
+        sb.append("<tr>");
+        sb.append("<td colspan=\"8\" align=\"center\">");
+        sb.append("Итого по заказу:");
+        sb.append("</td>");
+
+        sb.append("<td style=\"color: white; background-color: green; text-align: center\">");
+        sb.append(order.getTotal());
+        sb.append("</td>");
+
+        sb.append("</tr>");
+
+        sb.append("</tbody>");
+
         return sb.toString();
     }
 }

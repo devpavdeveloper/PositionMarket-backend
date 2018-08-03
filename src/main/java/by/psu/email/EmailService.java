@@ -1,6 +1,7 @@
 package by.psu.email;
 
 import by.psu.config.MailConfig;
+import by.psu.model.Order;
 import by.psu.reporting.HtmlBuilder;
 import by.psu.security.model.User;
 import by.psu.utility.Util;
@@ -89,10 +90,10 @@ public class EmailService {
         return sb.toString();
     }
 
-    public String createOrderEmail(){
+    public String createOrderEmail(Order order){
         StringBuilder htmlTemplate = new StringBuilder();
         String parsedResult = "";
-        /*File templateFile = null;
+        File templateFile = null;
         try{
             templateFile = ResourceUtils.getFile("classpath:email_order.html");
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
@@ -100,20 +101,18 @@ public class EmailService {
                 while((line = br.readLine())!=null){
                     htmlTemplate.append(line);
                 }
-                parsedResult = htmlTemplate.toString().replace("${order_created_date}", Util.convertDateToReadableLocalFormat(orderIssue.getDateEvent()));
-                parsedResult = parsedResult.replace("${user}", orderIssue.getUser().getLogin());
-                parsedResult = parsedResult.replace("${order_date}", Util.convertDateToReadableLocalFormat(orderIssue.getDateOrder()));
+                parsedResult = parsedResult.replace("${user}", order.getFullName() + order.getLastName());
+                parsedResult = parsedResult.replace("${order_date}",
+                        Util.convertDateToReadableLocalFormat(order.getDate()));
                 htmlTemplate = new StringBuilder();
                 htmlTemplate.append(parsedResult);
-                String mainTable = HtmlBuilder.createOrderTable(orderIssue, HtmlBuilder.TABLE_TYPES.MAIN_TABLE);
-                String totalsTable = HtmlBuilder.createOrderTable(orderIssue, HtmlBuilder.TABLE_TYPES.TOTALS_TABLE);
+                String mainTable = HtmlBuilder.createOrderTable(order);
                 parsedResult = parsedResult.replace("${main_table}", mainTable);
-                parsedResult = parsedResult.replace("${main_table_totals}", totalsTable);
                 return parsedResult;
             }
             catch(IOException e){}
         }
-        catch(IOException e){}*/
+        catch(IOException e){}
         return parsedResult;
     }
 }
