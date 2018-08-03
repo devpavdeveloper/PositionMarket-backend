@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="20180607_time14_36" author="devpav" runOnChange="true">
+        <comment>Создание таблиц для хранения данных</comment>
+        <sql>
+            INSERT INTO users (login, password, email, phone, enabled, last_password_reset_date)
+            VALUES
+            ('admin', '$2a$04$eq8a2soxlIEga/BrF20lO.HsSWXsjlpUTY0r6YiY.MARNLgCgc0pa', 'jsdeveloper@yahoo.com', '+375299479630',
+            TRUE, '2018-06-13 17:16:30.802000');
+
+            INSERT INTO roles (title) VALUES
+            ('ROLE_ADMIN');
+
+            INSERT INTO user_role (id_user, id_role) VALUES (1, 1);
+
+            INSERT INTO type_attraction (ru_title, en_title) VALUES
+            ('Надувные','Inflatable'),
+            ('Интерактивне','Interactive'),
+            ('Тимбилдинг','Team Building'),
+            ('Мягкие','Soft'),
+            ('Спортивные','Sports'),
+            ('Эксклюзивные','Exclusive'),
+            ('Механические','Mechanical'),
+            ('Настольные','Tabletop'),
+            ('Видеоигры','Video Games'),
+            ('Водные','Water'),
+            ('Детские','Children'),
+            ('Горки и батуты', 'Inflatable slides and trampolines'),
+            ('Тиры','Shooting');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

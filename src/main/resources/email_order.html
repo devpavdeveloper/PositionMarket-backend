@@ -1,0 +1,38 @@
+<h2>Уважаемый ${user}, на ваше имя был оформлен заказ аттракционов на сайте Sumo.by</h2>
+<table border="1" cellpadding="5" style="border-collapse: collapse; border: 1px solid #ccc">
+    <thead>
+    <tr>
+        <th style="background-color: #2E86C1; color: white;">Дата исполнения заказа</th>
+    </tr>
+    <tr>
+        <th>${order_date}</th>
+    </tr>
+    </thead>
+</table>
+<table border="1" cellpadding="5" style="border-collapse: collapse; border: 1px solid #ccc;">
+    <caption>
+        <h3 style="padding: 10px 0px;background-color: #2E86C1; color: white;">Таблица деталей заказа</h3>
+    </caption>
+    <thead>
+    <tr>
+        <th>Наименование аттракциона, способ доставки, цена руб.</th>
+    </tr>
+    </thead>
+    ${attraction}
+</table>
+<table border="1" cellpadding="5" style="border-collapse: collapse; border: 1px solid #ccc;">
+    <caption>
+        <h3 style="padding: 10px 0px;background-color: #2E86C1; color: white;">Таблица деталей заказа</h3>
+    </caption>
+    <thead>
+    <tr>
+        <th>Наименование аттракциона</th>
+        <th>Способ доставки</th>
+        <th>Цена, BYN</th>
+    </tr>
+    </thead>
+    ${main_table}
+    ${main_table_totals}
+</table>
+<h4><span style="color: red;">*</span>
+    Если вы не оформляли заказ, то проигнорируйте и удалите данное письмо.</h4>
