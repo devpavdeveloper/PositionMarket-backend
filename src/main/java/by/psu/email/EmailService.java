@@ -31,14 +31,12 @@ public class EmailService {
 
     //do not delete
     public void sendSimpleMessage(final Mail mail){
-
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(mail.getSubject());
         message.setText(mail.getContent());
         message.setTo(mail.getTo());
         message.setFrom(mail.getFrom());
         emailSender.send(message);
-
     }
 
     public void sendHtmlMessage(final Mail mail){
@@ -93,15 +91,15 @@ public class EmailService {
     public String createOrderEmail(Order order){
         StringBuilder htmlTemplate = new StringBuilder();
         String parsedResult = "";
-        File templateFile = null;
+        File templateFile;
         try{
             templateFile = ResourceUtils.getFile("classpath:email_order.html");
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
-                String line = "";
+                String line;
                 while((line = br.readLine())!=null){
                     htmlTemplate.append(line);
                 }
-                parsedResult = parsedResult.replace("${user}", order.getFirstName() + order.getLastName());
+                parsedResult = htmlTemplate.toString().replace("${user}", order.getFirstName() +" " + order.getLastName());
                 parsedResult = parsedResult.replace("${order_date}",
                         Util.convertDateToReadableLocalFormat(order.getDate(), Util.dateFormatTypes.DATE_ONLY));
                 htmlTemplate = new StringBuilder();

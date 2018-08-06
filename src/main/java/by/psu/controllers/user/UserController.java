@@ -98,6 +98,7 @@ public class UserController {
         mail.setSubject("Заказ на Sumo.by");
         mail.setContent(emailService.createOrderEmail(order));
         emailService.sendHtmlMessage(mail);
+
         return ResponseEntity.ok().build();
     }
 }

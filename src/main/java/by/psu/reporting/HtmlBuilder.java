@@ -11,7 +11,7 @@ public class HtmlBuilder {
         sb.append("<tr>");
 
         sb.append("<td>");
-        sb.append(order.getFirstName() + order.getLastName());
+        sb.append(order.getFirstName() + " " + order.getLastName());
         sb.append("</td>");
 
         sb.append("<td>");
@@ -39,13 +39,14 @@ public class HtmlBuilder {
         sb.append("</td>");
 
         sb.append("<td>");
-        Iterator<String> iter = null;
+        Iterator<String> iter;
         for(iter = order.getAttractions().iterator(); iter.hasNext();){
             sb.append(iter.next());
             if(iter.hasNext()){
-                sb.append(", ");
+                sb.append("\n");
             }
         }
+
         sb.append("</td>");
 
         sb.append("<td>");
