@@ -53,7 +53,15 @@
             CREATE TABLE type_attraction (
             id       SERIAL PRIMARY KEY,
             ru_title VARCHAR(150) NOT NULL,
-            en_title VARCHAR(150) NOT NULL
+            en_title VARCHAR(150) NOT NULL,
+            UNIQUE (ru_title)
+            );
+
+            CREATE TABLE tags (
+            id       SERIAL PRIMARY KEY,
+            ru_title VARCHAR(150) NOT NULL,
+            en_title VARCHAR(150) NOT NULL,
+            UNIQUE (ru_title)
             );
 
             CREATE TABLE attraction_to_type_attraction (
@@ -61,6 +69,13 @@
             id_attraction_type BIGINT NOT NULL REFERENCES type_attraction (id) ON DELETE CASCADE,
             UNIQUE (id_attraction, id_attraction_type)
             );
+
+            CREATE TABLE attraction_to_tag (
+            id_attraction      BIGINT NOT NULL REFERENCES attraction (id) ON DELETE CASCADE,
+            id_tag BIGINT NOT NULL REFERENCES tags (id) ON DELETE CASCADE,
+            UNIQUE (id_attraction, id_tag)
+            );
+
 
             CREATE TABLE verification_tokens (
             id              SERIAL PRIMARY KEY,

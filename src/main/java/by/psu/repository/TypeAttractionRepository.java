@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TypeAttractionRepository extends JpaRepository<TypeAttraction, Long> {
     public TypeAttraction findByEnTitle(String title);
+    public TypeAttraction findByRuTitle(String title);
 }
