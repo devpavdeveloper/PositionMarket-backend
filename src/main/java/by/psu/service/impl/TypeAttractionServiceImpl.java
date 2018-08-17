@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TypeAttractionServiceImpl implements TypeService {
@@ -24,8 +24,6 @@ public class TypeAttractionServiceImpl implements TypeService {
         this.typeAttractionRepository = typeAttractionRepository;
     }
 
-
-    @Override
     @Transactional
     public List<TypeAttraction> saveAll(TypeAttraction[] typeAttractions) {
         for (TypeAttraction t : typeAttractions) {
@@ -59,5 +57,20 @@ public class TypeAttractionServiceImpl implements TypeService {
     @Override
     public void remove(Long id) {
 
+    }
+
+    @Override
+    @Transactional(noRollbackFor = ServerDataBaseException.class)
+    public Set<TypeAttraction> saveOrFind(Collection<TypeAttraction> typeAttractions) {
+        Set<TypeAttraction> list = new HashSet<>();
+
+        for (TypeAttraction type : typeAttractions) {
+            TypeAttraction typeAttraction = typeAttractionRepository.findByRuTitle(type.getRuTitle());
+            try {
+                list.add(Objects.isNull(typeAttraction) ? typeAttractionRepository.save(type) : typeAttraction);
+            } catch (Exception ignore) {}
+        }
+
+        return list;
     }
 }

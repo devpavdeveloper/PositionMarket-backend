@@ -1,6 +1,7 @@
 package by.psu.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "type_attraction")
 @Getter @Setter
+@EqualsAndHashCode(callSuper = true)
 public class TypeAttraction extends Basic {
 
     @Column(name = "ru_title")
@@ -20,6 +22,6 @@ public class TypeAttraction extends Basic {
     private String enTitle;
 
     @JsonBackReference(value="type-attractions")
-    @ManyToMany(mappedBy = "typeAttractions", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "types", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Attraction> attractions = new HashSet<>();
 }

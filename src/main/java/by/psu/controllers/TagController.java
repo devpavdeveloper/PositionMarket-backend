@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -26,7 +29,7 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Tag>> createAllTags(@RequestBody Tag[] tags) {
-        return ResponseEntity.ok(tagService.saveAll(tags));
+    public ResponseEntity<Set<Tag>> createAllTags(@RequestBody Tag[] tags) {
+        return ResponseEntity.ok(tagService.saveOrFind(new ArrayList<>(Arrays.asList(tags))));
     }
 }

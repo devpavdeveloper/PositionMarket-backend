@@ -30,16 +30,16 @@ public class AttractionController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity getAttractionByTypes(@RequestParam(value = "type", required = false) String[] typeAttractions,
+    public ResponseEntity getAttractionByTypes(@RequestParam(value = "type", required = false) Long[] indexsAttractions,
                                                @RequestParam(defaultValue = "0",value = "priceField", required = false) Integer priceField,
                                                @RequestParam(defaultValue = "0",value = "direction", required = false) Integer direction){
-        return ResponseEntity.ok(attractionService.findAllFilter(typeAttractions, priceField, direction));
+        return ResponseEntity.ok(attractionService.findAllFilter(indexsAttractions, priceField, direction));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Attraction> createAttraction(@RequestBody Attraction attraction){
-        return ResponseEntity.ok(attractionService.update(attraction, attraction.getId()));
+        return ResponseEntity.ok(attractionService.saveOrFind(attraction));
     }
 
     @PutMapping("/{id}")
@@ -51,7 +51,7 @@ public class AttractionController {
     @PostMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity createAllAttraction(@RequestBody Attraction[] attraction){
-        return ResponseEntity.ok(attractionService.createAll(attraction));
+        return ResponseEntity.ok(attractionService.saveOrFind(attraction));
     }
 
     @DeleteMapping("/{id}")

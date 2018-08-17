@@ -38,7 +38,7 @@ public class Attraction extends Basic {
     @JoinTable(name = "attraction_to_type_attraction",
             joinColumns = @JoinColumn(name = "id_attraction"),
             inverseJoinColumns = @JoinColumn(name = "id_attraction_type"))
-    private Set<TypeAttraction> typeAttractions;
+    private Set<TypeAttraction> types;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "attraction_to_tag",

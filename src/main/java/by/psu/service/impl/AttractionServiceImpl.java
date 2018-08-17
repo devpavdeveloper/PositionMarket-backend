@@ -4,10 +4,13 @@ import by.psu.exceptions.EntityNotFoundException;
 import by.psu.exceptions.SearchRequestException;
 import by.psu.exceptions.ServerDataBaseException;
 import by.psu.model.Attraction;
+import by.psu.model.Tag;
 import by.psu.model.TypeAttraction;
 import by.psu.repository.AttractionRepository;
 import by.psu.repository.TypeAttractionRepository;
 import by.psu.service.AttractionService;
+import by.psu.service.TagService;
+import by.psu.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +26,22 @@ public class AttractionServiceImpl implements AttractionService {
     private final AttractionRepository repository;
     private final TypeAttractionRepository typeAttractionRepository;
 
+    private final TypeService typeService;
+    private final TagService tagService;
+
     @Autowired
-    public AttractionServiceImpl(AttractionRepository repository, EntityManager entityManager, TypeAttractionRepository typeAttractionRepository) {
+    public AttractionServiceImpl(AttractionRepository repository, EntityManager entityManager, TypeAttractionRepository typeAttractionRepository, TypeService typeService, TagService tagService) {
         this.repository = repository;
         this.entityManager = entityManager;
         this.typeAttractionRepository = typeAttractionRepository;
+        this.typeService = typeService;
+        this.tagService = tagService;
     }
 
     @Override
     public List<Attraction> findAll() {
         return repository.findAllByOrderByTitleAttractionAsc();
     }
-
 
 
     @Override
@@ -58,6 +65,7 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    @Transactional
     public void remove(Long id) {
         Attraction attraction = repository
                 .findById(id)
@@ -70,33 +78,25 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public ArrayList findAllFilter(String[] typeAttractions, Integer sortField, Integer direction) {
+    public ArrayList findAllFilter(Long[] typeAttractions, Integer sortField, Integer direction) {
         List<TypeAttraction> list;
         StringBuilder buildTypeAttractionSql = new StringBuilder();
-        if (Objects.isNull(typeAttractions)) {
-            /*list = typeAttractionRepository.findAll();
-            typeAttractions = new String[list.size()];
-            for (int i = 0; i < list.size(); i++)
-                typeAttractions[i] = list.get(i).getEnTitle();*/
-        } else {
-            buildTypeAttractionSql.append("JOIN attr.typeAttractions u WHERE ");
+        if (typeAttractions.length > 0) {
+            buildTypeAttractionSql.append("JOIN attr.types u WHERE ");
             buildTypeAttractionSql.append("(");
             for (int i = 0; i < typeAttractions.length; i++) {
-                TypeAttraction typeAttraction = null;
-                try {
-                    typeAttraction = typeAttractionRepository.findByEnTitle(typeAttractions[i]);
+                TypeAttraction typeAttraction = typeAttractionRepository.findById(typeAttractions[i]).orElse(null);
+                if (Objects.nonNull(typeAttraction)) {
                     buildTypeAttractionSql.append(String.format("u.id = %s", typeAttraction.getId().toString()));
-                    if (i != typeAttractions.length - 1)
-                        buildTypeAttractionSql.append(" or ");
-                    else
-                        buildTypeAttractionSql.append(")");
-                } catch (RuntimeException ex) {
-                    throw new SearchRequestException();
+                    buildTypeAttractionSql.append(i != typeAttractions.length - 1 ? " or " : ")");
                 }
             }
         }
 
-        String req = "select distinct attr from Attraction attr " + buildTypeAttractionSql + " ORDER BY " + selectSort(sortField) + " " + ((direction == 0) ? "asc" : "desc");
+        String req = "select distinct attr " +
+                "from Attraction attr "
+                + buildTypeAttractionSql + " " +
+                "ORDER BY " + selectSort(sortField) + " " + ((direction == 0) ? "asc" : "desc");
 
         Query query = entityManager.createQuery(req);
 
@@ -105,19 +105,24 @@ public class AttractionServiceImpl implements AttractionService {
 
     private String selectSort(Integer index) {
         switch (index) {
-            case 1: return "attr.pickupServicePrice";
-            case 2: return "attr.deliveryServicePrice";
-            case 3: return "attr.installationServicePrice";
-            case 4: return "attr.fullServicePrice";
-            default: return "attr.titleAttraction";
+            case 1:
+                return "attr.pickupServicePrice";
+            case 2:
+                return "attr.deliveryServicePrice";
+            case 3:
+                return "attr.installationServicePrice";
+            case 4:
+                return "attr.fullServicePrice";
+            default:
+                return "attr.titleAttraction";
         }
     }
 
     @Override
-    public List<Attraction> createAll(Attraction[] attractions) {
+    public List<Attraction> saveOrFind(Attraction[] attractions) {
         for (Attraction item : attractions) {
             try {
-               repository.saveAndFlush(item);
+                repository.saveAndFlush(item);
             } catch (Exception ignored) {
                 System.out.println(ignored);
             }
@@ -130,6 +135,28 @@ public class AttractionServiceImpl implements AttractionService {
         Attraction attraction = findByTitleAttraction(title);
         if (Objects.isNull(attraction)) {
             throw new EntityNotFoundException();
+        }
+        return attraction;
+    }
+
+    @Override
+    @Transactional(noRollbackFor = ServerDataBaseException.class)
+    public Attraction saveOrFind(Attraction attraction) {
+        Attraction findAttr = null;
+        try {
+            if (!Objects.isNull(attraction.getTitleAttraction()))
+                findAttr = repository.findByTitleAttraction(attraction.getTitleAttraction());
+
+            if (!Objects.isNull(findAttr)) {
+                attraction.setId(findAttr.getId());
+            }
+
+            attraction.setTypes(typeService.saveOrFind(attraction.getTypes()));
+            attraction.setTags(tagService.saveOrFind(attraction.getTags()));
+
+            repository.save(attraction);
+        } catch (Exception ignored) {
+            throw new ServerDataBaseException();
         }
         return attraction;
     }

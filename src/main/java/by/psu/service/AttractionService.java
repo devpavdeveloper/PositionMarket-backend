@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface AttractionService extends BasicService<Attraction, Long>{
-    ArrayList findAllFilter(String[] typeAttractions, Integer priceField, Integer direction);
-    List<Attraction> createAll(Attraction[] attractions);
+    ArrayList findAllFilter(Long[] typeAttractions, Integer priceField, Integer direction);
+    List<Attraction> saveOrFind(Attraction[] attractions);
     Attraction findByTitleAttraction(String title);
+    Attraction saveOrFind(Attraction attraction);
 }

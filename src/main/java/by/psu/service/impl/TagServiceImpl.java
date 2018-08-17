@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -59,12 +58,15 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> saveAll(Tag[] tags) {
+    @Transactional(noRollbackFor = ServerDataBaseException.class)
+    public Set<Tag> saveOrFind(Collection<Tag> tags) {
+        Set<Tag> tagList = new HashSet<>();
         for (Tag tag : tags) {
+            Tag findTag = repository.findByRuTitle(tag.getRuTitle());
             try {
-                repository.saveAndFlush(tag);
-            } catch (Exception ignored) {}
+                tagList.add(Objects.isNull(findTag) ? repository.save(tag) : findTag);
+            } catch (Exception ignore){}
         }
-        return findAll();
+        return tagList;
     }
 }

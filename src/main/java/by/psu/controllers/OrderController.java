@@ -28,8 +28,8 @@ public class OrderController {
     @PostMapping()
     public ResponseEntity sendOrder(@RequestBody Order order) {
         Mail mail = new Mail();
-        mail.setTo("jsdeveloper@yahoo.com");
 
+        mail.setTo(order.getEmail());
         mail.setFrom(email);
 
         mail.setSubject("Заказ на Sumo.by");
