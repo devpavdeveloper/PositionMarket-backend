@@ -12,6 +12,7 @@ import by.psu.service.AttractionService;
 import by.psu.service.TagService;
 import by.psu.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,15 +53,18 @@ public class AttractionServiceImpl implements AttractionService {
     @Override
     @Transactional
     public Attraction save(Attraction obj) {
-        return Optional.of(repository.save(obj)).orElseThrow(ServerDataBaseException::new);
+        return repository.save(obj);
     }
 
     @Override
     public Attraction update(Attraction obj, Long id) {
-        repository.findById(id)
+        Attraction attraction = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        obj.setId(id);
-        return Optional.of(repository.save(obj))
+        attraction.setDeliveryServicePrice(obj.getDeliveryServicePrice());
+        attraction.setPickupServicePrice(obj.getPickupServicePrice());
+        attraction.setFullServicePrice(obj.getFullServicePrice());
+        attraction.setInstallationServicePrice(obj.getInstallationServicePrice());
+        return Optional.of(repository.save(attraction))
                 .orElseThrow(ServerDataBaseException::new);
     }
 
@@ -78,23 +82,60 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public ArrayList findAllFilter(Long[] typeAttractions, Integer sortField, Integer direction) {
+    public ArrayList findAllFilter(Long[] typeAttractions, Long[] indexTags, Integer sortField, Integer direction) {
         List<TypeAttraction> list;
         StringBuilder buildTypeAttractionSql = new StringBuilder();
+
+        if (Objects.isNull(indexTags)) {
+            indexTags = new Long[0];
+        }
+
+        if (Objects.isNull(typeAttractions)) {
+            typeAttractions = new Long[0];
+        }
+
+        buildTypeAttractionSql.append(" WHERE ");
         if (typeAttractions.length > 0) {
-            buildTypeAttractionSql.append("JOIN attr.types u WHERE ");
-            buildTypeAttractionSql.append("(");
+            buildTypeAttractionSql.append(" (");
             for (int i = 0; i < typeAttractions.length; i++) {
                 TypeAttraction typeAttraction = typeAttractionRepository.findById(typeAttractions[i]).orElse(null);
                 if (Objects.nonNull(typeAttraction)) {
                     buildTypeAttractionSql.append(String.format("u.id = %s", typeAttraction.getId().toString()));
-                    buildTypeAttractionSql.append(i != typeAttractions.length - 1 ? " or " : ")");
+                    buildTypeAttractionSql.append(i != typeAttractions.length - 1 ? " or " : ") ");
+                }
+            }
+        }
+        StringBuilder builderTags = new StringBuilder();
+
+
+
+        if (indexTags.length > 0) {
+
+            builderTags.append(" (");
+            for (int i = 0; i < indexTags.length; i++) {
+                Tag tag = tagService.findById(indexTags[i]);
+                if (Objects.nonNull(tag)) {
+                    builderTags.append(String.format("t.id = %s", tag.getId().toString()));
+                    builderTags.append(i != indexTags.length - 1 ? " or " : ")");
                 }
             }
         }
 
+        if ((indexTags.length > 0) && !(typeAttractions.length > 0)) {
+            buildTypeAttractionSql
+                    .append(builderTags);
+        }
+
+        if (indexTags.length > 0 && typeAttractions.length > 0) {
+            buildTypeAttractionSql
+                    .append(" and ")
+                    .append(builderTags);
+        } else if (!(indexTags.length > 0) && !(typeAttractions.length > 0)) {
+            buildTypeAttractionSql = new StringBuilder();
+        }
+
         String req = "select distinct attr " +
-                "from Attraction attr "
+                "from Attraction attr JOIN attr.types u JOIN attr.tags t "
                 + buildTypeAttractionSql + " " +
                 "ORDER BY " + selectSort(sortField) + " " + ((direction == 0) ? "asc" : "desc");
 
@@ -140,24 +181,30 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    @Transactional(noRollbackFor = ServerDataBaseException.class)
+    @Transactional
     public Attraction saveOrFind(Attraction attraction) {
         Attraction findAttr = null;
-        try {
-            if (!Objects.isNull(attraction.getTitleAttraction()))
-                findAttr = repository.findByTitleAttraction(attraction.getTitleAttraction());
 
-            if (!Objects.isNull(findAttr)) {
-                attraction.setId(findAttr.getId());
-            }
+        Set<Tag> tags = tagService.saveOrFind(attraction.getTags());
+        Set<TypeAttraction> typeAttractions = typeService.saveOrFind(attraction.getTypes());
 
-            attraction.setTypes(typeService.saveOrFind(attraction.getTypes()));
-            attraction.setTags(tagService.saveOrFind(attraction.getTags()));
+        attraction.setTags(null);
+        attraction.setTypes(null);
 
-            repository.save(attraction);
-        } catch (Exception ignored) {
-            throw new ServerDataBaseException();
+        if (!Objects.isNull(attraction.getTitleAttraction()))
+            findAttr = repository.findByTitleAttraction(attraction.getTitleAttraction());
+
+        if (!Objects.isNull(findAttr)) {
+            attraction.setId(findAttr.getId());
         }
+
+        repository.save(attraction);
+
+        attraction.setTypes(typeAttractions);
+        attraction.setTags(tags);
+
+        repository.save(attraction);
+
         return attraction;
     }
 }

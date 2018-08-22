@@ -8,10 +8,12 @@ import by.psu.repository.TagRepository;
 import by.psu.repository.TypeAttractionRepository;
 import by.psu.service.TagService;
 import by.psu.service.TypeService;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -45,8 +47,10 @@ public class TypeAttractionServiceImpl implements TypeService {
     }
 
     @Override
+    @Transactional(noRollbackFor = SQLException.class)
     public TypeAttraction save(TypeAttraction obj) {
-        return null;
+        TypeAttraction type = typeAttractionRepository.findByRuTitle(obj.getRuTitle());
+        return Objects.nonNull(type) ? type : typeAttractionRepository.save(obj);
     }
 
     @Override
@@ -60,17 +64,11 @@ public class TypeAttractionServiceImpl implements TypeService {
     }
 
     @Override
-    @Transactional(noRollbackFor = ServerDataBaseException.class)
     public Set<TypeAttraction> saveOrFind(Collection<TypeAttraction> typeAttractions) {
         Set<TypeAttraction> list = new HashSet<>();
-
         for (TypeAttraction type : typeAttractions) {
-            TypeAttraction typeAttraction = typeAttractionRepository.findByRuTitle(type.getRuTitle());
-            try {
-                list.add(Objects.isNull(typeAttraction) ? typeAttractionRepository.save(type) : typeAttraction);
-            } catch (Exception ignore) {}
+            list.add(save(type));
         }
-
         return list;
     }
 }

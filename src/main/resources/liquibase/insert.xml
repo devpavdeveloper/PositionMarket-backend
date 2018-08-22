@@ -17,21 +17,6 @@
             ('ROLE_ADMIN');
 
             INSERT INTO user_role (id_user, id_role) VALUES (1, 1);
-
-            INSERT INTO type_attraction (ru_title, en_title) VALUES
-            ('Надувные','Inflatable'),
-            ('Интерактивне','Interactive'),
-            ('Тимбилдинг','Team Building'),
-            ('Мягкие','Soft'),
-            ('Спортивные','Sports'),
-            ('Эксклюзивные','Exclusive'),
-            ('Механические','Mechanical'),
-            ('Настольные','Tabletop'),
-            ('Видеоигры','Video Games'),
-            ('Водные','Water'),
-            ('Детские','Children'),
-            ('Горки и батуты', 'Inflatable slides and trampolines'),
-            ('Тиры','Shooting');
         </sql>
     </changeSet>
 </databaseChangeLog>

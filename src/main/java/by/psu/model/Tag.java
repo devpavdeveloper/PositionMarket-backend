@@ -22,7 +22,8 @@ public class Tag extends Basic {
     @Column(name = "en_title")
     private String enTitle;
 
+
     @JsonBackReference(value="tag-attractions")
-    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Attraction> attractions = new HashSet<>();
+    @ManyToMany(mappedBy = "tags")
+    private Set<Attraction> attractions;
 }

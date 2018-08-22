@@ -6,10 +6,12 @@ import by.psu.model.Tag;
 import by.psu.repository.TagRepository;
 import by.psu.repository.TypeAttractionRepository;
 import by.psu.service.TagService;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -35,15 +37,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = SQLException.class)
     public Tag save(Tag obj) {
-        Tag tag = null;
-        try {
-            tag = repository.save(obj);
-        } catch (Exception e) {
-            throw new ServerDataBaseException();
-        }
-        return tag;
+        Tag tag = repository.findByRuTitle(obj.getRuTitle());
+        return Objects.nonNull(tag) ? tag : repository.save(obj);
     }
 
     @Override
@@ -58,14 +55,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(noRollbackFor = ServerDataBaseException.class)
     public Set<Tag> saveOrFind(Collection<Tag> tags) {
         Set<Tag> tagList = new HashSet<>();
         for (Tag tag : tags) {
-            Tag findTag = repository.findByRuTitle(tag.getRuTitle());
-            try {
-                tagList.add(Objects.isNull(findTag) ? repository.save(tag) : findTag);
-            } catch (Exception ignore){}
+            tagList.add(save(tag));
         }
         return tagList;
     }

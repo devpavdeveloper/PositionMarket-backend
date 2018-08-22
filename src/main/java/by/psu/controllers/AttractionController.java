@@ -31,9 +31,10 @@ public class AttractionController {
 
     @GetMapping("/search")
     public ResponseEntity getAttractionByTypes(@RequestParam(value = "type", required = false) Long[] indexsAttractions,
+                                               @RequestParam(value = "tag", required = false) Long[] indexsTags,
                                                @RequestParam(defaultValue = "0",value = "priceField", required = false) Integer priceField,
                                                @RequestParam(defaultValue = "0",value = "direction", required = false) Integer direction){
-        return ResponseEntity.ok(attractionService.findAllFilter(indexsAttractions, priceField, direction));
+        return ResponseEntity.ok(attractionService.findAllFilter(indexsAttractions, indexsTags, priceField, direction));
     }
 
     @PostMapping

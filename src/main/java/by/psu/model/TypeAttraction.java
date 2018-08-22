@@ -22,6 +22,6 @@ public class TypeAttraction extends Basic {
     private String enTitle;
 
     @JsonBackReference(value="type-attractions")
-    @ManyToMany(mappedBy = "types", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<Attraction> attractions = new HashSet<>();
+    @ManyToMany(mappedBy = "types")
+    private Set<Attraction> attractions;
 }

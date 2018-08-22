@@ -1,5 +1,6 @@
 package by.psu.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,13 +35,13 @@ public class Attraction extends Basic {
     @Column(name = "full_service_price")
     private Double fullServicePrice;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "attraction_to_type_attraction",
             joinColumns = @JoinColumn(name = "id_attraction"),
             inverseJoinColumns = @JoinColumn(name = "id_attraction_type"))
     private Set<TypeAttraction> types;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "attraction_to_tag",
             joinColumns = @JoinColumn(name = "id_attraction"),
             inverseJoinColumns = @JoinColumn(name = "id_tag"))
