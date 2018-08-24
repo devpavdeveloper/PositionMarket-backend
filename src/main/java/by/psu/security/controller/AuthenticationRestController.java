@@ -1,7 +1,9 @@
 package by.psu.security.controller;
 
+import by.psu.exceptions.EntityNotFoundException;
 import by.psu.exceptions.TokenExpiredException;
 import by.psu.security.*;
+import by.psu.security.model.User;
 import by.psu.security.model.VerificationToken;
 import by.psu.security.service.JwtAuthenticationResponse;
 import by.psu.security.service.UserService;
@@ -69,7 +71,14 @@ public class AuthenticationRestController {
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         by.psu.security.model.User user = new by.psu.security.model.User(authenticationRequest.getUsername());
-        if (userService.alreadyExists(user).getEnabled()) {
+        User findUser = null;
+        try {
+            findUser = userService.alreadyExists(user);
+        } catch (Exception e) {
+            throw new AuthenticationException("Проверьте введенные данные", e);
+        }
+
+        if (findUser.getEnabled()) {
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
             // Reload password post-security so we can generate the token

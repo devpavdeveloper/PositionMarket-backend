@@ -134,9 +134,17 @@ public class AttractionServiceImpl implements AttractionService {
             buildTypeAttractionSql = new StringBuilder();
         }
 
+        StringBuilder stringJoin = new StringBuilder();
+
+        if (typeAttractions.length > 0) {
+            stringJoin.append(" JOIN attr.types u ");
+        }
+        if (indexTags.length > 0) {
+            stringJoin.append(" JOIN attr.tags t ");
+        }
+
         String req = "select distinct attr " +
-                "from Attraction attr JOIN attr.types u JOIN attr.tags t "
-                + buildTypeAttractionSql + " " +
+                "from Attraction attr" + stringJoin + buildTypeAttractionSql + " " +
                 "ORDER BY " + selectSort(sortField) + " " + ((direction == 0) ? "asc" : "desc");
 
         Query query = entityManager.createQuery(req);
@@ -197,6 +205,11 @@ public class AttractionServiceImpl implements AttractionService {
         if (!Objects.isNull(findAttr)) {
             attraction.setId(findAttr.getId());
         }
+       /* Random random = new Random();
+        attraction.setPickupServicePrice(random.nextDouble() * 50045);
+        attraction.setDeliveryServicePrice(random.nextDouble() * 50045);
+        attraction.setInstallationServicePrice(random.nextDouble() * 50045);
+        attraction.setFullServicePrice(random.nextDouble() * 50045);*/
 
         repository.save(attraction);
 
