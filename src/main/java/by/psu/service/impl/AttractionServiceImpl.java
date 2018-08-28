@@ -108,7 +108,6 @@ public class AttractionServiceImpl implements AttractionService {
         StringBuilder builderTags = new StringBuilder();
 
 
-
         if (indexTags.length > 0) {
 
             builderTags.append(" (");
@@ -189,15 +188,8 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    @Transactional
     public Attraction saveOrFind(Attraction attraction) {
         Attraction findAttr = null;
-
-        Set<Tag> tags = tagService.saveOrFind(attraction.getTags());
-        Set<TypeAttraction> typeAttractions = typeService.saveOrFind(attraction.getTypes());
-
-        attraction.setTags(null);
-        attraction.setTypes(null);
 
         if (!Objects.isNull(attraction.getTitleAttraction()))
             findAttr = repository.findByTitleAttraction(attraction.getTitleAttraction());
@@ -205,18 +197,11 @@ public class AttractionServiceImpl implements AttractionService {
         if (!Objects.isNull(findAttr)) {
             attraction.setId(findAttr.getId());
         }
-       /* Random random = new Random();
-        attraction.setPickupServicePrice(random.nextDouble() * 50045);
-        attraction.setDeliveryServicePrice(random.nextDouble() * 50045);
-        attraction.setInstallationServicePrice(random.nextDouble() * 50045);
-        attraction.setFullServicePrice(random.nextDouble() * 50045);*/
 
-        repository.save(attraction);
+        attraction.setTypes(typeService.saveOrFind(attraction.getTypes()));
+        attraction.setTags(tagService.saveOrFind(attraction.getTags()));
 
-        attraction.setTypes(typeAttractions);
-        attraction.setTags(tags);
-
-        repository.save(attraction);
+        save(attraction);
 
         return attraction;
     }

@@ -35,13 +35,13 @@ public class Attraction extends Basic {
     @Column(name = "full_service_price")
     private Double fullServicePrice;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "attraction_to_type_attraction",
             joinColumns = @JoinColumn(name = "id_attraction"),
             inverseJoinColumns = @JoinColumn(name = "id_attraction_type"))
     private Set<TypeAttraction> types;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "attraction_to_tag",
             joinColumns = @JoinColumn(name = "id_attraction"),
             inverseJoinColumns = @JoinColumn(name = "id_tag"))

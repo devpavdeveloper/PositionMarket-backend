@@ -12,7 +12,9 @@ import java.util.Set;
 
 @Entity
 @Getter @Setter
-@Table(name = "tags")
+@Table(
+        name = "tags"
+)
 @EqualsAndHashCode(callSuper = true)
 public class Tag extends Basic {
 

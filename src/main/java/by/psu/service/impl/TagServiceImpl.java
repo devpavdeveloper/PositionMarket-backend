@@ -8,6 +8,7 @@ import by.psu.repository.TypeAttractionRepository;
 import by.psu.service.TagService;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +38,13 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(noRollbackFor = SQLException.class)
+    @Transactional(noRollbackFor = Exception.class)
     public Tag save(Tag obj) {
         Tag tag = repository.findByRuTitle(obj.getRuTitle());
-        return Objects.nonNull(tag) ? tag : repository.save(obj);
+        if (Objects.isNull(tag)) {
+            return repository.save(obj);
+        }
+        return tag;
     }
 
     @Override

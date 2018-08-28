@@ -10,8 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "type_attraction")
-@Getter @Setter
+@Table(
+        name = "type_attraction"
+)
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class TypeAttraction extends Basic {
 
@@ -21,7 +24,7 @@ public class TypeAttraction extends Basic {
     @Column(name = "en_title")
     private String enTitle;
 
-    @JsonBackReference(value="type-attractions")
+    @JsonBackReference(value = "type-attractions")
     @ManyToMany(mappedBy = "types")
     private Set<Attraction> attractions;
 }

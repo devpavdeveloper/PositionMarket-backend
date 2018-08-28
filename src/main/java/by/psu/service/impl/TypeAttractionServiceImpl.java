@@ -31,7 +31,8 @@ public class TypeAttractionServiceImpl implements TypeService {
         for (TypeAttraction t : typeAttractions) {
             try {
                 typeAttractionRepository.saveAndFlush(t);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return findAll();
     }
@@ -47,10 +48,16 @@ public class TypeAttractionServiceImpl implements TypeService {
     }
 
     @Override
-    @Transactional(noRollbackFor = SQLException.class)
+    @Transactional(noRollbackFor = Exception.class)
     public TypeAttraction save(TypeAttraction obj) {
         TypeAttraction type = typeAttractionRepository.findByRuTitle(obj.getRuTitle());
-        return Objects.nonNull(type) ? type : typeAttractionRepository.save(obj);
+        if (Objects.isNull(type)) {
+            try {
+                obj = typeAttractionRepository.save(obj);
+            } catch (Exception ignore) {}
+            return obj;
+        }
+        return type;
     }
 
     @Override

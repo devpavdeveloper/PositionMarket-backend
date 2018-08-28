@@ -53,13 +53,15 @@
             CREATE TABLE type_attraction (
             id       SERIAL PRIMARY KEY,
             ru_title VARCHAR(150),
-            en_title VARCHAR(150)
+            en_title VARCHAR(150),
+            UNIQUE (ru_title)
             );
 
             CREATE TABLE tags (
             id       SERIAL PRIMARY KEY,
             ru_title VARCHAR(150),
-            en_title VARCHAR(150)
+            en_title VARCHAR(150),
+            UNIQUE (ru_title)
             );
 
             CREATE TABLE attraction_to_type_attraction (
