@@ -1,6 +1,5 @@
 package by.psu.security.controller;
 
-import by.psu.exceptions.EntityNotFoundException;
 import by.psu.exceptions.TokenExpiredException;
 import by.psu.security.*;
 import by.psu.security.model.User;
