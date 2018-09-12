@@ -6,7 +6,7 @@
     <groupId>by.psu</groupId>
     <artifactId>minskattractionproject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>minskattractionproject</name>
 
@@ -182,7 +182,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <profiles>
+ <!--   <profiles>
         <profile>
             <id>bundle</id>
             <build>
@@ -213,7 +213,7 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles>-->
 
     <build>
         <plugins>
