@@ -30,7 +30,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-    @Value("classpath:static/email_order.html")
+    @Value("classpath*:static/email_order.html")
     private Resource resource;
 
     @Autowired
