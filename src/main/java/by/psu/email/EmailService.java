@@ -8,7 +8,9 @@ import by.psu.utility.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,6 +29,9 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+
+    @Value("classpath:/email_order.html")
+    private Resource resource;
 
     @Autowired
     public EmailService(JavaMailSender emailSender) {
@@ -98,11 +103,7 @@ public class EmailService {
         String parsedResult = "";
         File templateFile;
         try{
-            ClassPathResource cpr = new ClassPathResource("static/email_order.html");
-            logger.info("CLASSPATH FILE", cpr.getFilename());
-            logger.info("CLASSPATH URL", cpr.getURL().toString());
-
-            templateFile = ResourceUtils.getFile("classpath:email_order.html");
+            templateFile = resource.getFile();
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
                 String line;
                 while((line = br.readLine())!=null){
