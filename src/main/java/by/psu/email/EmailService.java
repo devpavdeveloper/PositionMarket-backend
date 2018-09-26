@@ -98,7 +98,7 @@ public class EmailService {
         String parsedResult = "";
         File templateFile;
         try{
-            templateFile = ResourceUtils.getFile(Objects.requireNonNull(EmailService.class.getClassLoader().getResource("email_order.html")));
+            templateFile = ResourceUtils.getFile("classpath:static/email_order.html");
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
                 String line;
                 while((line = br.readLine())!=null){
