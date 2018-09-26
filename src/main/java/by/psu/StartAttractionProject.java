@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@PropertySource("classpath*:static/email_order.html")
 public class StartAttractionProject extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
