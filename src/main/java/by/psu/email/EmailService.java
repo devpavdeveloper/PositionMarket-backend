@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 public class EmailService {
@@ -93,7 +94,7 @@ public class EmailService {
         String parsedResult = "";
         File templateFile;
         try{
-            templateFile = ResourceUtils.getFile("classpath:email_order.html");
+            templateFile = ResourceUtils.getFile(Objects.requireNonNull(EmailService.class.getClassLoader().getResource("email_order.html")));
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
                 String line;
                 while((line = br.readLine())!=null){

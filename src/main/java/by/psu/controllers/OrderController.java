@@ -36,6 +36,7 @@ public class OrderController {
 
         mail.setContent(emailService.createOrderEmail(order));
         emailService.sendHtmlMessage(mail);*/
+        mail.setContent(emailService.createOrderEmail(order));
         emailService.sendSimpleMessage(mail);
 
         return ResponseEntity.ok().build();
