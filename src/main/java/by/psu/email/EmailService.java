@@ -28,9 +28,10 @@ import java.io.IOException;
 public class EmailService {
 
     private final JavaMailSender emailSender;
+
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-    @Value("classpath:static/email_order.html")
+    @Value("src/main/resources/static/email_order.html")
     private Resource resource;
 
     @Autowired

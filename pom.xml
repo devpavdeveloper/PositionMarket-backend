@@ -180,9 +180,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <addResources>true</addResources>
-                </configuration>
             </plugin>
         </plugins>
     </build>
