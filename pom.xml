@@ -6,7 +6,7 @@
     <groupId>by.psu</groupId>
     <artifactId>minskattractionproject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>Attraction Application WAR</name>
 
@@ -18,7 +18,7 @@
     </parent>
 
     <properties>
-        <start-class>by.psu.StartAttractionProject</start-class>
+        <!--<start-class>by.psu.StartAttractionProject</start-class>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
