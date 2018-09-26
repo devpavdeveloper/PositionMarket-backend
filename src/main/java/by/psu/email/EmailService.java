@@ -8,6 +8,7 @@ import by.psu.utility.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -98,7 +99,10 @@ public class EmailService {
         String parsedResult = "";
         File templateFile;
         try{
-            templateFile = ResourceUtils.getFile("classpath:email_order.html");
+            templateFile = ResourceUtils.getFile("classpath*:email_order.html");
+            ClassPathResource cpr = new ClassPathResource("email_order.html");
+            logger.info("CLASSPATH FILE", cpr.getFilename());
+            logger.info("CLASSPATH URL", cpr.getURL().toString());
             try(BufferedReader br = new BufferedReader(new FileReader(templateFile))){
                 String line;
                 while((line = br.readLine())!=null){
