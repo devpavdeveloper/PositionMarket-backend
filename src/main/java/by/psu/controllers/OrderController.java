@@ -32,13 +32,9 @@ public class OrderController {
         mail.setTo(order.getEmail());
         mail.setFrom(email);
         mail.setSubject("Заказ на Sumo.by");
-/*
-        mail.setSubject("Заказ на Sumo.by");
 
         mail.setContent(emailService.createOrderEmail(order));
-        emailService.sendHtmlMessage(mail);*/
-        mail.setContent("Message ");
-        emailService.sendSimpleMessage(mail);
+        emailService.sendHtmlMessage(mail);
 
         return ResponseEntity.ok().build();
     }

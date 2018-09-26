@@ -5,6 +5,8 @@ import by.psu.model.Order;
 import by.psu.reporting.HtmlBuilder;
 import by.psu.security.model.User;
 import by.psu.utility.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,6 +26,7 @@ import java.util.Objects;
 public class EmailService {
 
     private final JavaMailSender emailSender;
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     public EmailService(JavaMailSender emailSender) {
@@ -59,6 +62,7 @@ public class EmailService {
             Transport.send(message);
         }
         catch(MessagingException mex){
+            logger.error("MessagingException: ", mex);
             mex.printStackTrace();
         }
 
@@ -109,9 +113,13 @@ public class EmailService {
                 parsedResult = parsedResult.replace("${main_table}", mainTable);
                 return parsedResult;
             }
-            catch(IOException e){}
+            catch(IOException e){
+                logger.error("createOrderEmail (templateFile): ", e);
+            }
         }
-        catch(IOException e){}
+        catch(IOException e){
+            logger.error("createOrderEmail: ", e);
+        }
         return parsedResult;
     }
 }
