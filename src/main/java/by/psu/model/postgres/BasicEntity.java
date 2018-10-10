@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @MappedSuperclass
 @Getter @Setter
-public class BasicEntity {
+public abstract class BasicEntity {
 
     @Id
     @GenericGenerator(name = "useIdOrGenerate", strategy = "by.psu.model.postgres.generator.CustomUUIDGenerator")

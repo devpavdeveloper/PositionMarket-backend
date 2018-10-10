@@ -32,16 +32,15 @@ public class Attraction extends BasicEntity {
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "cv_position", joinColumns = {
+  @JoinTable(name = "attraction_tag", joinColumns = {
           @JoinColumn(name = "attraction", nullable = false) },
-          inverseJoinColumns = { @JoinColumn(name = "attraction") })
+          inverseJoinColumns = { @JoinColumn(name = "tag") })
   private List<Tag> tags;
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "cv_position", joinColumns = {
+  @JoinTable(name = "attraction_type", joinColumns = {
           @JoinColumn(name = "attraction", nullable = false) },
-          inverseJoinColumns = { @JoinColumn(name = "attraction") })
+          inverseJoinColumns = { @JoinColumn(name = "type") })
   private List<Type> types;
-
 }
