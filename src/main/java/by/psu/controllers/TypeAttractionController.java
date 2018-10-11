@@ -1,21 +1,15 @@
 package by.psu.controllers;
 
-import by.psu.model.TypeAttraction;
-import by.psu.repository.TypeAttractionRepository;
-import by.psu.service.TypeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/types/attractions")
 public class TypeAttractionController {
 
-    private final TypeService typeService;
+   /* private final TypeService typeService;
 
     @Autowired
     public TypeAttractionController(TypeService typeService) {
@@ -30,5 +24,5 @@ public class TypeAttractionController {
     @PostMapping("/all")
     public ResponseEntity createAll(@RequestBody TypeAttraction[] typeAttractions){
         return ResponseEntity.ok(typeService.saveOrFind(new ArrayList<>(Arrays.asList(typeAttractions))));
-    }
+    }*/
 }

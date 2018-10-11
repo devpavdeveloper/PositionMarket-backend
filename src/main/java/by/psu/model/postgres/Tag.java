@@ -17,5 +17,4 @@ import javax.persistence.Table;
 )
 @Getter @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Tag extends Nsi<Tag> {}

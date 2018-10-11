@@ -1,11 +1,9 @@
 package by.psu.reporting;
 
-import by.psu.model.Order;
-
 import java.util.Iterator;
 
 public class HtmlBuilder {
-    public static String createOrderTable(Order order){
+   /* public static String createOrderTable(Order order){
         StringBuilder sb = new StringBuilder();
         sb.append("<tbody>");
         sb.append("<tr>");
@@ -69,5 +67,5 @@ public class HtmlBuilder {
         sb.append("</tbody>");
 
         return sb.toString();
-    }
+    }*/
 }

@@ -2,7 +2,6 @@ package by.psu.controllers;
 
 import by.psu.email.EmailService;
 import by.psu.email.Mail;
-import by.psu.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,12 @@ public class OrderController {
         this.emailService = emailService;
     }
 
-
+/*
     @PostMapping()
     public ResponseEntity sendOrder(@RequestBody Order order) {
         Mail mail = new Mail();
 
-        mail.setTo(order.getEmail());
+   *//*     mail.setTo(order.getEmail());*//*
         mail.setFrom(email);
         mail.setSubject("Заказ на Sumo.by");
 
@@ -37,5 +36,5 @@ public class OrderController {
         emailService.sendHtmlMessage(mail);
 
         return ResponseEntity.ok().build();
-    }
+    }*/
 }

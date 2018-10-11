@@ -34,10 +34,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         InternetHeaders internetHeaders = new InternetHeaders();
         internetHeaders.addHeader("Content-Type", "text/html; charset=UTF-8");
-
+/*
         String confirmationString = emailService.createConfirmationString(user, token, event.getAppUrl());
 
         Mail confirmationMessage = new Mail("no-reply@hurr.com", user.getEmail(), "Registration Confirmation", confirmationString);
-        emailService.sendHtmlMessage(confirmationMessage);
+        emailService.sendHtmlMessage(confirmationMessage);*/
     }
 }

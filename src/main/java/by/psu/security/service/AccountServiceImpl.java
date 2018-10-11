@@ -1,4 +1,4 @@
-package by.psu.service.impl;
+package by.psu.security.service;
 
 import by.psu.events.OnPasswordRecoveryInitiate;
 import by.psu.events.OnRegistrationComplete;
@@ -7,8 +7,6 @@ import by.psu.security.PasswordResetRequest;
 import by.psu.security.RegistrationRequest;
 import by.psu.security.model.User;
 import by.psu.security.model.VerificationToken;
-import by.psu.security.service.UserService;
-import by.psu.service.AccountService;
 import by.psu.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -104,15 +102,15 @@ public class AccountServiceImpl implements AccountService {
             //password reset allowed only once every 24 hours
             //allow
 
-                if(user.getEnabled()){
-                    user.setEnabled(false);
-                    eventPublisher.publishEvent(new OnPasswordRecoveryInitiate(user, httpHeaders.getHost().getHostName()));
-                    //send email
-                }
-                else{
-                    throw new UserNotActiveException("Пользователь не активен");
-                    //reject, user not activated -> unable to recover
-                }
+            if(user.getEnabled()){
+                user.setEnabled(false);
+                eventPublisher.publishEvent(new OnPasswordRecoveryInitiate(user, httpHeaders.getHost().getHostName()));
+                //send email
+            }
+            else{
+                throw new UserNotActiveException("Пользователь не активен");
+                //reject, user not activated -> unable to recover
+            }
 
         }
         else{

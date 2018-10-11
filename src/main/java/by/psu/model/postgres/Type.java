@@ -16,5 +16,4 @@ import javax.persistence.Table;
 )
 @Getter @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Type extends Nsi<Type> { }

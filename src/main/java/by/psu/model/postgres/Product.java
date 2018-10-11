@@ -19,11 +19,7 @@ import java.math.BigDecimal;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Products extends BasicEntity {
-
-  @OneToMany
-  @Column(name = "attraction")
-  private Attraction attraction;
+public class Product extends BasicEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "service")
@@ -31,4 +27,5 @@ public class Products extends BasicEntity {
 
   @Column(name = "price")
   private BigDecimal price;
+
 }

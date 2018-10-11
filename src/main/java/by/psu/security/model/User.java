@@ -14,7 +14,7 @@ import java.util.*;
 @Entity
 @Getter @Setter
 @Table(name = "users")
-public class User extends Basic{
+public class User extends Basic {
 
     @Column(name = "login", length = 50, unique = true)
     @NotNull

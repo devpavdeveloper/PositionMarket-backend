@@ -1,7 +1,6 @@
 package by.psu.email;
 
 import by.psu.config.MailConfig;
-import by.psu.model.Order;
 import by.psu.reporting.HtmlBuilder;
 import by.psu.security.model.User;
 import by.psu.utility.Util;
@@ -9,25 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.util.ResourceUtils;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender emailSender;
+/*    private final JavaMailSender emailSender;
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
@@ -132,11 +125,11 @@ public class EmailService {
                 "</table>\n" +
                 "<h4><span style=\"color: red;\">*</span>\n" +
                 "    Если вы не оформляли заказ, то проигнорируйте и удалите данное письмо.</h4>\n");
-      /*  try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
+      *//*  try (BufferedReader br = new BufferedReader(new FileReader(resource.getFile()))) {
             String line;
             while ((line = br.readLine()) != null) {
                 htmlTemplate.append(line);
-            }*/
+            }*//*
             String parsedResult = htmlTemplate.toString().replace("${user}", order.getFirstName() + " " + order.getLastName());
             parsedResult = parsedResult.replace("${order_date}",
                     Util.convertDateToReadableLocalFormat(order.getDate(), Util.dateFormatTypes.DATE_ONLY));
@@ -145,9 +138,9 @@ public class EmailService {
             String mainTable = HtmlBuilder.createOrderTable(order);
             parsedResult = parsedResult.replace("${main_table}", mainTable);
             return parsedResult;
-       /* } catch (IOException e) {
+       *//* } catch (IOException e) {
             logger.error("createOrderEmail (templateFile): ", e);
-        }*/
+        }*//*
 
-    }
+    }*/
 }

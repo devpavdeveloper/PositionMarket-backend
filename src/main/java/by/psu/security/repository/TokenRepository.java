@@ -1,4 +1,4 @@
-package by.psu.repository;
+package by.psu.security.repository;
 
 import by.psu.security.model.User;
 import by.psu.security.model.VerificationToken;

@@ -1,21 +1,14 @@
 package by.psu.controllers;
 
-import by.psu.model.Tag;
-import by.psu.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
-
+/*
     private final TagService tagService;
 
     @Autowired
@@ -31,5 +24,5 @@ public class TagController {
     @PostMapping
     public ResponseEntity<Set<Tag>> createAllTags(@RequestBody Tag[] tags) {
         return ResponseEntity.ok(tagService.saveOrFind(new ArrayList<>(Arrays.asList(tags))));
-    }
+    }*/
 }

@@ -34,9 +34,9 @@ public class PasswordRecoveryListener implements ApplicationListener<OnPasswordR
         InternetHeaders internetHeaders = new InternetHeaders();
         internetHeaders.addHeader("Content-Type", "text/html; charset=UTF-8");
 
-        String confirmationString = emailService.createPasswordRecoveryString(user, token, event.getAppUrl());
+       /* String confirmationString = emailService.createPasswordRecoveryString(user, token, event.getAppUrl());
 
         Mail confirmationMessage = new Mail("no-reply@hurr.com", user.getEmail(), "Password recovery", confirmationString);
-        emailService.sendHtmlMessage(confirmationMessage);
+        emailService.sendHtmlMessage(confirmationMessage);*/
     }
 }

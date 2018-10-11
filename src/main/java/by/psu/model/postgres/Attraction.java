@@ -43,4 +43,9 @@ public class Attraction extends BasicEntity {
           @JoinColumn(name = "attraction", nullable = false) },
           inverseJoinColumns = { @JoinColumn(name = "type") })
   private List<Type> types;
+
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+  @JoinColumn(name = "attraction")
+  private List<Product> products;
 }
