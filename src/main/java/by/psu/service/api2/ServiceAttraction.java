@@ -1,6 +1,7 @@
 package by.psu.service.api2;
 
 
+import by.psu.constants.TypeService;
 import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.Tag;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -57,14 +58,29 @@ public class ServiceAttraction {
     }
 
     private void placeProduct(Attraction attraction) {
-        if (nonNull(attraction) && nonNull(attraction.getProducts())) {
-            List<Product> products = null;
-            if (nonNull(attraction.getId())) {
-                products = repositoryProduct.findAllProductByUUIDAttraction(attraction.getId());
-                if (nonNull(products) && !products.isEmpty()) {
-                    //attraction.getProducts().stream().filter()
+        Attraction find = null;
+        if (nonNull(attraction.getId())) {
+            find = repositoryAttraction.findById(attraction.getId()).orElse(null);
+        }
+
+        List<Product> products = null;
+
+        if (nonNull(find)) {
+            products = find.getProducts();
+        }
+
+        if (nonNull(products) && !products.isEmpty()) {
+            Map<TypeService, Product> map =
+                    products.stream()
+                            .collect(Collectors.toMap(Product::getService, e -> e));
+            attraction.setProducts(attraction.getProducts().stream().map(product -> {
+                Product productFound = map.get(product.getService());
+                if (nonNull(productFound)){
+                    productFound.setPrice(product.getPrice());
+                    return productFound;
                 }
-            }
+                return product;
+            }).collect(Collectors.toList()));
         }
     }
 

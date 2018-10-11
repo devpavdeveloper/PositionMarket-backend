@@ -1,28 +1,44 @@
 package by.psu.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import by.psu.model.postgres.Tag;
+import by.psu.model.postgres.repository.RepositoryAttraction;
+import by.psu.service.api2.ServiceTag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
-/*
-    private final TagService tagService;
+    private final ServiceTag serviceTag;
 
     @Autowired
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
+    public TagController(ServiceTag serviceTag) {
+        this.serviceTag = serviceTag;
     }
 
     @GetMapping
     public ResponseEntity<List<Tag>> get() {
-        return ResponseEntity.ok(tagService.findAll());
+        return ResponseEntity.ok(serviceTag.getAllTags());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Tag> get(@PathVariable UUID id) {
+        return ResponseEntity.ok(serviceTag.getOne(id));
     }
 
     @PostMapping
-    public ResponseEntity<Set<Tag>> createAllTags(@RequestBody Tag[] tags) {
-        return ResponseEntity.ok(tagService.saveOrFind(new ArrayList<>(Arrays.asList(tags))));
-    }*/
+    public ResponseEntity<Tag> get(@RequestBody Tag tag) {
+        return ResponseEntity.ok(serviceTag.saveOrFind(tag));
+    }
+
+    @PutMapping
+    public ResponseEntity<Tag> update(@RequestBody Tag tag) {
+        return ResponseEntity.ok(serviceTag.update(tag.getTitle(), tag.getId()));
+    }
 }

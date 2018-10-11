@@ -1,5 +1,9 @@
 package by.psu.model.postgres;
 
+import by.psu.model.postgres.converters.DeserializeUUID;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +22,7 @@ public abstract class BasicEntity {
     @GenericGenerator(name = "useIdOrGenerate", strategy = "by.psu.model.postgres.generator.CustomUUIDGenerator")
     @GeneratedValue(generator = "useIdOrGenerate")
     @Column(name = "id", nullable = false)
+    @JsonDeserialize(using = DeserializeUUID.class)
     private UUID id;
 
 }
