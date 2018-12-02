@@ -1,9 +1,11 @@
 package by.psu.security.model;
 
 import by.psu.model.Basic;
+import by.psu.model.postgres.BasicEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,8 +15,9 @@ import java.util.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 @Table(name = "users")
-public class User extends Basic {
+public class User extends BasicEntity {
 
     @Column(name = "login", length = 50, unique = true)
     @NotNull
@@ -38,10 +41,6 @@ public class User extends Basic {
     @NotNull
     private Boolean enabled;
 
-    @Column(name = "discount")
-    @NotNull
-    private Integer discount = 10;
-
     @Column(name="last_password_reset_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastPasswordResetDate;
@@ -56,7 +55,7 @@ public class User extends Basic {
     public User(String login){
         this.login = login;
     }
-    public User(){}
+
     @JsonBackReference("user-authorities")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
@@ -77,13 +76,11 @@ public class User extends Basic {
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPhone(), user.getPhone()) &&
                 Objects.equals(getEnabled(), user.getEnabled()) &&
-                Objects.equals(getDiscount(), user.getDiscount()) &&
                 Objects.equals(getLastPasswordResetDate(), user.getLastPasswordResetDate());
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getId(), getLogin(), getPassword(), getEmail(), getPhone(), getEnabled(), getDiscount(), getLastPasswordResetDate());
+        return Objects.hash(getId(), getLogin(), getPassword(), getEmail(), getPhone(), getEnabled(), getLastPasswordResetDate());
     }
 }

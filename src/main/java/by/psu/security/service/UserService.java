@@ -6,8 +6,9 @@ import by.psu.security.model.VerificationToken;
 import by.psu.service.BasicService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
-public interface UserService extends BasicService<User, Long>{
+public interface UserService extends BasicService<User, UUID>{
 
     public User save(User user);
 

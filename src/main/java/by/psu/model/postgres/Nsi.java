@@ -3,14 +3,14 @@ package by.psu.model.postgres;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
-@MappedSuperclass
 @Getter @Setter
-public abstract class Nsi<T extends Nsi> extends BasicEntity {
+@MappedSuperclass
+public abstract class Nsi extends BasicEntity {
 
-    @Column(name = "title")
-    private String title;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="title", nullable=false)
+    private Translate title;
 
 }

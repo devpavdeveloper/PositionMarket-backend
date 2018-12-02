@@ -18,7 +18,7 @@ import static java.util.Objects.nonNull;
 @Service
 public class ServiceTag {
 
-    private final RepositoryTag repositoryTag;
+   /* private final RepositoryTag repositoryTag;
 
 
     @Autowired
@@ -58,5 +58,5 @@ public class ServiceTag {
 
     public Tag getOne(UUID uuid) {
         return repositoryTag.findById(uuid).orElse(null);
-    }
+    }*/
 }

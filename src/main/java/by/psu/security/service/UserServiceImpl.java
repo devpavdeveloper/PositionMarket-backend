@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(UUID id) {
         return null;
     }
 
@@ -62,9 +62,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         user.setPassword(passwordEncoderBean.encode(user.getPassword()));
-        List<Role> listRoles = roleRepository.findAll(); //change this accordingly
+        List<Role> listRoles = roleRepository.findAll();
         user.setAuthorities(new ArrayList<>(listRoles));
-        //user.setNextPasswordResetAvailability(Util.incrementDateByHours(new Date(), 24));
         user.setLastPasswordResetDate(new Date());
         return userRepository.save(user);
     }
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User obj, Long id) {
+    public User update(User obj, UUID id) {
         userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         obj.setId(id);
@@ -87,9 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(Long id) {
-
-    }
+    public void remove(UUID id) {}
 
     @Transactional
     @Override
@@ -135,7 +132,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User alreadyExistsByEmail(User user) {
-
         return Optional.ofNullable(userRepository.findByEmail(user.getEmail())).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -184,7 +180,6 @@ public class UserServiceImpl implements UserService {
             throw new UserTransactionException("User [" + username + "] not found");
 
         try {
-            user.setDiscount(discount);
             userRepository.save(user);
         } catch (Exception e) {
             throw new UserTransactionException("User [" + username + "] not be add new authorities");

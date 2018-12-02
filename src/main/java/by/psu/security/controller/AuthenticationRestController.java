@@ -80,12 +80,9 @@ public class AuthenticationRestController {
         if (findUser.getEnabled()) {
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-            // Reload password post-security so we can generate the token
             final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            //check if you have granted authorities here
             final String token = jwtTokenUtil.generateToken(userDetails);
 
-            // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);

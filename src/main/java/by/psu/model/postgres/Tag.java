@@ -18,4 +18,4 @@ import java.util.List;
 )
 @Getter @Setter
 @AllArgsConstructor
-public class Tag extends Nsi<Tag> {}
+public class Tag extends Nsi {}

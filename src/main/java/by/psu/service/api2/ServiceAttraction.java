@@ -1,31 +1,19 @@
 package by.psu.service.api2;
 
 
-import by.psu.constants.TypeService;
 import by.psu.model.postgres.Attraction;
-import by.psu.model.postgres.Product;
-import by.psu.model.postgres.Tag;
 import by.psu.model.postgres.Type;
-import by.psu.model.postgres.repository.RepositoryAttraction;
-import by.psu.model.postgres.repository.RepositoryProduct;
-import by.psu.model.postgres.repository.RepositoryTag;
-import by.psu.model.postgres.repository.RepositoryType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.nonNull;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 public class ServiceAttraction {
 
-    private final RepositoryAttraction repositoryAttraction;
+   /* private final RepositoryAttraction repositoryAttraction;
     private final RepositoryType repositoryType;
     private final RepositoryTag repositoryTag;
     private final RepositoryProduct repositoryProduct;
@@ -112,5 +100,5 @@ public class ServiceAttraction {
                     }).collect(Collectors.toList())
             );
         }
-    }
+    }*/
 }

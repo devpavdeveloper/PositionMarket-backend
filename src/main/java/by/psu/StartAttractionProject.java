@@ -1,17 +1,13 @@
 package by.psu;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EntityScan(value = {"by.psu.model", "by.psu.security.model"})
 public class StartAttractionProject extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
@@ -23,4 +19,3 @@ public class StartAttractionProject extends SpringBootServletInitializer {
         return builder.sources(StartAttractionProject.class);
     }
 }
-

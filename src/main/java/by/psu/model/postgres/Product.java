@@ -1,7 +1,5 @@
 package by.psu.model.postgres;
 
-
-import by.psu.constants.TypeService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +19,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Product extends BasicEntity {
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "service")
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id_service", nullable = false)
   private TypeService service;
 
   @Column(name = "price")

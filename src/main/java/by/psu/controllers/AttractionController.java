@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/api/attractions")
 public class AttractionController {
 
-    private final ServiceAttraction attractionService;
+    /*private final ServiceAttraction attractionService;
 
     @Autowired
     public AttractionController(ServiceAttraction attractionService) {
@@ -32,13 +32,13 @@ public class AttractionController {
         return ResponseEntity.ok(attractionService.getAttractionByUUID(id));
     }
 
-   /* @GetMapping("/search")
+   *//* @GetMapping("/search")
     public ResponseEntity getAttractionByTypes(@RequestParam(value = "type", required = false) Long[] indexsAttractions,
                                                @RequestParam(value = "tag", required = false) Long[] indexsTags,
                                                @RequestParam(defaultValue = "0",value = "priceField", required = false) Integer priceField,
                                                @RequestParam(defaultValue = "0",value = "direction", required = false) Integer direction){
         return ResponseEntity.ok(attractionService.findAllFilter(indexsAttractions, indexsTags, priceField, direction));
-    }*/
+    }*//*
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,13 +46,13 @@ public class AttractionController {
         return ResponseEntity.ok(attractionService.saveOrUpdate(attraction));
     }
 
-/*
+*//*
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity updateAttraction(@RequestBody Attraction attraction, @PathVariable("id") Long id){
         return ResponseEntity.ok(attractionService.update(attraction, id));
     }
-*/
+*//*
 
     @PostMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
@@ -61,7 +61,7 @@ public class AttractionController {
         return ResponseEntity.ok().build();
     }
 
-    /*@DeleteMapping("/{id}")
+    *//*@DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity deleteAttraction(@PathVariable("id") UUID id){
         attractionService.remove(id);
