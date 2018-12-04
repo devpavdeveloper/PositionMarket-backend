@@ -112,9 +112,12 @@ abstract public class ServiceNsi<T extends Nsi> {
             throw new RuntimeException(new EntityNotFoundException("Nsi not found"));
         }
 
-        findNsi.setTitle(nsi.getTitle());
+        Optional<T> optional = isExists(nsi);
+        if ( !optional.isPresent() ) {
+            findNsi.setTitle(nsi.getTitle());
+        }
 
-        return findNsi;
+        return optional.orElse(findNsi);
     }
 
     @Transactional

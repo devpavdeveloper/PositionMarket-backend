@@ -2,7 +2,6 @@ package by.psu.model.postgres;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.UUID;
 

@@ -16,11 +16,7 @@ import java.util.List;
 @Getter @Setter
 public class Translate extends BasicEntity {
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "translate",
-            orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "translate")
     List<StringValue> stringValues;
 
 }

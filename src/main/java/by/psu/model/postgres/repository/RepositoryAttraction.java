@@ -16,6 +16,4 @@ import java.util.UUID;
 @Repository
 public interface RepositoryAttraction extends JpaRepository<Attraction, UUID> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM attractions ORDER BY title ASC OFFSET :offs LIMIT :lim")
-    List<Attraction> findAllOrderByTitle(@Param("offs") Integer offset, @Param("lim") Integer limit);
 }

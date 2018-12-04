@@ -7,7 +7,7 @@ import by.psu.model.postgres.Translate;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class LanguageUtil {
+public abstract class LanguageUtil {
 
     public static Optional<StringValue> getValueByLanguage(Translate translate, Language language) {
         if ( translate != null) {
@@ -52,7 +52,6 @@ public class LanguageUtil {
                 if ( stringValue.getValue() == null) {
                     stringValue.setValue("");
                 }
-                stringValue.setTranslate(translate);
                 translate.getStringValues().add(stringValue);
                 return Optional.of(stringValue);
             }

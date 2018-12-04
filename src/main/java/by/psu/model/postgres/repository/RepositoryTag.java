@@ -4,5 +4,4 @@ import by.psu.model.postgres.Tag;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositoryTag extends RepositoryNsi<Tag> {
-}
+public interface RepositoryTag extends RepositoryNsi<Tag> { }

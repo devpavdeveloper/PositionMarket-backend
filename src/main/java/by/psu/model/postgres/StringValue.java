@@ -24,7 +24,6 @@ public class StringValue extends BasicEntity {
     String value;
 
     @ManyToOne
-    @JoinColumn(name="id_translate", nullable=false)
+    @JoinColumn(name = "id_translate")
     Translate translate;
-
 }
