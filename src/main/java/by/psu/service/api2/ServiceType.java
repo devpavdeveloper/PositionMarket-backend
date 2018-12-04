@@ -4,4 +4,8 @@ import by.psu.model.postgres.Type;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceType extends ServiceNsi<Type> {}
+public class ServiceType extends ServiceNsi<Type> {
+    public ServiceType() {
+        super(Type.class);
+    }
+}

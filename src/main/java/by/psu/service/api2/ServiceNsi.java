@@ -16,6 +16,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -35,6 +36,14 @@ abstract public class ServiceNsi<T extends Nsi> {
         this.type = classT;
     }
 
+
+    public List<T> getAll() {
+        return repositoryNsi.findAll();
+    }
+
+    public T getOne(UUID uuid) {
+        return repositoryNsi.getOne(uuid);
+    }
 
     protected Optional<T> isExists(T nsi) {
         if (nsi == null) {
@@ -120,7 +129,7 @@ abstract public class ServiceNsi<T extends Nsi> {
         }
 
         if( nsi.getTitle() == null ) {
-
+            throw new RuntimeException("Nsi title is null", new BadHttpRequest());
         }
 
         return repositoryNsi.save(nsi);

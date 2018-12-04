@@ -15,7 +15,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {
-    /*private final ServiceTag serviceTag;
+
+    private final ServiceTag serviceTag;
 
     @Autowired
     public TagController(ServiceTag serviceTag) {
@@ -24,7 +25,7 @@ public class TagController {
 
     @GetMapping
     public ResponseEntity<List<Tag>> get() {
-        return ResponseEntity.ok(serviceTag.getAllTags());
+        return ResponseEntity.ok(serviceTag.getAll());
     }
 
     @GetMapping("/{id}")
@@ -33,12 +34,12 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<Tag> get(@RequestBody Tag tag) {
-        return ResponseEntity.ok(serviceTag.saveOrFind(tag));
+    public ResponseEntity<Tag> create(@RequestBody Tag tag) {
+        return ResponseEntity.ok(serviceTag.save(tag));
     }
 
     @PutMapping
     public ResponseEntity<Tag> update(@RequestBody Tag tag) {
-        return ResponseEntity.ok(serviceTag.update(tag.getTitle(), tag.getId()));
-    }*/
+        return ResponseEntity.ok(serviceTag.update(tag));
+    }
 }
