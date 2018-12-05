@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @Getter @Setter
 public class Translate extends BasicEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "translate")
-    List<StringValue> stringValues;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "translate", fetch = FetchType.EAGER)
+    List<StringValue> values;
 
     public Optional<StringValue> setValue(StringValue stringValue) {
         Optional<StringValue> optionalValue = Optional.ofNullable(stringValue);
@@ -32,14 +32,14 @@ public class Translate extends BasicEntity {
                     .orElseThrow(() -> new RuntimeException("Language with id" + optionalValue.get().getLanguage() + " not supported"));
 
             Optional.of(stringValue.getValue()).orElseThrow(() -> new RuntimeException("Value is null or empty"));
-            stringValues = Optional.ofNullable(stringValues).orElseGet(ArrayList::new);
+            values = Optional.ofNullable(values).orElseGet(ArrayList::new);
 
-            Optional<StringValue> stringValueFounded = stringValues.stream()
+            Optional<StringValue> stringValueFounded = values.stream()
                     .filter(value -> value.getLanguage().equals(optionalValue.get().getLanguage()))
                     .findFirst();
 
-            if ( stringValues.isEmpty() || !stringValueFounded.isPresent() ) {
-                stringValues.add(optionalValue.get());
+            if ( values.isEmpty() || !stringValueFounded.isPresent() ) {
+                values.add(optionalValue.get());
                 return optionalValue;
             } else {
                 stringValueFounded.get().setValue(optionalValue.get().getValue());
@@ -50,10 +50,10 @@ public class Translate extends BasicEntity {
         return Optional.empty();
     }
 
-    public Optional<List<StringValue>> setValue(List<StringValue> stringValues) {
-        Optional<List<StringValue>> optionalStringValueList = Optional.ofNullable(stringValues);
+    public Optional<List<StringValue>> setListValues(List<StringValue> values) {
+        Optional<List<StringValue>> optionalStringValueList = Optional.ofNullable(values);
         return optionalStringValueList
-                .map(stringValues1 -> stringValues1.stream()
+                .map(values1 -> values1.stream()
                         .map(value -> setValue(value).orElse(null))
                         .filter(Objects::isNull)
                         .collect(Collectors.toList())

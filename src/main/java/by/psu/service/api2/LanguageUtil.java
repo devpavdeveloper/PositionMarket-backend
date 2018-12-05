@@ -11,8 +11,8 @@ public abstract class LanguageUtil {
 
     public static Optional<StringValue> getValueByLanguage(Translate translate, Language language) {
         if ( translate != null) {
-            if ( translate.getStringValues() != null && !translate.getStringValues().isEmpty() ) {
-                return translate.getStringValues().stream()
+            if ( translate.getValues() != null && !translate.getValues().isEmpty() ) {
+                return translate.getValues().stream()
                         .filter(stringValue -> language.getUuid().equals(stringValue.getLanguage()))
                         .findFirst();
             }
@@ -39,11 +39,11 @@ public abstract class LanguageUtil {
                 throw new RuntimeException("StringValue have a language is null");
             }
 
-            if (translate.getStringValues() == null) {
-                translate.setStringValues(new ArrayList<>());
+            if (translate.getValues() == null) {
+                translate.setValues(new ArrayList<>());
             }
 
-            Optional<StringValue> optionalStringValue = translate.getStringValues().stream()
+            Optional<StringValue> optionalStringValue = translate.getValues().stream()
                     .filter(value -> value.getLanguage().equals(stringValue.getLanguage()))
                     .findFirst();
 
@@ -52,7 +52,7 @@ public abstract class LanguageUtil {
                 if ( stringValue.getValue() == null) {
                     stringValue.setValue("");
                 }
-                translate.getStringValues().add(stringValue);
+                translate.getValues().add(stringValue);
                 return Optional.of(stringValue);
             }
 

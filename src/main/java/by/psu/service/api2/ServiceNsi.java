@@ -4,9 +4,7 @@ import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.repository.RepositoryNsi;
-import javassist.NotFoundException;
 import javassist.tools.web.BadHttpRequest;
-import org.hibernate.mapping.Join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +22,13 @@ import static java.util.Objects.isNull;
 abstract public class ServiceNsi<T extends Nsi> {
 
     @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected RepositoryNsi<T> repositoryNsi;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Class<T> type = null;
+    private Class<T> type;
 
 
     public ServiceNsi(Class<T> classT) {
@@ -74,8 +73,7 @@ abstract public class ServiceNsi<T extends Nsi> {
             throw new RuntimeException("Nsi doesn't have a valid value");
         }
 
-        Predicate predicate = expressions.size() == 1 ?
-                    expressions.get(0) :
+        Predicate predicate = expressions.size() == 1 ? expressions.get(0) :
                     criteriaBuilder.or(expressions.toArray(new Predicate[0]));
 
         stringValueSubquery.select(stringValueRoot)
@@ -86,13 +84,12 @@ abstract public class ServiceNsi<T extends Nsi> {
                         )
                 );
 
-        criteriaQuery.select(root)
-                .where(
-                            criteriaBuilder.exists(stringValueSubquery)
-                );
+        criteriaQuery.select(root).where(criteriaBuilder.exists(stringValueSubquery));
 
         TypedQuery<T> tTypedQuery = entityManager.createQuery(criteriaQuery);
-        return Optional.of(tTypedQuery.getSingleResult());
+        //tTypedQuery.unwrap(org.hibernate.Query.class).getQueryString();
+        List<T> objList = tTypedQuery.getResultList();
+        return objList.stream().findFirst();
     }
 
     @Transactional
@@ -105,25 +102,24 @@ abstract public class ServiceNsi<T extends Nsi> {
         findNsi.orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi not found")));
         findNsi.get().setTitle(nsi.getTitle());
 
-        return findNsi.get();
+        return repositoryNsi.save(findNsi.get());
     }
 
     @Transactional
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public T save(T nsi) {
-        if ( nsi == null ) {
-            throw new RuntimeException("Nsi is null", new BadHttpRequest());
-        }
+        Optional<T> optionalNsi = Optional.ofNullable(nsi);
 
-        if ( nsi.getId() != null ) {
+        optionalNsi.orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
+
+        if ( optionalNsi.get().getId() != null ) {
             throw new RuntimeException(new EntityExistsException("Id is not null"));
         }
 
-        if( nsi.getTitle() == null ) {
-            throw new RuntimeException("Nsi title is null", new BadHttpRequest());
-        }
+        Optional.ofNullable(optionalNsi.get().getTitle())
+                .orElseThrow(() -> new RuntimeException("Nsi title is null", new BadHttpRequest()));
 
-        return repositoryNsi.save(nsi);
+        return isExists(optionalNsi.get()).orElseGet(() -> repositoryNsi.save(optionalNsi.get()));
+
     }
 
     public List<T> place(List<T> nsiCollection) {

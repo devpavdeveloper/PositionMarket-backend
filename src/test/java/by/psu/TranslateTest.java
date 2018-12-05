@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,30 +28,20 @@ public class TranslateTest {
     public void init() {
         translate = new Translate();
 
-        StringValue stringValueRu = new StringValue();
-        stringValueRu.setValue("RU");
-        stringValueRu.setLanguage(Language.RU.getUuid());
-
-        StringValue stringValueEn = new StringValue();
-        stringValueEn.setValue("EN");
-        stringValueEn.setLanguage(Language.EN.getUuid());
+        StringValue stringValueRu = new StringValue(Language.RU.getUuid(), "RU", translate);
+        StringValue stringValueEn = new StringValue(Language.EN.getUuid(), "EN", translate);
 
         translate.setValue(stringValueEn);
         translate.setValue(stringValueRu);
 
-        StringValue stringItemValueRu = new StringValue();
-        stringItemValueRu.setValue("RUList");
-        stringItemValueRu.setLanguage(Language.RU.getUuid());
-
-        StringValue stringItemValueEn = new StringValue();
-        stringItemValueEn.setValue("ENList");
-        stringItemValueEn.setLanguage(Language.EN.getUuid());
+        StringValue stringItemValueRu = new StringValue(Language.RU.getUuid(), "RUList", translate);
+        StringValue stringItemValueEn = new StringValue(Language.EN.getUuid(), "ENList", translate);
         stringValueList.addAll(Arrays.asList(stringItemValueEn, stringItemValueRu));
     }
 
     @Test
     public void testSetNewStringValueToTranslateListValue() {
-        assertNotNull(translate.getStringValues());
+        assertNotNull(translate.getValues());
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());
     }
@@ -63,13 +51,11 @@ public class TranslateTest {
     public void testSetNewStringValueToTranslateListValueWithExistsValue() {
         assertEquals(LanguageUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "EN");
 
-        StringValue stringValueEnNew = new StringValue();
-        stringValueEnNew.setValue("NewEN");
-        stringValueEnNew.setLanguage(Language.EN.getUuid());
+        StringValue stringValueEnNew = new StringValue(Language.EN.getUuid(), "NewEN", translate);
 
         translate.setValue(stringValueEnNew);
 
-        assertEquals(translate.getStringValues().size(), 2);
+        assertEquals(translate.getValues().size(), 2);
         assertEquals(LanguageUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "NewEN");
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());
@@ -78,9 +64,9 @@ public class TranslateTest {
 
     @Test
     public void testSetNewListStringValueToTranslateListValueWithExistsValue() {
-        translate.setValue(stringValueList);
+        translate.setValues(stringValueList);
 
-        assertEquals(translate.getStringValues().size(), 2);
+        assertEquals(translate.getValues().size(), 2);
 
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
         assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());

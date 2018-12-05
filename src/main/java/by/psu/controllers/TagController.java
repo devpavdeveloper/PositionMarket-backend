@@ -1,17 +1,14 @@
 package by.psu.controllers;
 
 import by.psu.model.postgres.Tag;
-import by.psu.model.postgres.repository.RepositoryAttraction;
 import by.psu.service.api2.ServiceTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/tags")
 public class TagController {

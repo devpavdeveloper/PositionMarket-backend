@@ -10,6 +10,4 @@ public class ServiceTag extends ServiceNsi<Tag> {
         super(Tag.class);
     }
 
-
-
 }
