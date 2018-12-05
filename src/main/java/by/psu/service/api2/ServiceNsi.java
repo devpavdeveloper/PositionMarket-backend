@@ -98,26 +98,14 @@ abstract public class ServiceNsi<T extends Nsi> {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_READ)
     public T update(T nsi) {
-        if ( nsi == null ) {
-            throw new RuntimeException("Nsi is null", new BadHttpRequest());
-        }
+        Optional.of(nsi).orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
+        Optional.of(nsi.getId()).orElseThrow(() -> new RuntimeException("Id is null"));
 
-        if ( nsi.getId() == null ) {
-            throw new RuntimeException("Id is null");
-        }
+        Optional<T> findNsi = Optional.of(repositoryNsi.getOne(nsi.getId()));
+        findNsi.orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi not found")));
+        findNsi.get().setTitle(nsi.getTitle());
 
-        T findNsi = repositoryNsi.getOne(nsi.getId());
-
-        if ( findNsi == null ) {
-            throw new RuntimeException(new EntityNotFoundException("Nsi not found"));
-        }
-
-        Optional<T> optional = isExists(nsi);
-        if ( !optional.isPresent() ) {
-            findNsi.setTitle(nsi.getTitle());
-        }
-
-        return optional.orElse(findNsi);
+        return findNsi.get();
     }
 
     @Transactional
