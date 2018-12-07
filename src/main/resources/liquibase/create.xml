@@ -8,6 +8,7 @@
     <changeSet id="20180607_time11_59" author="devpav" runOnChange="true">
         <comment>Создание таблиц для хранения данных</comment>
         <sql>
+
             create table if not exists attractions
             (
             id uuid not null
@@ -16,9 +17,9 @@
             image varchar(255),
             link_source varchar(255),
             title varchar(255)
-            );
+            )
+            ;
 
-            alter table attractions owner to postgres;
 
             create table if not exists roles
             (
@@ -26,18 +27,17 @@
             constraint roles_pkey
             primary key,
             title varchar(50)
-            );
-
-            alter table roles owner to postgres;
+            )
+            ;
 
             create table if not exists translate
             (
             id uuid not null
             constraint translate_pkey
             primary key
-            );
+            )
+            ;
 
-            alter table translate owner to postgres;
 
             create table if not exists string_values
             (
@@ -46,12 +46,11 @@
             primary key,
             language uuid not null,
             value varchar(255) not null,
-            id_translate uuid not null
-            constraint fk20554qq1j30fvstf6t76xyu0g
+            translate_id uuid
+            constraint fksnt5nmoqr6j2mjeu7ae61bc5p
             references translate
-            );
-
-            alter table string_values owner to postgres;
+            )
+            ;
 
             create table if not exists tags
             (
@@ -61,9 +60,8 @@
             title uuid not null
             constraint fkcf1v0sjodvyv3kkoh42hkfxw3
             references translate
-            );
-
-            alter table tags owner to postgres;
+            )
+            ;
 
             create table if not exists attraction_tag
             (
@@ -73,9 +71,8 @@
             tag uuid not null
             constraint fk8nsttgdubm36fkutru96bp5po
             references tags
-            );
-
-            alter table attraction_tag owner to postgres;
+            )
+            ;
 
             create table if not exists type_service
             (
@@ -85,9 +82,9 @@
             title uuid not null
             constraint fki23eflj82kllsa94otgjvaqk
             references translate
-            );
+            )
+            ;
 
-            alter table type_service owner to postgres;
 
             create table if not exists products
             (
@@ -101,9 +98,8 @@
             attraction uuid
             constraint fk7lqagw1qny7cikooc914cmi4m
             references attractions
-            );
-
-            alter table products owner to postgres;
+            )
+            ;
 
             create table if not exists types
             (
@@ -113,9 +109,9 @@
             title uuid not null
             constraint fk1cq1rf2wy2khmdaceyywkvrqb
             references translate
-            );
+            )
+            ;
 
-            alter table types owner to postgres;
 
             create table if not exists attraction_type
             (
@@ -125,9 +121,8 @@
             type uuid not null
             constraint fknnp7kkvsdt4v83xwdia3ojwub
             references types
-            );
-
-            alter table attraction_type owner to postgres;
+            )
+            ;
 
             create table if not exists users
             (
@@ -142,9 +137,8 @@
             unique,
             password varchar(100) not null,
             phone varchar(255)
-            );
-
-            alter table users owner to postgres;
+            )
+            ;
 
             create table if not exists user_role
             (
@@ -154,9 +148,8 @@
             id_role uuid not null
             constraint fk2yqlxhjhgilevh7qvt2ve6udh
             references roles
-            );
-
-            alter table user_role owner to postgres;
+            )
+            ;
 
             create table if not exists verification_tokens
             (
@@ -168,9 +161,9 @@
             user_id uuid
             constraint fk54y8mqsnq1rtyf581sfmrbp4f
             references users
-            );
+            )
+            ;
 
-            alter table verification_tokens owner to postgres;
         </sql>
     </changeSet>
 </databaseChangeLog>

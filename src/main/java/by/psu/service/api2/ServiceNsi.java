@@ -85,7 +85,6 @@ abstract public class ServiceNsi<T extends Nsi> {
                 );
 
         criteriaQuery.select(root).where(criteriaBuilder.exists(stringValueSubquery));
-
         TypedQuery<T> tTypedQuery = entityManager.createQuery(criteriaQuery);
         //tTypedQuery.unwrap(org.hibernate.Query.class).getQueryString();
         List<T> objList = tTypedQuery.getResultList();
@@ -108,18 +107,14 @@ abstract public class ServiceNsi<T extends Nsi> {
     @Transactional
     public T save(T nsi) {
         Optional<T> optionalNsi = Optional.ofNullable(nsi);
-
         optionalNsi.orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
 
-        if ( optionalNsi.get().getId() != null ) {
-            throw new RuntimeException(new EntityExistsException("Id is not null"));
-        }
+        optionalNsi.map(Nsi::getId).orElseThrow(() -> new RuntimeException(new EntityExistsException("Id is not null")));
+        optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException("Nsi title is null", new BadHttpRequest()));
 
-        Optional.ofNullable(optionalNsi.get().getTitle())
-                .orElseThrow(() -> new RuntimeException("Nsi title is null", new BadHttpRequest()));
+        optionalNsi.get().getTitle().setListValues(optionalNsi.get().getTitle().getValues());
 
         return isExists(optionalNsi.get()).orElseGet(() -> repositoryNsi.save(optionalNsi.get()));
-
     }
 
     public List<T> place(List<T> nsiCollection) {

@@ -1,7 +1,10 @@
 package by.psu.model.postgres;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +18,7 @@ import java.util.UUID;
 )
 @Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class StringValue extends BasicEntity {
 
     @Column(name = "language", nullable = false, length = 120)
@@ -24,7 +28,6 @@ public class StringValue extends BasicEntity {
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "id_translate")
+    @JsonBackReference("string_value_translate")
     private Translate translate;
-
 }

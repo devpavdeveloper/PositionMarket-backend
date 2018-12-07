@@ -1,6 +1,7 @@
 package by.psu.model.postgres;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
         name = "translate"
 )
 @Getter @Setter
+@NoArgsConstructor
 public class Translate extends BasicEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "translate", fetch = FetchType.EAGER)
-    List<StringValue> values;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "translate_id")
+    private List<StringValue> values;
 
     public Optional<StringValue> setValue(StringValue stringValue) {
         Optional<StringValue> optionalValue = Optional.ofNullable(stringValue);

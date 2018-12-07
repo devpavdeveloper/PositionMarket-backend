@@ -16,6 +16,5 @@ import java.util.List;
 @Table(
         name = "tags"
 )
-@Getter @Setter
 @AllArgsConstructor
 public class Tag extends Nsi {}
