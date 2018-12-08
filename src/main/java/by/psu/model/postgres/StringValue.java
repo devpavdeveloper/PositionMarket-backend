@@ -1,7 +1,6 @@
 package by.psu.model.postgres;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,7 @@ public class StringValue extends BasicEntity {
     @Column(name = "value", nullable = false)
     private String value;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference("string_value_translate")
     private Translate translate;
 }

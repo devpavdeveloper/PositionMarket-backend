@@ -3,14 +3,15 @@ package by.psu.service.api2;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
+import by.psu.model.postgres.Translate;
 import by.psu.model.postgres.repository.RepositoryNsi;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +32,8 @@ abstract public class ServiceNsi<T extends Nsi> {
     private Class<T> type;
 
 
-    public ServiceNsi(Class<T> classT) {
-        this.type = classT;
+    public ServiceNsi() {
+        this.type = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
 
@@ -92,14 +93,20 @@ abstract public class ServiceNsi<T extends Nsi> {
     }
 
     @Transactional
-    @Lock(LockModeType.PESSIMISTIC_READ)
     public T update(T nsi) {
-        Optional.of(nsi).orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
-        Optional.of(nsi.getId()).orElseThrow(() -> new RuntimeException("Id is null"));
+        Optional<T> optionalNsi = Optional.of(nsi);
+        optionalNsi.orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
+        optionalNsi.map(Nsi::getId).orElseThrow(() -> new RuntimeException("Id is null"));
 
         Optional<T> findNsi = Optional.of(repositoryNsi.getOne(nsi.getId()));
         findNsi.orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi not found")));
-        findNsi.get().setTitle(nsi.getTitle());
+
+        Translate translate = optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi title is null")));
+        Translate translateFind = findNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Find nsi (BD) title is null")));
+
+        if ( !translate.getValues().isEmpty() && !translateFind.getValues().isEmpty() ) {
+            findNsi.get().getTitle().setListValues(nsi.getTitle().getValues());
+        }
 
         return repositoryNsi.save(findNsi.get());
     }
@@ -109,7 +116,10 @@ abstract public class ServiceNsi<T extends Nsi> {
         Optional<T> optionalNsi = Optional.ofNullable(nsi);
         optionalNsi.orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
 
-        optionalNsi.map(Nsi::getId).orElseThrow(() -> new RuntimeException(new EntityExistsException("Id is not null")));
+        if ( optionalNsi.map(Nsi::getId).isPresent() ) {
+             throw new RuntimeException(new EntityExistsException("Id is not null"));
+        }
+
         optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException("Nsi title is null", new BadHttpRequest()));
 
         optionalNsi.get().getTitle().setListValues(optionalNsi.get().getTitle().getValues());

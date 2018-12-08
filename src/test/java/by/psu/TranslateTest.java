@@ -6,9 +6,6 @@ import by.psu.model.postgres.Translate;
 import by.psu.service.api2.LanguageUtil;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,9 +13,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TranslateTest {
+
+public class TranslateTest extends BaseTest {
 
     private Translate translate;
     private List<StringValue> stringValueList = new ArrayList<>();
@@ -64,7 +60,7 @@ public class TranslateTest {
 
     @Test
     public void testSetNewListStringValueToTranslateListValueWithExistsValue() {
-        translate.setValues(stringValueList);
+        translate.setListValues(stringValueList);
 
         assertEquals(translate.getValues().size(), 2);
 
