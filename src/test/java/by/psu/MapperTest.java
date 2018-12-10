@@ -4,7 +4,7 @@ import by.psu.model.postgres.Nsi;
 import by.psu.service.api2.ServiceTag;
 import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.StringValueDTO;
-import by.psu.service.dto.mappers.NsiMapper;
+import by.psu.service.dto.mappers.TagNsiMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ public class MapperTest extends BaseTest {
 
     @Test
     public void testMapperNsiToNsiDTO() {
-        NsiMapper nsiMapper = NsiMapper.INSTANCE;
+        TagNsiMapper nsiMapper = TagNsiMapper.INSTANCE;
         NsiDTO nsiDTO = nsiMapper.to(serviceTag.getAll().stream().findFirst().get());
         Assert.assertNotNull(nsiDTO);
     }
 
     @Test
     public void testMapperNsiFromNsiDTO() {
-        NsiMapper nsiMapper = NsiMapper.INSTANCE;
+        TagNsiMapper nsiMapper = TagNsiMapper.INSTANCE;
         NsiDTO nsiDTO = new NsiDTO();
         nsiDTO.setId(UUID.randomUUID());
 

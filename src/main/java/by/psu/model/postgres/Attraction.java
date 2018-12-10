@@ -21,8 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Attraction extends BasicEntity {
 
-  @Column(name = "title")
-  private String title;
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name="title", nullable=false)
 
   @Column(name = "link_source")
   private String linkSource;

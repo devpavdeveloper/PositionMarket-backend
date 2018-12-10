@@ -5,35 +5,34 @@ import by.psu.service.dto.NsiDTO;
 import by.psu.service.facade.NsiFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
-public class NsiController<T extends Nsi> {
+public class NsiController<T extends Nsi, E extends NsiDTO> {
 
     @Autowired
-    protected NsiFacade<T> nsiFacade;
+    protected NsiFacade<T, E> nsiFacade;
 
     @GetMapping
-    public ResponseEntity<List<NsiDTO>> get() {
+    public ResponseEntity<List<E>> get() {
         return ResponseEntity.ok(nsiFacade.getAll());
     }
-/*
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> get(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(serviceNsi.getOne(id));
+    public ResponseEntity<E> get(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(nsiFacade.getOne(id));
     }
 
     @PostMapping
-    public ResponseEntity<T> create(@RequestBody T obj) {
-        return ResponseEntity.ok(serviceNsi.save(obj));
+    public ResponseEntity<E> create(@RequestBody E obj) {
+        return ResponseEntity.ok(nsiFacade.save(obj));
     }
 
     @PutMapping
-    public ResponseEntity<T> update(@RequestBody T obj) {
-        return ResponseEntity.ok(serviceNsi.update(obj));
+    public ResponseEntity<E> update(@RequestBody E obj) {
+        return ResponseEntity.ok(nsiFacade.update(obj));
     }
-*/
 
 }

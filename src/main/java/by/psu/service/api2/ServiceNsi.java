@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-abstract public class ServiceNsi<T extends Nsi> {
+public abstract class ServiceNsi<T extends Nsi> {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

@@ -3,7 +3,6 @@ package by.psu;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
@@ -14,8 +13,8 @@ public class StartAttractionProject extends SpringBootServletInitializer {
         SpringApplication.run(StartAttractionProject.class, args);
     }
 
-    @Override
+/*    @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(StartAttractionProject.class);
-    }
+    }*/
 }
