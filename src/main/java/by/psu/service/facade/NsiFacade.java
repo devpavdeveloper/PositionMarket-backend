@@ -3,7 +3,7 @@ package by.psu.service.facade;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.api2.ServiceNsi;
 import by.psu.service.dto.NsiDTO;
-import by.psu.service.dto.mappers.NsiMapper;
+import by.psu.service.dto.mappers.nsi.NsiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 

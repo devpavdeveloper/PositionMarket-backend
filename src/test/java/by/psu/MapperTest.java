@@ -4,7 +4,7 @@ import by.psu.model.postgres.Nsi;
 import by.psu.service.api2.ServiceTag;
 import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.StringValueDTO;
-import by.psu.service.dto.mappers.TagNsiMapper;
+import by.psu.service.dto.mappers.nsi.TagNsiMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

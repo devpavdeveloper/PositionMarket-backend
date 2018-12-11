@@ -1,4 +1,4 @@
-package by.psu.service.dto.mappers;
+package by.psu.service.dto.mappers.nsi;
 
 import by.psu.model.postgres.Type;
 import by.psu.service.dto.NsiDTO;
