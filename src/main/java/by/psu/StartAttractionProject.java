@@ -13,8 +13,4 @@ public class StartAttractionProject extends SpringBootServletInitializer {
         SpringApplication.run(StartAttractionProject.class, args);
     }
 
-/*    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(StartAttractionProject.class);
-    }*/
 }

@@ -25,4 +25,5 @@ public class TypeAttractionController {
     public ResponseEntity createAll(@RequestBody TypeAttraction[] typeAttractions){
         return ResponseEntity.ok(typeService.saveOrFind(new ArrayList<>(Arrays.asList(typeAttractions))));
     }*/
+
 }
