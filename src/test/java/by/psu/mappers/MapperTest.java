@@ -1,5 +1,6 @@
-package by.psu;
+package by.psu.mappers;
 
+import by.psu.BaseTest;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.api2.ServiceTag;
 import by.psu.service.dto.NsiDTO;
@@ -17,16 +18,17 @@ public class MapperTest extends BaseTest {
     @Autowired
     private ServiceTag serviceTag;
 
+    private TagNsiMapper nsiMapper = TagNsiMapper.INSTANCE;
+
+
     @Test
     public void testMapperNsiToNsiDTO() {
-        TagNsiMapper nsiMapper = TagNsiMapper.INSTANCE;
         NsiDTO nsiDTO = nsiMapper.to(serviceTag.getAll().stream().findFirst().get());
         Assert.assertNotNull(nsiDTO);
     }
 
     @Test
     public void testMapperNsiFromNsiDTO() {
-        TagNsiMapper nsiMapper = TagNsiMapper.INSTANCE;
         NsiDTO nsiDTO = new NsiDTO();
         nsiDTO.setId(UUID.randomUUID());
 

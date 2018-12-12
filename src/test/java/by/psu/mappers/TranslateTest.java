@@ -1,5 +1,6 @@
-package by.psu;
+package by.psu.mappers;
 
+import by.psu.BaseTest;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.Translate;
