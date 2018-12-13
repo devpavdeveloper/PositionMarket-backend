@@ -1,4 +1,7 @@
 package by.psu.model.factory;
 
-public class FactoryType {
-}
+import by.psu.model.postgres.Type;
+import org.springframework.stereotype.Component;
+
+@Component
+public class FactoryType extends FactoryNsi<Type> {}

@@ -1,3 +1,3 @@
-package by.psu.service.api2;
+package by.psu.service.api;
 
 public class TypeService {}

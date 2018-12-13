@@ -2,7 +2,7 @@ package by.psu.mappers;
 
 import by.psu.BaseTest;
 import by.psu.model.postgres.Nsi;
-import by.psu.service.api2.ServiceTag;
+import by.psu.service.api.ServiceTag;
 import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.StringValueDTO;
 import by.psu.service.dto.mappers.nsi.TagNsiMapper;

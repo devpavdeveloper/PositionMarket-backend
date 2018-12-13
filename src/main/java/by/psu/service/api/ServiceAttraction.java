@@ -1,4 +1,4 @@
-package by.psu.service.api2;
+package by.psu.service.api;
 
 import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.repository.RepositoryAttraction;

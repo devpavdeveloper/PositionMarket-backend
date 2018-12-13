@@ -1,4 +1,4 @@
-package by.psu.service.api2;
+package by.psu.service.api;
 
 import org.springframework.stereotype.Service;
 

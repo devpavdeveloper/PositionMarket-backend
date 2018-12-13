@@ -1,4 +1,3 @@
 package by.psu.service.dto;
 
-public class TagDTO {
-}
+public class TagDTO extends NsiDTO {}

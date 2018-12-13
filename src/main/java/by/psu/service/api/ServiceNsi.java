@@ -1,11 +1,10 @@
-package by.psu.service.api2;
+package by.psu.service.api;
 
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.Translate;
 import by.psu.model.postgres.repository.RepositoryNsi;
-import by.psu.service.api.LanguageUtil;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

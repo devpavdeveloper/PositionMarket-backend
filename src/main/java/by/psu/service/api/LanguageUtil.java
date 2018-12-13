@@ -1,6 +1,7 @@
-package by.psu.service.api2;
+package by.psu.service.api;
 
 import by.psu.model.postgres.Language;
+import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.Translate;
 
@@ -17,6 +18,10 @@ public abstract class LanguageUtil {
             }
         }
         return Optional.empty();
+    }
+
+    public static <T extends Nsi> Optional<StringValue> getValueOrEmpty(T value, Language language) {
+        return getValueByLanguage(value.getTitle(), language);
     }
 
 }

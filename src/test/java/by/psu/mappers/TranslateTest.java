@@ -4,7 +4,7 @@ import by.psu.BaseTest;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.Translate;
-import by.psu.service.api2.LanguageUtil;
+import by.psu.service.api.LanguageUtil;
 import org.junit.Before;
 import org.junit.Test;
 

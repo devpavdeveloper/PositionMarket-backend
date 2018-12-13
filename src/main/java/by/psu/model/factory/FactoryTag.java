@@ -1,4 +1,7 @@
 package by.psu.model.factory;
 
-public class FactoryTag {
-}
+import by.psu.model.postgres.Tag;
+import org.springframework.stereotype.Component;
+
+@Component
+public class FactoryTag extends FactoryNsi<Tag> {}
