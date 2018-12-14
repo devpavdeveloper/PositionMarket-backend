@@ -5,9 +5,11 @@ import by.psu.model.postgres.*;
 import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.ProductDTO;
 import by.psu.service.dto.StringValueDTO;
+import by.psu.service.dto.TypeServiceDTO;
 import by.psu.service.dto.mappers.ProductMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -17,7 +19,8 @@ import static org.junit.Assert.*;
 
 public class ProductMapperTest extends BaseTest {
 
-    private ProductMapper productMapper = ProductMapper.INSTANCE;
+    @Autowired
+    private ProductMapper productMapper;
 
     private Translate translate;
 
@@ -48,7 +51,7 @@ public class ProductMapperTest extends BaseTest {
 
         assertNotNull(productDTO);
         assertEquals(productDTO.getPrice(), product.getPrice());
-        assertEquals(productDTO.getType().getValues().size(), 2);
+        assertEquals(productDTO.getService().getValues().size(), 2);
     }
 
 
@@ -65,11 +68,11 @@ public class ProductMapperTest extends BaseTest {
         stringValueDTO2.setLanguage(Language.RU.getUuid());
         stringValueDTO2.setValue("RU");
 
-        NsiDTO nsiDTO = new NsiDTO();
+        TypeServiceDTO nsiDTO = new TypeServiceDTO();
         nsiDTO.setId(UUID.randomUUID());
         nsiDTO.setValues(Arrays.asList(stringValueDTO, stringValueDTO2));
 
-        productDTO.setType(nsiDTO);
+        productDTO.setService(nsiDTO);
 
         Product product = productMapper.from( productDTO );
 

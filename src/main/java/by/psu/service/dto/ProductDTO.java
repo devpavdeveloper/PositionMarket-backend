@@ -10,6 +10,6 @@ import java.math.BigDecimal;
 public class ProductDTO {
 
     private BigDecimal price;
-    private NsiDTO type;
+    private TypeServiceDTO service;
 
 }

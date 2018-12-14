@@ -24,7 +24,8 @@ import static org.junit.Assert.*;
 
 public class AttractionMapperTest extends BaseTest {
 
-    private AttractionMapper mapper = AttractionMapper.INSTANCE;
+    @Autowired
+    private AttractionMapper mapper;
 
     @Autowired
     private FactoryAttraction factoryAttraction;
@@ -38,10 +39,17 @@ public class AttractionMapperTest extends BaseTest {
     private FactoryTag factoryTag;
 
 
-    private TagNsiMapper tagNsiMapper = TagNsiMapper.INSTANCE;
-    private TypeNsiMapper typeNsiMapper = TypeNsiMapper.INSTANCE;
-    private TypeServiceNsiMapper typeServiceNsiMapper = TypeServiceNsiMapper.INSTANCE;
-    private ProductMapper productMapper = ProductMapper.INSTANCE;
+    @Autowired
+    private TagNsiMapper tagNsiMapper;
+
+    @Autowired
+    private TypeNsiMapper typeNsiMapper;
+
+    @Autowired
+    private TypeServiceNsiMapper typeServiceNsiMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
 
     private Attraction attraction;
 
