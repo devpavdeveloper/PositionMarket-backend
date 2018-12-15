@@ -1,7 +1,7 @@
 package by.psu.mappers;
 
 import by.psu.BaseTest;
-import by.psu.service.api.ServiceTag;
+import by.psu.service.api.TagService;
 import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.mappers.nsi.TagNsiMapper;
 import org.junit.Assert;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MapperTest extends BaseTest {
 
     @Autowired
-    private ServiceTag serviceTag;
+    private TagService serviceTag;
 
     @Autowired
     private TagNsiMapper nsiMapper;

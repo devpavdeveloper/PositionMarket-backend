@@ -4,7 +4,7 @@ import by.psu.BaseTest;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.Translate;
-import by.psu.service.api.LanguageUtil;
+import by.psu.service.api.TranslateUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,23 +39,23 @@ public class TranslateTest extends BaseTest {
     @Test
     public void testSetNewStringValueToTranslateListValue() {
         assertNotNull(translate.getValues());
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.RU).isPresent());
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.EN).isPresent());
     }
 
 
     @Test
     public void testSetNewStringValueToTranslateListValueWithExistsValue() {
-        assertEquals(LanguageUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "EN");
+        assertEquals(TranslateUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "EN");
 
         StringValue stringValueEnNew = new StringValue(Language.EN.getUuid(), "NewEN", translate);
 
         translate.setValue(stringValueEnNew);
 
         assertEquals(translate.getValues().size(), 2);
-        assertEquals(LanguageUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "NewEN");
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());
+        assertEquals(TranslateUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "NewEN");
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.RU).isPresent());
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.EN).isPresent());
     }
 
 
@@ -65,10 +65,10 @@ public class TranslateTest extends BaseTest {
 
         assertEquals(translate.getValues().size(), 2);
 
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.RU).isPresent());
-        assertTrue(LanguageUtil.getValueByLanguage(translate, Language.EN).isPresent());
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.RU).isPresent());
+        assertTrue(TranslateUtil.getValueByLanguage(translate, Language.EN).isPresent());
 
-        assertEquals(LanguageUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "ENList");
-        assertEquals(LanguageUtil.getValueByLanguage(translate, Language.RU).get().getValue(), "RUList");
+        assertEquals(TranslateUtil.getValueByLanguage(translate, Language.EN).get().getValue(), "ENList");
+        assertEquals(TranslateUtil.getValueByLanguage(translate, Language.RU).get().getValue(), "RUList");
     }
 }

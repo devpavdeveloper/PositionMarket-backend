@@ -2,7 +2,6 @@ package by.psu.mappers;
 
 import by.psu.BaseTest;
 import by.psu.model.postgres.*;
-import by.psu.service.dto.NsiDTO;
 import by.psu.service.dto.ProductDTO;
 import by.psu.service.dto.StringValueDTO;
 import by.psu.service.dto.TypeServiceDTO;
@@ -15,7 +14,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ProductMapperTest extends BaseTest {
 

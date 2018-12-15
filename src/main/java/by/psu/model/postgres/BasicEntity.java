@@ -2,8 +2,6 @@ package by.psu.model.postgres;
 
 import by.psu.model.postgres.converters.DeserializeUUID;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,7 +13,8 @@ import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @MappedSuperclass
-@Getter @Setter
+@Getter
+@Setter
 public abstract class BasicEntity {
 
     @Id

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public abstract class ServiceNsi<T extends Nsi> {
+public abstract class NsiService<T extends Nsi> {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -32,7 +32,7 @@ public abstract class ServiceNsi<T extends Nsi> {
     private Class<T> type;
 
 
-    public ServiceNsi() {
+    public NsiService() {
         this.type = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
@@ -45,6 +45,7 @@ public abstract class ServiceNsi<T extends Nsi> {
         return repositoryNsi.getOne(uuid);
     }
 
+    @Transactional
     protected Optional<T> isExists(T nsi) {
         if (nsi == null) {
             return Optional.empty();
@@ -57,8 +58,8 @@ public abstract class ServiceNsi<T extends Nsi> {
         Subquery<StringValue> stringValueSubquery = criteriaQuery.subquery(StringValue.class);
         Root<StringValue> stringValueRoot = stringValueSubquery.from(StringValue.class);
 
-        Optional<StringValue> stringValueEn = LanguageUtil.getValueByLanguage(nsi.getTitle(), Language.EN);
-        Optional<StringValue> stringValueRu = LanguageUtil.getValueByLanguage(nsi.getTitle(), Language.RU);
+        Optional<StringValue> stringValueEn = TranslateUtil.getValueByLanguage(nsi.getTitle(), Language.EN);
+        Optional<StringValue> stringValueRu = TranslateUtil.getValueByLanguage(nsi.getTitle(), Language.RU);
 
         List<Predicate> expressions = new ArrayList<>();
 
@@ -117,7 +118,7 @@ public abstract class ServiceNsi<T extends Nsi> {
         optionalNsi.orElseThrow(() -> new RuntimeException("Nsi is null", new BadHttpRequest()));
 
         if ( optionalNsi.map(Nsi::getId).isPresent() ) {
-             throw new RuntimeException(new EntityExistsException("Id is not null"));
+             return repositoryNsi.getOne(optionalNsi.map(Nsi::getId).get());
         }
 
         optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException("Nsi title is null", new BadHttpRequest()));

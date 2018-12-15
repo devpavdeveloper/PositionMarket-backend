@@ -1,13 +1,33 @@
 package by.psu.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import by.psu.service.dto.AttractionDTO;
+import by.psu.service.facade.AttractionFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/attractions")
 public class AttractionController {
+
+    private final AttractionFacade attractionFacade;
+
+    @Autowired
+    public AttractionController(AttractionFacade attractionFacade) {
+        this.attractionFacade = attractionFacade;
+    }
+
+
+    @GetMapping()
+    public ResponseEntity getAll(){
+        return ResponseEntity.ok(attractionFacade.getAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<AttractionDTO> create(@RequestBody AttractionDTO attraction){
+        return ResponseEntity.ok(attractionFacade.save(attraction));
+    }
 
     /*private final ServiceAttraction attractionService;
 
@@ -17,8 +37,8 @@ public class AttractionController {
     }
 
     @GetMapping()
-    public ResponseEntity getAttractions(){
-        return ResponseEntity.ok(attractionService.getAllAttraction());
+    public ResponseEntity getAll(){
+        return ResponseEntity.ok(attractionFacade.getAll());
     }
 
     @GetMapping("/{id}")

@@ -1,3 +1,7 @@
 package by.psu.service.api;
 
-public class TypeService {}
+import by.psu.model.postgres.Type;
+import org.springframework.stereotype.Service;
+
+@Service
+public class TypeService extends NsiService<Type> {}

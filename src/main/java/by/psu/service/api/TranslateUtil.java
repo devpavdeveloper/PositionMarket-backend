@@ -7,7 +7,7 @@ import by.psu.model.postgres.Translate;
 
 import java.util.Optional;
 
-public abstract class LanguageUtil {
+public abstract class TranslateUtil {
 
     public static Optional<StringValue> getValueByLanguage(Translate translate, Language language) {
         if ( translate != null) {

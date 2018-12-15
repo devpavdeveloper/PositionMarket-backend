@@ -3,7 +3,7 @@ package by.psu.mappers;
 import by.psu.BaseTest;
 import by.psu.model.factory.*;
 import by.psu.model.postgres.*;
-import by.psu.service.api.LanguageUtil;
+import by.psu.service.api.TranslateUtil;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.dto.mappers.AttractionMapper;
 import by.psu.service.dto.mappers.ProductMapper;
@@ -90,18 +90,18 @@ public class AttractionMapperTest extends BaseTest {
 
         List<Product> products = attractionDTO.getProducts().stream().map(product -> productMapper.from(product)).collect(toList());
 
-        assertTrue(products.stream().anyMatch(product -> LanguageUtil.getValueOrEmpty(product.getService(), Language.EN).isPresent()));
-        assertTrue(products.stream().anyMatch(product -> LanguageUtil.getValueOrEmpty(product.getService(), Language.RU).isPresent()));
+        assertTrue(products.stream().anyMatch(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.EN).isPresent()));
+        assertTrue(products.stream().anyMatch(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.RU).isPresent()));
 
         List<StringValue> stringValuesRu = products.stream()
-                .map(product -> LanguageUtil.getValueOrEmpty(product.getService(), Language.RU).get())
+                .map(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.RU).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Доставка")));
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Установка")));
 
         List<StringValue> stringValuesEn = products.stream()
-                .map(product -> LanguageUtil.getValueOrEmpty(product.getService(), Language.EN).get())
+                .map(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.EN).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Pick Service")));
@@ -122,18 +122,18 @@ public class AttractionMapperTest extends BaseTest {
 
         List<Tag> tags = attractionDTO.getTags().stream().map(tag -> tagNsiMapper.from(tag)).collect(toList());
 
-        assertTrue(tags.stream().anyMatch(tag -> LanguageUtil.getValueOrEmpty(tag, Language.EN).isPresent()));
-        assertTrue(tags.stream().anyMatch(tag -> LanguageUtil.getValueOrEmpty(tag, Language.RU).isPresent()));
+        assertTrue(tags.stream().anyMatch(tag -> TranslateUtil.getValueOrEmpty(tag, Language.EN).isPresent()));
+        assertTrue(tags.stream().anyMatch(tag -> TranslateUtil.getValueOrEmpty(tag, Language.RU).isPresent()));
 
         List<StringValue> stringValuesRu = tags.stream()
-                .map(tag -> LanguageUtil.getValueOrEmpty(tag, Language.RU).get())
+                .map(tag -> TranslateUtil.getValueOrEmpty(tag, Language.RU).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Спортивные 2018")));
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Интерактивные 2019")));
 
         List<StringValue> stringValuesEn = tags.stream()
-                .map(tag -> LanguageUtil.getValueOrEmpty(tag, Language.EN).get())
+                .map(tag -> TranslateUtil.getValueOrEmpty(tag, Language.EN).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Sport 2018")));
@@ -154,18 +154,18 @@ public class AttractionMapperTest extends BaseTest {
 
         List<Type> types = attractionDTO.getTypes().stream().map(type -> typeNsiMapper.from(type)).collect(toList());
 
-        assertTrue(types.stream().anyMatch(type -> LanguageUtil.getValueOrEmpty(type, Language.EN).isPresent()));
-        assertTrue(types.stream().anyMatch(type -> LanguageUtil.getValueOrEmpty(type, Language.RU).isPresent()));
+        assertTrue(types.stream().anyMatch(type -> TranslateUtil.getValueOrEmpty(type, Language.EN).isPresent()));
+        assertTrue(types.stream().anyMatch(type -> TranslateUtil.getValueOrEmpty(type, Language.RU).isPresent()));
 
         List<StringValue> stringValuesRu = types.stream()
-                .map(type -> LanguageUtil.getValueOrEmpty(type, Language.RU).get())
+                .map(type -> TranslateUtil.getValueOrEmpty(type, Language.RU).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Спортивные")));
         assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Интерактивные")));
 
         List<StringValue> stringValuesEn = types.stream()
-                .map(type -> LanguageUtil.getValueOrEmpty(type, Language.EN).get())
+                .map(type -> TranslateUtil.getValueOrEmpty(type, Language.EN).get())
                 .collect(Collectors.toList());
 
         assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Sport")));

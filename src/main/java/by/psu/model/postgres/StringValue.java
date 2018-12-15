@@ -15,7 +15,8 @@ import java.util.UUID;
 @Table(
         name = "string_values"
 )
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class StringValue extends BasicEntity {
