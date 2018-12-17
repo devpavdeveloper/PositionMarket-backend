@@ -3,13 +3,16 @@ package by.psu.service.api;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
-import by.psu.model.postgres.Translate;
 import by.psu.model.postgres.repository.RepositoryNsi;
+import by.psu.service.merger.AbstractNsiMerger;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ public abstract class NsiService<T extends Nsi> {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected RepositoryNsi<T> repositoryNsi;
+
+    @Autowired
+    private AbstractNsiMerger<T> abstractNsiMerger;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -102,14 +108,10 @@ public abstract class NsiService<T extends Nsi> {
         Optional<T> findNsi = Optional.of(repositoryNsi.getOne(nsi.getId()));
         findNsi.orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi not found")));
 
-        Translate translate = optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi title is null")));
-        Translate translateFind = findNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Find nsi (BD) title is null")));
+        optionalNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Nsi title is null")));
+        findNsi.map(Nsi::getTitle).orElseThrow(() -> new RuntimeException(new EntityNotFoundException("Find nsi (BD) title is null")));
 
-        if ( !translate.getValues().isEmpty() && !translateFind.getValues().isEmpty() ) {
-            findNsi.get().getTitle().setListValues(nsi.getTitle().getValues());
-        }
-
-        return repositoryNsi.save(findNsi.get());
+        return repositoryNsi.save(abstractNsiMerger.merge(findNsi.get(), nsi));
     }
 
     @Transactional

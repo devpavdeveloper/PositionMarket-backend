@@ -4,12 +4,10 @@ import by.psu.model.postgres.Attraction;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.dto.mappers.nsi.TagNsiMapper;
 import by.psu.service.dto.mappers.nsi.TypeNsiMapper;
-import by.psu.service.dto.mappers.util.MappingUtil;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel="spring", uses = {
         ProductMapper.class,

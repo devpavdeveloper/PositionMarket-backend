@@ -29,6 +29,11 @@ public class AttractionController {
         return ResponseEntity.ok(attractionFacade.save(attraction));
     }
 
+    @PutMapping
+    public ResponseEntity<AttractionDTO> update(@RequestBody AttractionDTO attraction){
+        return ResponseEntity.ok(attractionFacade.update(attraction));
+    }
+
     /*private final ServiceAttraction attractionService;
 
     @Autowired

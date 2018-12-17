@@ -20,7 +20,7 @@ public abstract class BasicEntity {
     @Id
     @GenericGenerator(name = "useIdOrGenerate", strategy = "by.psu.model.postgres.generator.CustomUUIDGenerator")
     @GeneratedValue(generator = "useIdOrGenerate")
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true)
     @JsonDeserialize(using = DeserializeUUID.class)
     private UUID id;
 

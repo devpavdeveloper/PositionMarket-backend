@@ -30,6 +30,15 @@ public class AttractionFacade {
     }
 
     @Transactional
+    public AttractionDTO update(AttractionDTO attractionDTO) {
+        return attractionMapper.to(
+                attractionService.update(
+                        attractionMapper.from(attractionDTO)
+                )
+        );
+    }
+
+    @Transactional
     public AttractionDTO save(AttractionDTO attractionDTO) {
         return attractionMapper.to(
                 attractionService.save(

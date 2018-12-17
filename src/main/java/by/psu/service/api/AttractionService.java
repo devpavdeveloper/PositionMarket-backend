@@ -2,11 +2,13 @@ package by.psu.service.api;
 
 import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.repository.RepositoryAttraction;
+import by.psu.service.merger.AttractionMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,8 @@ public class AttractionService {
     private TypeService serviceType;
     @Autowired
     private ProductService productService;
-
+    @Autowired
+    private AttractionMerger attractionMerger;
 
     public List<Attraction> getAll() {
         return repositoryAttraction.findAll();
@@ -34,7 +37,15 @@ public class AttractionService {
 
     @Transactional
     public Attraction update(Attraction attraction) {
-        return save(attraction);
+        if ( attraction == null ) {
+            throw new RuntimeException("Attraction entity is null");
+        }
+        if ( attraction.getId() == null ) {
+            throw new RuntimeException("Attraction id is null");
+        }
+
+        Optional<Attraction> findAttraction = repositoryAttraction.findById(attraction.getId());
+        return repositoryAttraction.save( attractionMerger.merge(findAttraction.get(), attraction) );
     }
 
     @Transactional
