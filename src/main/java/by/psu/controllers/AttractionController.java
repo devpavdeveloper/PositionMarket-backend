@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/attractions")
@@ -22,6 +24,11 @@ public class AttractionController {
     @GetMapping()
     public ResponseEntity getAll(){
         return ResponseEntity.ok(attractionFacade.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getOne(@PathVariable UUID id){
+        return ResponseEntity.ok(attractionFacade.getOne(id));
     }
 
     @PostMapping

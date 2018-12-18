@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +21,11 @@ public class AttractionFacade {
     public AttractionFacade(AttractionService attractionService, AttractionMapper attractionMapper) {
         this.attractionService = attractionService;
         this.attractionMapper = attractionMapper;
+    }
+
+    @Transactional(readOnly = true)
+    public AttractionDTO getOne(UUID uuid) {
+        return attractionMapper.to(attractionService.getOne(uuid));
     }
 
     @Transactional(readOnly = true)

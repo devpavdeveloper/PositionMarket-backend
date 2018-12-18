@@ -1,6 +1,7 @@
 package by.psu.service.api;
 
 import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.Product;
 import by.psu.model.postgres.repository.RepositoryAttraction;
 import by.psu.service.merger.AttractionMerger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,7 +32,7 @@ public class AttractionService {
     }
 
     public Attraction getOne(UUID uuid) {
-        return repositoryAttraction.getOne(uuid);
+        return repositoryAttraction.findById(uuid).orElse(null);
     }
 
     @Transactional
@@ -44,8 +44,7 @@ public class AttractionService {
             throw new RuntimeException("Attraction id is null");
         }
 
-        Optional<Attraction> findAttraction = repositoryAttraction.findById(attraction.getId());
-        return repositoryAttraction.save( attractionMerger.merge(findAttraction.get(), attraction) );
+        return repositoryAttraction.save( attractionMerger.merge(getOne(attraction.getId()), attraction) );
     }
 
     @Transactional
@@ -53,7 +52,11 @@ public class AttractionService {
         attraction.setTypes(attraction.getTypes().stream().map(serviceType::save).collect(Collectors.toList()));
         attraction.setTags(attraction.getTags().stream().map(serviceTag::save).collect(Collectors.toList()));
 
-        attraction.setProducts(productService.place(attraction.getProducts()));
+
+        List<Product> products = productService.place(attraction.getProducts());
+
+        attraction.getProducts().clear();
+        attraction.getProducts().addAll(products);
 
         return repositoryAttraction.save(attraction);
     }

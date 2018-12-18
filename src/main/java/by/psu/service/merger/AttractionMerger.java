@@ -1,10 +1,13 @@
 package by.psu.service.merger;
 
 import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.Product;
 import by.psu.model.postgres.Tag;
 import by.psu.model.postgres.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class AttractionMerger implements BaseMerger<Attraction> {
@@ -26,7 +29,11 @@ public class AttractionMerger implements BaseMerger<Attraction> {
         first.setTitle( translateObjectMerger.merge(first.getTitle(), second.getTitle()) );
         first.setTags( tagAbstractNsiMerger.merge(first.getTags(), second.getTags()) );
         first.setTypes( typeAbstractNsiMerger.merge(first.getTypes(), second.getTypes()) );
-        first.setProducts( productMerger.merge(first.getProducts(), second.getProducts()) );
+
+        List<Product> products = productMerger.merge(first.getProducts(), second.getProducts());
+
+        first.getProducts().clear();
+        first.getProducts().addAll( products );
 
         return first;
     }

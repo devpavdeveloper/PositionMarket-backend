@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ public abstract class BasicEntity {
     @GeneratedValue(generator = "useIdOrGenerate")
     @Column(name = "id", nullable = false, unique = true)
     @JsonDeserialize(using = DeserializeUUID.class)
+    @Type(type="pg-uuid")
     private UUID id;
 
 }

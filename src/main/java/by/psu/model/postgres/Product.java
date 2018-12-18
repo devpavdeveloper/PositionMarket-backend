@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 public class Product extends BasicEntity {
 
   @LazyCollection(LazyCollectionOption.FALSE)
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "id_service", nullable = false)
   private TypeService service;
 
