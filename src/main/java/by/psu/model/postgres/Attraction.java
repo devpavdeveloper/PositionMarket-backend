@@ -31,14 +31,14 @@ public class Attraction extends BasicEntity {
   @Column(name = "image")
   private String image;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
   @JoinTable(name = "attraction_tag", joinColumns = {
           @JoinColumn(name = "attraction", nullable = false) },
           inverseJoinColumns = { @JoinColumn(name = "tag") })
   private List<Tag> tags;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH}, fetch = FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
   @JoinTable(name = "attraction_type", joinColumns = {
           @JoinColumn(name = "attraction", nullable = false) },

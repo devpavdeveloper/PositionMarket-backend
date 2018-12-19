@@ -20,9 +20,9 @@ public class NsiController<T extends Nsi, E extends NsiDTO> {
         return ResponseEntity.ok(nsiFacade.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<E> get(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(nsiFacade.getOne(id));
+    @GetMapping("/{uuid}")
+    public ResponseEntity<E> get(@PathVariable("uuid") UUID uuid) {
+        return ResponseEntity.ok(nsiFacade.getOne(uuid));
     }
 
     @PostMapping
@@ -33,6 +33,12 @@ public class NsiController<T extends Nsi, E extends NsiDTO> {
     @PutMapping
     public ResponseEntity<E> update(@RequestBody E obj) {
         return ResponseEntity.ok(nsiFacade.update(obj));
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<E> delete(@PathVariable UUID uuid) {
+        nsiFacade.delete(uuid);
+        return ResponseEntity.ok().build();
     }
 
 }

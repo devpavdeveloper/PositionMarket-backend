@@ -45,4 +45,9 @@ public abstract class NsiFacade <T extends Nsi, E extends NsiDTO> {
     public E update(E nsiDTO) {
         return mapper.to(nsiService.update(mapper.from(nsiDTO)));
     }
+
+    @Transactional
+    public void delete(UUID uuid) {
+        nsiService.delete(uuid);
+    }
 }

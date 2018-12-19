@@ -53,4 +53,9 @@ public class AttractionFacade {
         );
     }
 
+    @Transactional
+    public void delete(UUID uuid) {
+        attractionService.delete(uuid);
+    }
+
 }

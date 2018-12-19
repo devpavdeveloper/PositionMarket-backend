@@ -27,10 +27,12 @@ public class AttractionService {
     @Autowired
     private AttractionMerger attractionMerger;
 
+    @Transactional(readOnly = true)
     public List<Attraction> getAll() {
         return repositoryAttraction.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Attraction getOne(UUID uuid) {
         return repositoryAttraction.findById(uuid).orElse(null);
     }
@@ -59,5 +61,10 @@ public class AttractionService {
         attraction.getProducts().addAll(products);
 
         return repositoryAttraction.save(attraction);
+    }
+
+    @Transactional
+    public void delete(UUID uuid) {
+        repositoryAttraction.deleteById(uuid);
     }
 }

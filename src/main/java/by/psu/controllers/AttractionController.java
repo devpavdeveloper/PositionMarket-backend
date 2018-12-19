@@ -26,9 +26,9 @@ public class AttractionController {
         return ResponseEntity.ok(attractionFacade.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getOne(@PathVariable UUID id){
-        return ResponseEntity.ok(attractionFacade.getOne(id));
+    @GetMapping("/{uuid}")
+    public ResponseEntity getOne(@PathVariable UUID uuid){
+        return ResponseEntity.ok(attractionFacade.getOne(uuid));
     }
 
     @PostMapping
@@ -39,6 +39,12 @@ public class AttractionController {
     @PutMapping
     public ResponseEntity<AttractionDTO> update(@RequestBody AttractionDTO attraction){
         return ResponseEntity.ok(attractionFacade.update(attraction));
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity delete(@PathVariable UUID uuid) {
+        attractionFacade.delete(uuid);
+        return ResponseEntity.ok().build();
     }
 
     /*private final ServiceAttraction attractionService;

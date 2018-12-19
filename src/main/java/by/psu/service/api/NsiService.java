@@ -140,4 +140,9 @@ public abstract class NsiService<T extends Nsi> {
                 .map(nsiItem -> isExists(nsiItem).orElseGet(() -> repositoryNsi.save(nsiItem)))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void delete(UUID uuid) {
+        repositoryNsi.deleteById(uuid);
+    }
 }
