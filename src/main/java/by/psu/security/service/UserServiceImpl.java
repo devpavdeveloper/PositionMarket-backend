@@ -2,7 +2,6 @@ package by.psu.security.service;
 
 import by.psu.exceptions.EntityNotFoundException;
 import by.psu.exceptions.ServerDataBaseException;
-import by.psu.exceptions.TokenInvalidException;
 import by.psu.exceptions.transaction.UserTransactionException;
 import by.psu.security.JwtTokenUtil;
 import by.psu.security.model.Role;
@@ -10,7 +9,6 @@ import by.psu.security.model.User;
 import by.psu.security.model.VerificationToken;
 import by.psu.security.repository.RoleRepository;
 import by.psu.security.repository.TokenRepository;
-import by.psu.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -103,6 +101,12 @@ public class UserServiceImpl implements UserService {
         tokenRepository.save(myToken);
     }
 
+    @Override
+    public VerificationToken getVerificationToken(String token, String email) {
+        return null;
+    }
+
+/*
     @Transactional
     @Override
     public VerificationToken getVerificationToken(String token, String email) {
@@ -118,6 +122,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException();
         }
     }
+*/
 
     @Override
     public void deleteVerificationToken(VerificationToken token) {
@@ -132,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User alreadyExistsByEmail(User user) {
-        return Optional.ofNullable(userRepository.findByEmail(user.getEmail())).orElseThrow(EntityNotFoundException::new);
+        return new User();
     }
 
     @Override
@@ -210,11 +215,6 @@ public class UserServiceImpl implements UserService {
             throw new UserTransactionException("User not found");
         }
 
-        if (Objects.isNull(user.getPhone()))
-            throw new UserTransactionException("phone is null");
-
-        us.setPhone(user.getPhone());
-
         try {
             userRepository.save(user);
         } catch (Exception e) {
@@ -226,9 +226,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean existsByEmail(String email) {
+        return null;
+    }
+/*
+    @Override
+    public Boolean existsByEmail(String email) {
         if (!userRepository.existsByEmail(email)) {
             throw new UserTransactionException("User with email");
         }
         return true;
-    }
+    }*/
 }

@@ -2,7 +2,6 @@ package by.psu.security.service;
 
 import by.psu.security.JwtUserFactory;
 import by.psu.security.model.User;
-import by.psu.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

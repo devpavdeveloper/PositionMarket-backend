@@ -1,13 +1,13 @@
 package by.psu.security.controller;
 
-import by.psu.exceptions.TokenExpiredException;
+import by.psu.exceptions.authorization.UserBlockedException;
+import by.psu.exceptions.authorization.UserIncorrectException;
+import by.psu.exceptions.authorization.UserNotFoundException;
 import by.psu.security.*;
 import by.psu.security.model.User;
-import by.psu.security.model.VerificationToken;
 import by.psu.security.service.AccountService;
 import by.psu.security.service.JwtAuthenticationResponse;
 import by.psu.security.service.UserService;
-import by.psu.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,25 +67,21 @@ public class AuthenticationRestController {
         this.userDetailsService = userDetailsService;
     }
 
-    @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         by.psu.security.model.User user = new by.psu.security.model.User(authenticationRequest.getUsername());
         User findUser = null;
         try {
             findUser = userService.alreadyExists(user);
         } catch (Exception e) {
-            throw new AuthenticationException("Проверьте введенные данные", e);
+            throw new UserNotFoundException();
         }
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        if (findUser.getEnabled()) {
-            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails);
 
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails);
-
-            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-        }
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     @RequestMapping(value = "/auth/refresh", method = RequestMethod.GET)
@@ -138,7 +134,7 @@ public class AuthenticationRestController {
         return ResponseEntity.ok().build();
     }
 
-    //actual account recovery page
+/*    //actual account recovery page
     @GetMapping("/auth/account_recovery")
     public ResponseEntity<?> recoverAccount(@RequestParam("token") String token, @RequestParam("email") String email, HttpServletResponse response) {
         VerificationToken vt = userService.getVerificationToken(token, email);
@@ -155,7 +151,7 @@ public class AuthenticationRestController {
             e.printStackTrace();
         }
         return new ResponseEntity(HttpStatus.OK);
-    }
+    }*/
 
     //user entered email and clicked send activation with password recovery instructions
     @PostMapping("/auth/forgot_password")
@@ -170,13 +166,12 @@ public class AuthenticationRestController {
     private void authenticate(String username, String password) {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new AuthenticationException("Пользователь временно заблокирован", e);
+            throw new UserBlockedException();
         } catch (BadCredentialsException e) {
-            throw new AuthenticationException("Неправильный логин или пароль", e);
+            throw new UserIncorrectException();
         }
     }
 }

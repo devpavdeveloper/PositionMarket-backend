@@ -2,8 +2,8 @@ package by.psu.service.dto.mappers.nsi;
 
 import by.psu.model.postgres.TypeService;
 import by.psu.service.dto.TypeServiceDTO;
+import by.psu.service.dto.mappers.MapperConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel="spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(config = MapperConfiguration.class)
 public interface TypeServiceNsiMapper extends NsiMapper<TypeService, TypeServiceDTO> {}

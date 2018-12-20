@@ -37,9 +37,7 @@ public class AccountServiceImpl implements AccountService {
 
         User user = new User(
                 registrationRequest.getUsername(),
-                registrationRequest.getPassword(),
-                registrationRequest.getEmail(),
-                registrationRequest.getPhone()
+                registrationRequest.getPassword()
         );
 
         try {
@@ -97,7 +95,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResponseEntity<?> forgotPassword(String email, HttpHeaders httpHeaders) {
         User user = new User();
-        user.setEmail(email);
         if((user = userService.alreadyExistsByEmail(user)) != null){
             //password reset allowed only once every 24 hours
             //allow
@@ -114,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
 
         }
         else{
-            throw new EntityNotFoundException("Пользователь не существует");
+            throw new EntityNotFoundException();
             //reject, user does not exist
         }
         return new ResponseEntity(HttpStatus.CREATED);
