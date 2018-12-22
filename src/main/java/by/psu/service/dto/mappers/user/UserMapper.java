@@ -3,7 +3,6 @@ package by.psu.service.dto.mappers.user;
 import by.psu.security.model.User;
 import by.psu.service.dto.UserDTO;
 import by.psu.service.dto.mappers.MapperConfiguration;
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -17,6 +16,9 @@ public interface UserMapper {
     })
     public UserDTO to(User user);
 
-    @InheritConfiguration
+    @Mappings({
+            @Mapping(source = "username", target = "login"),
+            @Mapping(source = "information", target = "userProfile")
+    })
     public User from(UserDTO userDTO);
 }

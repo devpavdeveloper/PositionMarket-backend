@@ -1,7 +1,5 @@
 package by.psu.security.service;
 
-import by.psu.events.OnPasswordRecoveryInitiate;
-import by.psu.events.OnRegistrationComplete;
 import by.psu.exceptions.*;
 import by.psu.security.PasswordResetRequest;
 import by.psu.security.RegistrationRequest;
@@ -47,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
                 userService.alreadyExistsByEmail(user);
             } catch(EntityNotFoundException e){
                 user = userService.save(user);
-                eventPublisher.publishEvent(new OnRegistrationComplete(user, httpHeaders.getHost().getHostName()));
+                //eventPublisher.publishEvent(new OnRegistrationComplete(user, httpHeaders.getHost().getHostName()));
                 return user;
             }
             throw new DuplicateEmailException("Данный email уже зарегистрирован другим пользователем");
@@ -101,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
 
             if(user.getEnabled()){
                 user.setEnabled(false);
-                eventPublisher.publishEvent(new OnPasswordRecoveryInitiate(user, httpHeaders.getHost().getHostName()));
+                //eventPublisher.publishEvent(new OnPasswordRecoveryInitiate(user, httpHeaders.getHost().getHostName()));
                 //send email
             }
             else{

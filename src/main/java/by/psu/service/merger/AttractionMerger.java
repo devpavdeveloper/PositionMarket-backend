@@ -26,9 +26,9 @@ public class AttractionMerger implements BaseMerger<Attraction> {
 
         first.setImage( second.getImage() );
 
-        first.setTitle( translateObjectMerger.merge(first.getTitle(), second.getTitle()) );
-        first.setTags( tagAbstractNsiMerger.merge(first.getTags(), second.getTags()) );
-        first.setTypes( typeAbstractNsiMerger.merge(first.getTypes(), second.getTypes()) );
+        //first.setTitle( translateObjectMerger.merge(first.getTitle(), second.getTitle()) );
+        //first.setTags( tagAbstractNsiMerger.merge(first.getTags(), second.getTags()) );
+        //first.setTypes( typeAbstractNsiMerger.merge(first.getTypes(), second.getTypes()) );
 
         List<Product> products = productMerger.merge(first.getProducts(), second.getProducts());
 
