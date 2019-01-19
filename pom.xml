@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>by.psu</groupId>
-    <artifactId>minskattractionproject</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <groupId>by.devpav</groupId>
+    <artifactId>server-attraction</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <name>Attraction Application WAR</name>
 
