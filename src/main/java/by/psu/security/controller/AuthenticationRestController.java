@@ -37,10 +37,6 @@ public class AuthenticationRestController {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-
-    @Autowired
-    AccountService accountService;
-
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
@@ -96,40 +92,10 @@ public class AuthenticationRestController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    @PostMapping("/auth/register")
-    public ResponseEntity<?> registration(@RequestBody RegistrationRequest registrationRequest, @RequestHeader HttpHeaders httpHeaders) {
-        return ResponseEntity.ok(accountService.register(registrationRequest, httpHeaders));
-
-    }
-
     @GetMapping("/auth/email/exists")
     public ResponseEntity<?> existsEmail(@RequestParam("email") String email) {
         boolean existUser = userService.existsByEmail(email);
         return ResponseEntity.ok(existUser);
-    }
-
-    @GetMapping("/auth/register")
-    public ResponseEntity<?> registrationConfirmation(@RequestParam("token") String token, @RequestParam("email") String email, HttpServletResponse response) {
-        accountService.confirmRegistration(token, email);
-        /*try {
-            response.sendRedirect(springRegistrationConfirmationRedirect);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        return ResponseEntity.ok().build();
-
-    }
-
-    @PostMapping("/auth/reset_password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest, HttpServletResponse response) {
-        accountService.resetPassword(passwordResetRequest);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/auth/forgot_password")
-    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email,
-                                            @RequestHeader HttpHeaders httpHeaders) {
-        return ResponseEntity.ok(accountService.forgotPassword(email, httpHeaders));
     }
 
     private void authenticate(String username, String password) {

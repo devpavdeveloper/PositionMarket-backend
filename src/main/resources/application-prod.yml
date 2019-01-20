@@ -9,6 +9,6 @@ spring:
   #DataSource settings
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/project-01
-    username: artteam
-    password: artteam
+    url: jdbc:postgresql://postgres:5432/devpav
+    username: devpav
+    password: devpav
