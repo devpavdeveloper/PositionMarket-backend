@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NsiController<T extends Nsi, E extends NsiDTO> {
 
@@ -38,6 +40,12 @@ public class NsiController<T extends Nsi, E extends NsiDTO> {
     @DeleteMapping("/{uuid}")
     public ResponseEntity<E> delete(@PathVariable UUID uuid) {
         nsiFacade.delete(uuid);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/multiple/delete")
+    public ResponseEntity<E> delete(@RequestBody List<String> uuids) {
+        nsiFacade.deleteAll(uuids.stream().map(UUID::fromString).collect(Collectors.toList()));
         return ResponseEntity.ok().build();
     }
 

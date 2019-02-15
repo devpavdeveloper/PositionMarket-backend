@@ -145,4 +145,9 @@ public abstract class NsiService<T extends Nsi> {
     public void delete(UUID uuid) {
         repositoryNsi.deleteById(uuid);
     }
+
+    @Transactional
+    public void deleteAll(List<UUID> uuid) {
+        uuid.forEach(repositoryNsi::deleteById);
+    }
 }
