@@ -11,21 +11,29 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.logging.Logger;
+
 @ControllerAdvice
 public class ExceptionAbstractHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({UserNotFoundException.class})
-    private ResponseEntity<AwesomeException> handleUserNotFoundException() {
+    private final Logger logger = Logger.getLogger(ExceptionAbstractHandler.class.getName());
+
+
+    @ExceptionHandler
+    private ResponseEntity<AwesomeException> handleUserNotFoundException(UserNotFoundException userNotFoundException) {
+        logger.severe(userNotFoundException.getMessage());
         return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND.value(), "The user is not found"), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({UserBlockedException.class})
-    private ResponseEntity<AwesomeException> handleUserBlockedException() {
+    @ExceptionHandler
+    private ResponseEntity<AwesomeException> handleUserBlockedException(UserBlockedException userBlockedException) {
+        logger.severe(userBlockedException.getMessage());
         return new ResponseEntity<>(new AwesomeException(HttpStatus.PRECONDITION_FAILED.value(), "The user is temporarily blocked"), HttpStatus.PRECONDITION_FAILED);
     }
 
     @ExceptionHandler({UserIncorrectException.class})
-    private ResponseEntity<AwesomeException> handleUserIncorrectException() {
+    private ResponseEntity<AwesomeException> handleUserIncorrectException(UserIncorrectException userIncorrectException) {
+        logger.severe(userIncorrectException.getMessage());
         return new ResponseEntity<>(new AwesomeException(HttpStatus.BAD_REQUEST.value(), "Incorrect username or password"), HttpStatus.BAD_REQUEST);
     }
 
