@@ -5,13 +5,15 @@ import by.psu.service.dto.ProductDTO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 @Mapper(componentModel="spring")
 public interface ProductMapper {
 
-    @Mapping(source = "service.title.values", target = "service.values")
+    @Mapping(source = "service.id", target = "service")
     ProductDTO to(Product nsi);
 
-    @InheritInverseConfiguration
+    @Mapping(source = "service", target = "service.id")
     Product from(ProductDTO nsi);
+
 }

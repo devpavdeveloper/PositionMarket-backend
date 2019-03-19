@@ -1,28 +1,67 @@
 package by.psu.service.dto.mappers;
 
-import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.*;
+import by.psu.service.api.TagService;
+import by.psu.service.api.TypeService;
+import by.psu.service.api.TypeServiceService;
 import by.psu.service.dto.AttractionDTO;
-import by.psu.service.dto.mappers.nsi.TagNsiMapper;
-import by.psu.service.dto.mappers.nsi.TypeNsiMapper;
-import org.mapstruct.InheritInverseConfiguration;
+import by.psu.service.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel="spring", uses = {
-        ProductMapper.class,
-        TypeNsiMapper.class,
-        TagNsiMapper.class
-})
-public interface AttractionMapper {
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
+
+@Mapper(componentModel = "spring", uses = ProductMapper.class)
+public abstract class AttractionMapper {
+
+    @Autowired
+    protected TypeService typeService;
+    @Autowired
+    protected TagService tagService;
+    @Autowired
+    protected TypeServiceService typeServiceService;
 
     @Mappings(value = {
             @Mapping(source = "title.values", target = "title"),
-            @Mapping(source = "linkSource", target = "link")
+            @Mapping(source = "linkSource", target = "link"),
+            @Mapping(target = "tags", expression = "java( convertToString(nsi.getTags()) )"),
+            @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )")
     })
-    AttractionDTO to(Attraction nsi);
+    public abstract AttractionDTO to(Attraction nsi);
 
-    @InheritInverseConfiguration
-    Attraction from(AttractionDTO nsi);
+    @Mappings(value = {
+            @Mapping(source = "title", target = "title.values"),
+            @Mapping(source = "link", target = "linkSource"),
+            @Mapping(target = "tags", expression = "java( convertToTag(nsi.getTags()) )"),
+            @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )")
+    })
+    public abstract Attraction from(AttractionDTO nsi);
+
+    protected List<UUID> convertToString(List<? extends Nsi> collection) {
+        if (nonNull(collection) && !collection.isEmpty()) {
+            return collection.stream()
+                    .filter(Objects::nonNull)
+                    .filter(nsi -> nonNull(nsi.getId()))
+                    .map(BasicEntity::getId)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    protected List<Tag> convertToTag(List<? extends UUID> collection) {
+        return collection.stream().map(uuid -> tagService.getOne(uuid)).collect(Collectors.toList());
+    }
+
+    protected List<Type> convertToType(List<? extends UUID> collection) {
+        return collection.stream().map(uuid -> typeService.getOne(uuid)).collect(Collectors.toList());
+    }
 
 }

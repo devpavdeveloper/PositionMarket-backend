@@ -74,6 +74,7 @@ public class AttractionMapperTest extends BaseTest {
     }
 
 
+/*
     @Test
     public void testMapperAttractionToAttractionDTOAllInformationExistsProducts() {
         attraction.setProducts(Arrays.asList(
@@ -171,5 +172,6 @@ public class AttractionMapperTest extends BaseTest {
         assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Sport")));
         assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Interactive")));
     }
+*/
 
 }

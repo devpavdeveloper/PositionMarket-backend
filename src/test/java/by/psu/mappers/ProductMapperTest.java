@@ -51,7 +51,6 @@ public class ProductMapperTest extends BaseTest {
 
         assertNotNull(productDTO);
         assertEquals(productDTO.getPrice(), product.getPrice());
-        assertEquals(productDTO.getService().getValues().size(), 2);
     }
 
 
@@ -72,7 +71,6 @@ public class ProductMapperTest extends BaseTest {
         nsiDTO.setId(UUID.randomUUID());
         nsiDTO.setValues(Arrays.asList(stringValueDTO, stringValueDTO2));
 
-        productDTO.setService(nsiDTO);
 
         Product product = productMapper.from( productDTO );
 

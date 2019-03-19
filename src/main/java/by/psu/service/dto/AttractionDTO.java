@@ -14,8 +14,8 @@ public class AttractionDTO {
     private String link;
     private String image;
 
-    private List<TagDTO> tags;
-    private List<TypeDTO> types;
+    private List<UUID> tags;
+    private List<UUID> types;
 
     private List<ProductDTO> products;
 
