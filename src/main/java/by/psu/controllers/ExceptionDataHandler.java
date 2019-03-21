@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 @ControllerAdvice
 public class ExceptionDataHandler extends ExceptionAbstractHandler {
 
-
     private final Logger logger = Logger.getLogger(ExceptionDataHandler.class.getName());
 
     @ExceptionHandler
@@ -19,7 +18,6 @@ public class ExceptionDataHandler extends ExceptionAbstractHandler {
         logger.severe(entityNotFoundException.getMessage());
         return new ResponseEntity<>(new AwesomeException(HttpStatus.PRECONDITION_FAILED.value(), "Entity is not founded"), HttpStatus.NOT_FOUND);
     }
-
 
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(Exception ex) {

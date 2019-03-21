@@ -68,16 +68,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        User user =  userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
         if (Objects.isNull(user))
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("User isn't found by login " + login);
 
         return user;
     }
 
     @Override
     public User update(User obj, UUID id) {
-        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User isn't found by id " + id));
 
         obj.setId(id);
         return Optional.of(userRepository.save(obj)).orElseThrow(ServerDataBaseException::new);
@@ -89,7 +89,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User alreadyExists(User user) {
-        return Optional.ofNullable(userRepository.findByLogin(user.getLogin())).orElseThrow(EntityNotFoundException::new);
+        return Optional.ofNullable(userRepository.findByLogin(user.getLogin()))
+                .orElseThrow(() -> new EntityNotFoundException("User isn't found by login " + user.getLogin()));
     }
 
     @Transactional
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService {
         try {
             tokenRepository
                     .delete(tokenRepository.findById(token.getId())
-                            .orElseThrow(EntityNotFoundException::new));
+                            .orElseThrow(() -> new EntityNotFoundException("Token isn't found by id " + token.getId())));
         } catch (RuntimeException ex) {
             throw new ServerDataBaseException();
         }

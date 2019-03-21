@@ -11,12 +11,12 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/attractions")
-public class AttractionController {
+public class PositionController {
 
     private final AttractionFacade attractionFacade;
 
     @Autowired
-    public AttractionController(AttractionFacade attractionFacade) {
+    public PositionController(AttractionFacade attractionFacade) {
         this.attractionFacade = attractionFacade;
     }
 

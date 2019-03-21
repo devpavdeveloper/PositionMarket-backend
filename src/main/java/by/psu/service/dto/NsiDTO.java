@@ -13,4 +13,5 @@ public class NsiDTO {
 
     private UUID id;
     private List<StringValueDTO> values = new ArrayList<>();
+
 }
