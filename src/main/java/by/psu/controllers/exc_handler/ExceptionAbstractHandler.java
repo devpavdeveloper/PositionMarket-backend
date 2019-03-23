@@ -1,4 +1,4 @@
-package by.psu.controllers;
+package by.psu.controllers.exc_handler;
 
 import by.psu.exceptions.authorization.UserBlockedException;
 import by.psu.exceptions.authorization.UserIncorrectException;
@@ -39,9 +39,17 @@ public class ExceptionAbstractHandler extends ResponseEntityExceptionHandler {
 
     @Data
     @AllArgsConstructor
-    protected static class AwesomeException {
+    static class AwesomeException {
         private int code;
         private String message;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MessageException {
+        private int code;
+        private String message;
+        private String reason;
     }
 
 }
