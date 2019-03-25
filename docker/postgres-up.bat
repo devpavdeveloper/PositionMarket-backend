@@ -1,1 +1,1 @@
-docker-compose up -d --build postgres
+docker-compose up -d --build position
