@@ -10,9 +10,9 @@ FROM maven:3.5-jdk-8-alpine as build
 
 WORKDIR /app
 
-COPY --from=clone /app/${REPOSITORY} /app
+COPY --from=clone /app/server-attraction /app
 
-RUN mvn install -DskipTests -Dspring-boot.run.profiles=${PROFILE}
+RUN mvn install -DskipTests -Dspring-boot.run.profiles=prod
 
 
 #Java system environment
