@@ -1,7 +1,5 @@
 FROM postgres:9.6.1
 
-MAINTAINER Pavel Talaika<jsdeveloper@yahoo.com>
-
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ADD init.sql /docker-entrypoint-initdb.d/

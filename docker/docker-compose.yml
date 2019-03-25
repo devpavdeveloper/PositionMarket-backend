@@ -21,12 +21,9 @@ services:
             dockerfile: Dockerfile
             args:
                 USERNAME_GIT: ${USERNAME_GIT}
-                PASSWORD_GIT: ${PASSWORD_GIT}
                 TAG: ${TAG}
                 REPOSITORY: ${REPOSITORY}
-                ARTIFACTID: ${ARTIFACTID}
                 VERSION: ${VERSION}
-                PROJECT: ${PROJECT}
                 PROFILE: ${PROFILE}
         restart: 
             unless-stopped
