@@ -1,9 +1,15 @@
-#Git system environment
-FROM alpine/git as clone
 
+#system environment
 ENV REPOSITORY;
 ENV USERNAME_GIT;
 ENV TAG;
+ENV PROFILE;
+ENV VERSION;
+
+ENV ARTIFACT ${REPOSITORY}-${VERSION}.jar
+
+#Git
+FROM alpine/git as clone
 
 WORKDIR /app
 
@@ -11,11 +17,8 @@ RUN git clone https://5842ab875c2ee6355c2d5c5dd2ee9c9ba7d7b027@github.com/${USER
 
 #git clone https://<token>@github.com/username/repo_name.git
 
-#Maven system environment
+#Maven
 FROM maven:3.5-jdk-8-alpine as build
-
-ENV REPOSITORY;
-ENV PROFILE;
 
 WORKDIR /app
 
@@ -23,14 +26,9 @@ COPY --from=clone /app/${REPOSITORY} /app
 
 RUN mvn install -DskipTests -Dspring-boot.run.profiles=${PROFILE}
 
-#Java system environment
+#Java
 FROM openjdk:8-jre-alpine
 
-ENV REPOSITORY;
-ENV VERSION;
-ENV PROFILE;
-
-ENV ARTIFACT ${REPOSITORY}-${VERSION}.jar
 WORKDIR /app
 
 COPY wait.sh /app/wait.sh
