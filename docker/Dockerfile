@@ -3,7 +3,7 @@ FROM alpine/git as clone
 
 WORKDIR /app
 
-RUN git clone https://5842ab875c2ee6355c2d5c5dd2ee9c9ba7d7b027@github.com/devpav/server-attraction.git --branch=${TAG}
+RUN git clone https://5842ab875c2ee6355c2d5c5dd2ee9c9ba7d7b027@github.com/devpav/server-attraction.git --branch=2-d52c0c52
 
 
 FROM maven:3.5-jdk-8-alpine as build
