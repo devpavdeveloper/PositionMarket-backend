@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+
+  postgres:
+    extends:
+      file: postgres/postgres.yml
+      service: postgres
+    volumes:
+      - pgsql-volume:/var/lib/postgresql/data
+    networks:
+      - devpav
+
+
+  rest:
+    extends:
+      file: java/java.yml
+      service: rest
+    depends_on:
+      - postgres
+    volumes:
+      - rest-volume:/app/
+    networks:
+      - devpav
+
+
+  nginx:
+    extends:
+      file: nginx/nginx.yml
+      service: nginx
+    depends_on:
+      - rest
+    volumes:
+      - rest-volume:/app/
+    networks:
+      - devpav
+
+networks:
+  devpav:
+    driver: bridge
+
+volumes:
+  pgsql-volume:
+  rest-volume:
