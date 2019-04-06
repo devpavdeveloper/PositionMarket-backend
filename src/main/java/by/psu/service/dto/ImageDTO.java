@@ -9,6 +9,5 @@ public class ImageDTO {
 
     private UUID id;
     private String url;
-    private String type;
 
 }

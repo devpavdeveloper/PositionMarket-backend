@@ -144,7 +144,10 @@
             <artifactId>curvesapi</artifactId>
             <version>1.04.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>

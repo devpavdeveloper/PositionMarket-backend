@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +21,9 @@ import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ImageFacade {
@@ -60,11 +64,18 @@ public class ImageFacade {
         }
     }
 
+    public List<ImageDTO> save(MultipartFile[] multipartFile) {
+        return Stream.of(multipartFile)
+                .map(this::save)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public ImageDTO save(MultipartFile multipartFile) {
         Path path = Paths.get(dirImages);
 
         Image image = new Image();
-        image.setUrl(host + ":" + port + "/api/images/" + multipartFile.getOriginalFilename());
+        image.setUrl("/api/images/" + multipartFile.getOriginalFilename());
 
         try {
             image = imageService.save(image);
@@ -81,7 +92,7 @@ public class ImageFacade {
         }
 
         try {
-            path = Files.write(path.resolve(multipartFile.getOriginalFilename()), multipartFile.getBytes());
+            Files.write(path.resolve(multipartFile.getOriginalFilename()), multipartFile.getBytes());
         } catch (IOException e) {
             throw new ResourceException("Resource isn't loaded, because an error occurred while writing the file", e);
         }

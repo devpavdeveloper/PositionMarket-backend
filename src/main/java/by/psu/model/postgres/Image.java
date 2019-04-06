@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(
         name = "images"
@@ -23,5 +21,8 @@ public class Image extends BasicEntity {
 
     @Column(name = "url", nullable = false)
     public String url;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "image")
+    private PositionImage positionImage;
 
 }
