@@ -2,6 +2,7 @@ package by.psu.model.postgres;
 
 import by.psu.model.postgres.converters.DeserializeUUID;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "id")
 public abstract class BasicEntity {
 
     @Id

@@ -2,8 +2,8 @@ package by.psu.mappers;
 
 import by.psu.BaseTest;
 import by.psu.model.factory.*;
-import by.psu.model.postgres.*;
-import by.psu.service.api.TranslateUtil;
+import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.Language;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.dto.mappers.AttractionMapper;
 import by.psu.service.dto.mappers.ProductMapper;
@@ -14,13 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class AttractionMapperTest extends BaseTest {
 
@@ -53,20 +48,16 @@ public class AttractionMapperTest extends BaseTest {
 
     private Attraction attraction;
 
-
     @Before
     public void init() {
-        attraction = factoryAttraction.create("Новый", "New", "http://link", "http://image");
+        attraction = factoryAttraction.create("Новый", "New");
     }
-
 
     @Test
     public void testMapperAttractionToAttractionDTOCommonInformation() {
         AttractionDTO attractionDTO = mapper.to(attraction);
 
         assertNotNull(attractionDTO);
-        assertEquals(attractionDTO.getImage(), "http://image");
-        assertEquals(attractionDTO.getLink(), "http://link");
         assertTrue(attractionDTO.getTitle().stream()
                 .anyMatch(item -> item.getLanguage().equals(Language.RU.getUuid()) && item.getValue().equals("Новый")));
         assertTrue(attractionDTO.getTitle().stream()

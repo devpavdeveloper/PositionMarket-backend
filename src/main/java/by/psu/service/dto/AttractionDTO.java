@@ -11,8 +11,7 @@ public class AttractionDTO {
 
     private UUID id;
     private List<StringValueDTO> title;
-    private String link;
-    private String image;
+    private List<PositionImageDTO> images;
 
     private List<UUID> tags;
     private List<UUID> types;

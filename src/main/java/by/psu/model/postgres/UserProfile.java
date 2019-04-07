@@ -7,10 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "user_profile")
 @Data
+@EqualsAndHashCode(callSuper = true, exclude = {"email", "phone", "priceDistance"})
 public class UserProfile extends BasicEntity {
 
     @Column(name = "email")
@@ -22,3 +22,5 @@ public class UserProfile extends BasicEntity {
     @Column(name = "price_distance")
     private Integer priceDistance;
 }
+
+

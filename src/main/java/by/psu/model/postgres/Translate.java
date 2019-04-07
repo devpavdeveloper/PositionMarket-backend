@@ -1,5 +1,6 @@
 package by.psu.model.postgres;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 )
 @Getter @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = "values")
 public class Translate extends BasicEntity {
 
     @LazyCollection(LazyCollectionOption.FALSE)

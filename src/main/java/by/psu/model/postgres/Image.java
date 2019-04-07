@@ -1,11 +1,10 @@
 package by.psu.model.postgres;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity(
         name = "images"
@@ -17,12 +16,10 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = "url")
 public class Image extends BasicEntity {
 
     @Column(name = "url", nullable = false)
     public String url;
-
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "image")
-    private PositionImage positionImage;
 
 }

@@ -44,7 +44,6 @@ public class AttractionFacade {
         );
     }
 
-    @Transactional
     public AttractionDTO save(AttractionDTO attractionDTO) {
         return attractionMapper.to(
                 attractionService.save(
@@ -52,6 +51,15 @@ public class AttractionFacade {
                 )
         );
     }
+
+/*
+    @Transactional
+    public void multipleDelete(List<UUID> uuids) {
+        if ( isNull(uuids) ) {
+            throw new
+        }
+    }
+*/
 
     @Transactional
     public void delete(UUID uuid) {

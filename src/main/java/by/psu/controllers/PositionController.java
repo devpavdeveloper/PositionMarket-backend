@@ -41,6 +41,13 @@ public class PositionController {
         return ResponseEntity.ok(attractionFacade.update(attraction));
     }
 
+/*
+    @PostMapping("/multiple/delete")
+    public ResponseEntity update(@RequestBody List<UUID> uuids){
+        return ResponseEntity.ok(attractionFacade.update(attraction));
+    }
+*/
+
     @DeleteMapping("/{uuid}")
     public ResponseEntity delete(@PathVariable UUID uuid) {
         attractionFacade.delete(uuid);

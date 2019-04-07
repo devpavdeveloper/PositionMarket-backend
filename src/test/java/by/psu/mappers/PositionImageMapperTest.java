@@ -28,7 +28,6 @@ public class PositionImageMapperTest extends BaseTest {
         Attraction attraction = new Attraction();
         attraction.setId(UUID.randomUUID());
 
-        positionImage.setAttraction(attraction);
         positionImage.setMainImage(false);
 
         Image image = new Image();
@@ -39,7 +38,6 @@ public class PositionImageMapperTest extends BaseTest {
         positionImageDTO = new PositionImageDTO();
 
         positionImageDTO.setImage(UUID.randomUUID());
-        positionImageDTO.setPosition(UUID.randomUUID());
         positionImageDTO.setMainImage(true);
 
     }
@@ -49,10 +47,8 @@ public class PositionImageMapperTest extends BaseTest {
         PositionImage positionImage = positionImageMapper.from(positionImageDTO);
 
         Assert.assertNotNull(positionImage);
-        Assert.assertNotNull(positionImage.getAttraction());
         Assert.assertNotNull(positionImage.getImage());
 
-        Assert.assertEquals(positionImage.getAttraction().getId(), positionImageDTO.getPosition());
         Assert.assertEquals(positionImage.getImage().getId(), positionImageDTO.getImage());
         Assert.assertEquals(positionImage.isMainImage(), positionImageDTO.isMainImage());
     }
@@ -62,10 +58,8 @@ public class PositionImageMapperTest extends BaseTest {
         PositionImageDTO positionImageDTO = positionImageMapper.to(positionImage);
 
         Assert.assertNotNull(positionImageDTO);
-        Assert.assertNotNull(positionImageDTO.getPosition());
         Assert.assertNotNull(positionImageDTO.getImage());
 
-        Assert.assertEquals(positionImage.getAttraction().getId(), positionImageDTO.getPosition());
         Assert.assertEquals(positionImage.getImage().getId(), positionImageDTO.getImage());
         Assert.assertEquals(positionImage.isMainImage(), positionImageDTO.isMainImage());
     }

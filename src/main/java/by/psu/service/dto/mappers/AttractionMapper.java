@@ -5,7 +5,6 @@ import by.psu.service.api.TagService;
 import by.psu.service.api.TypeService;
 import by.psu.service.api.TypeServiceService;
 import by.psu.service.dto.AttractionDTO;
-import by.psu.service.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -19,7 +18,10 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
-@Mapper(componentModel = "spring", uses = ProductMapper.class)
+@Mapper(componentModel = "spring", uses = {
+        ProductMapper.class,
+        PositionImageMapper.class
+})
 public abstract class AttractionMapper {
 
     @Autowired
@@ -31,17 +33,17 @@ public abstract class AttractionMapper {
 
     @Mappings(value = {
             @Mapping(source = "title.values", target = "title"),
-            @Mapping(source = "linkSource", target = "link"),
             @Mapping(target = "tags", expression = "java( convertToString(nsi.getTags()) )"),
-            @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )")
+            @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )"),
+            @Mapping(source = "images", target = "images")
     })
     public abstract AttractionDTO to(Attraction nsi);
 
     @Mappings(value = {
             @Mapping(source = "title", target = "title.values"),
-            @Mapping(source = "link", target = "linkSource"),
             @Mapping(target = "tags", expression = "java( convertToTag(nsi.getTags()) )"),
-            @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )")
+            @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )"),
+            @Mapping(source = "images", target = "images")
     })
     public abstract Attraction from(AttractionDTO nsi);
 

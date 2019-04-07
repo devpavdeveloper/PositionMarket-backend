@@ -9,8 +9,9 @@ import java.util.UUID;
 @Setter
 public class PositionImageDTO {
 
+    private UUID id;
     private UUID image;
-    private UUID position;
+    private String url;
     private boolean mainImage;
 
 }

@@ -1,9 +1,6 @@
 package by.psu.model.postgres;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -20,19 +17,15 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = {"title", "images", "tags", "types", "products"})
 public class Attraction extends BasicEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "title", nullable = false)
     private Translate title;
 
-    @Column(name = "link_source")
-    private String linkSource;
-
-    @Column(name = "image")
-    private String image;
-
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "attraction")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "attraction")
     private List<PositionImage> images;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)

@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(config = MapperConfiguration.class)
 public interface PositionImageMapper {
 
-    @Mapping(source = "attraction.id", target = "position")
     @Mapping(source = "image.id", target = "image")
+    @Mapping(source = "image.url", target = "url")
     PositionImageDTO to(PositionImage nsi);
 
     @InheritInverseConfiguration
