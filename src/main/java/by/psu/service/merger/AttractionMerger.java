@@ -23,10 +23,14 @@ public class AttractionMerger implements BaseMerger<Attraction> {
 
     @Override
     public Attraction merge(Attraction first, Attraction second) {
+        translateObjectMerger.merge(first.getTitle(), second.getTitle());
 
-        //first.setTitle( translateObjectMerger.merge(first.getTitle(), second.getTitle()) );
-        //first.setTags( tagAbstractNsiMerger.merge(first.getTags(), second.getTags()) );
-        //first.setTypes( typeAbstractNsiMerger.merge(first.getTypes(), second.getTypes()) );
+        // first.setTitle( translateObjectMerger.merge(first.getTitle(), second.getTitle()) );
+        // first.setTags( tagAbstractNsiMerger.merge(first.getTags(), second.getTags()) );
+        // first.setTypes( typeAbstractNsiMerger.merge(first.getTypes(), second.getTypes()) );
+
+        first.getImages().clear();
+        first.getImages().addAll( second.getImages() );
 
         List<Product> products = productMerger.merge(first.getProducts(), second.getProducts());
 
