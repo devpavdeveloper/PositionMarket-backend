@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin
@@ -41,12 +42,11 @@ public class PositionController {
         return ResponseEntity.ok(attractionFacade.update(attraction));
     }
 
-/*
     @PostMapping("/multiple/delete")
-    public ResponseEntity update(@RequestBody List<UUID> uuids){
-        return ResponseEntity.ok(attractionFacade.update(attraction));
+    public ResponseEntity multipleDelete(@RequestBody List<UUID> uuids){
+        attractionFacade.multipleDelete(uuids);
+        return ResponseEntity.ok().build();
     }
-*/
 
     @DeleteMapping("/{uuid}")
     public ResponseEntity delete(@PathVariable UUID uuid) {

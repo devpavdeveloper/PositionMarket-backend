@@ -1,5 +1,6 @@
 package by.psu.service.facade;
 
+import by.psu.exceptions.BadRequestException;
 import by.psu.service.api.AttractionService;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.dto.mappers.AttractionMapper;
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 public class AttractionFacade {
@@ -52,14 +56,18 @@ public class AttractionFacade {
         );
     }
 
-/*
     @Transactional
     public void multipleDelete(List<UUID> uuids) {
         if ( isNull(uuids) ) {
-            throw new
+            throw new BadRequestException("List cannot to be null");
         }
+
+        uuids.forEach(uuid -> {
+            if ( nonNull( attractionService.getOne(uuid) ) ) {
+                this.delete(uuid);
+            }
+        });
     }
-*/
 
     @Transactional
     public void delete(UUID uuid) {
