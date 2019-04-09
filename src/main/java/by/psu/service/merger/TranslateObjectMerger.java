@@ -4,6 +4,8 @@ import by.psu.model.postgres.Translate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.nonNull;
+
 @Component
 public class TranslateObjectMerger implements BaseMerger<Translate> {
 
@@ -13,6 +15,9 @@ public class TranslateObjectMerger implements BaseMerger<Translate> {
     @Override
     public Translate merge(Translate first, Translate second) {
         if ( isNotValidTranslate(first) ) {
+            if ( nonNull(first.getId()) ) {
+                second.setId(first.getId());
+            }
             return second;
         }
 

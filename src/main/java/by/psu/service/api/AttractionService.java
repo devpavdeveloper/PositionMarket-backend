@@ -54,6 +54,15 @@ public class AttractionService {
 
     @Transactional
     public Attraction save(Attraction attraction) {
+
+        if ( attraction == null ) {
+            throw new RuntimeException("Attraction entity is null");
+        }
+
+        if ( attraction.getId() != null ) {
+            throw new RuntimeException("Attraction id isn't null");
+        }
+
         attraction.setTypes(attraction.getTypes().stream()
                 .map(serviceType::save)
                 .collect(Collectors.toList()));
