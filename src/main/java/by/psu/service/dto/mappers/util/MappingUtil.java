@@ -3,10 +3,8 @@ package by.psu.service.dto.mappers.util;
 import by.psu.model.postgres.Product;
 import by.psu.service.dto.ProductDTO;
 import by.psu.service.dto.mappers.ProductMapper;
-import by.psu.service.dto.mappers.ProductMapperImpl;
 import org.mapstruct.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.lang.annotation.ElementType;

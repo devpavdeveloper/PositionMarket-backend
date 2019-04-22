@@ -2,9 +2,7 @@ package by.psu.service.dto.mappers.nsi;
 
 import by.psu.model.postgres.Nsi;
 import by.psu.service.dto.NsiDTO;
-import by.psu.service.dto.mappers.MapperConfiguration;
 import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 

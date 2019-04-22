@@ -18,4 +18,6 @@ import javax.persistence.Table;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class TypeService extends Nsi { }
+public class TypeService extends Nsi {
+    
+}
