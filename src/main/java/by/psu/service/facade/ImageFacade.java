@@ -31,7 +31,7 @@ public class ImageFacade {
     private final ImageService imageService;
     private final ImageMapper imageMapper;
 
-    private String port;
+    private final String port;
     private final String host;
 
     @Value("${load.dir.images}")

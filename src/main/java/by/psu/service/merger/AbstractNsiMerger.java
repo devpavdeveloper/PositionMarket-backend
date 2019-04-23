@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AbstractNsiMerger<T extends Nsi> implements NsiMerger<T> {
 
+    private final TranslateObjectMerger translateObjectMerger;
+
     @Autowired
-    private TranslateObjectMerger translateObjectMerger;
+    public AbstractNsiMerger(TranslateObjectMerger translateObjectMerger) {
+        this.translateObjectMerger = translateObjectMerger;
+    }
 
     @Override
     public T merge(T first, T second) {

@@ -33,7 +33,7 @@ public abstract class NsiService<T extends Nsi> {
     private AbstractNsiMerger<T> abstractNsiMerger;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     private Class<T> type;
 
@@ -53,6 +53,7 @@ public abstract class NsiService<T extends Nsi> {
 
     @Transactional
     protected Optional<T> isExists(T nsi) {
+
         if (nsi == null) {
             return Optional.empty();
         }
@@ -94,7 +95,7 @@ public abstract class NsiService<T extends Nsi> {
 
         criteriaQuery.select(root).where(criteriaBuilder.exists(stringValueSubquery));
         TypedQuery<T> tTypedQuery = entityManager.createQuery(criteriaQuery);
-        //tTypedQuery.unwrap(org.hibernate.Query.class).getQueryString();
+
         List<T> objList = tTypedQuery.getResultList();
         return objList.stream().findFirst();
     }

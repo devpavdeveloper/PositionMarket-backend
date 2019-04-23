@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.ws.Action;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -35,6 +36,14 @@ public class ImageService implements ServiceCRUD<Image> {
     public Image getOne(UUID id) {
         return repositoryImage.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Image isn't found by id " + id));
+    }
+
+    public Optional<Image> isExistsInStore(final Image image) {
+        if ( isNull(image) ) {
+            return Optional.empty();
+        }
+        // TODO Дописать данный метод как надо
+        return Optional.empty();
     }
 
     @Override

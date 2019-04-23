@@ -15,9 +15,12 @@ public class ProductService {
 
     @Autowired
     private TypeServiceService typeServiceService;
-    @Autowired
-    private RepositoryProduct repositoryProduct;
+    private final RepositoryProduct repositoryProduct;
 
+    @Autowired
+    public ProductService(RepositoryProduct repositoryProduct) {
+        this.repositoryProduct = repositoryProduct;
+    }
 
     public List<Product> getAll() {
         return repositoryProduct.findAll();

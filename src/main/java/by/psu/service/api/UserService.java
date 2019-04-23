@@ -15,12 +15,16 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final SecurityUtil securityUtil;
+    private final UserRepository userRepository;
+    private final UserMerger userMerger;
+
     @Autowired
-    private SecurityUtil securityUtil;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMerger userMerger;
+    public UserService(SecurityUtil securityUtil, UserRepository userRepository, UserMerger userMerger) {
+        this.securityUtil = securityUtil;
+        this.userRepository = userRepository;
+        this.userMerger = userMerger;
+    }
 
 
     @Transactional

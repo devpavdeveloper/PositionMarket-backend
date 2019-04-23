@@ -12,8 +12,12 @@ import java.util.UUID;
 @Service
 public class PositionImageService implements ServiceCRUD<PositionImage> {
 
+    private final RepositoryPositionImage repositoryPositionImage;
+
     @Autowired
-    private RepositoryPositionImage repositoryPositionImage;
+    public PositionImageService(RepositoryPositionImage repositoryPositionImage) {
+        this.repositoryPositionImage = repositoryPositionImage;
+    }
 
 
     @Override

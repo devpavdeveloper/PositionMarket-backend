@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class NsiController<T extends Nsi, E extends NsiDTO> {
 
-    @Autowired
     protected NsiFacade<T, E> nsiFacade;
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    public NsiController(NsiFacade<T, E> nsiFacade) {
+        this.nsiFacade = nsiFacade;
+    }
 
     @GetMapping
     public ResponseEntity<List<E>> get() {
@@ -42,9 +47,9 @@ public class NsiController<T extends Nsi, E extends NsiDTO> {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/multiple/delete")
-    public ResponseEntity<E> delete(@RequestBody List<String> uuids) {
-        nsiFacade.deleteAll(uuids.stream().map(UUID::fromString).collect(Collectors.toList()));
+    @DeleteMapping("/[{uuid}]")
+    public ResponseEntity delete(@PathVariable UUID[] uuid) {
+        nsiFacade.deleteAll(Arrays.asList(uuid));
         return ResponseEntity.ok().build();
     }
 

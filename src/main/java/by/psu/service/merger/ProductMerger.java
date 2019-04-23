@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 @Component
 public class ProductMerger implements BaseMerger<Product> {
 
+    private final AbstractNsiMerger<TypeService> typeServiceAbstractNsiMerger;
+
     @Autowired
-    private AbstractNsiMerger<TypeService> typeServiceAbstractNsiMerger;
+    public ProductMerger(AbstractNsiMerger<TypeService> typeServiceAbstractNsiMerger) {
+        this.typeServiceAbstractNsiMerger = typeServiceAbstractNsiMerger;
+    }
 
     public List<Product> merge(List<Product> first, List<Product> second) {
         List<Product> products = BaseMerger.super.merge(first, second);

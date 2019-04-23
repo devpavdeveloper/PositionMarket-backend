@@ -1,11 +1,10 @@
 package by.psu.model.postgres;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +20,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class Tag extends Nsi {
 
-    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinTable(name = "attraction_tag", joinColumns = {
+            @JoinColumn(name = "tag", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "attraction")})
     private Set<Attraction> attractions = new HashSet<>();
 
 }

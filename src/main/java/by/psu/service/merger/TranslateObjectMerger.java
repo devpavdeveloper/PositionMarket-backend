@@ -9,8 +9,12 @@ import static java.util.Objects.nonNull;
 @Component
 public class TranslateObjectMerger implements BaseMerger<Translate> {
 
+    private final StringValueMerger stringValueMerger;
+
     @Autowired
-    private StringValueMerger stringValueMerger;
+    public TranslateObjectMerger(StringValueMerger stringValueMerger) {
+        this.stringValueMerger = stringValueMerger;
+    }
 
     @Override
     public Translate merge(Translate first, Translate second) {
