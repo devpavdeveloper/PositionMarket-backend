@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Service
 public class AttractionService {
 
@@ -48,8 +50,14 @@ public class AttractionService {
         if ( attraction.getId() == null ) {
             throw new RuntimeException("Attraction id is null");
         }
-
-        return repositoryAttraction.save( attractionMerger.merge(getOne(attraction.getId()), attraction) );
+        Attraction findEntityById = getOne(attraction.getId());
+        if ( nonNull(attraction.getTags()) ) {
+            findEntityById.setTags(attraction.getTags());
+        }
+        if ( nonNull(attraction.getTypes()) ) {
+            findEntityById.setTypes(attraction.getTypes());
+        }
+        return repositoryAttraction.save( attractionMerger.merge(findEntityById, attraction) );
     }
 
     @Transactional

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -148,7 +149,16 @@ public abstract class NsiService<T extends Nsi> {
     }
 
     @Transactional
-    public void deleteAll(List<UUID> uuid) {
-        uuid.forEach(repositoryNsi::deleteById);
+    public void deleteAll(List<UUID> uuid, final Consumer<T> consumer) {
+        uuid.stream()
+                .map(repositoryNsi::findById)
+                .map(Optional::get)
+                .forEach(nsi -> {
+                    consumer.accept(nsi);
+
+                    entityManager.merge(nsi);
+                    entityManager.flush();
+                    entityManager.remove(nsi);
+                });
     }
 }
