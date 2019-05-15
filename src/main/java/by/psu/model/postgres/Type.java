@@ -1,13 +1,12 @@
 package by.psu.model.postgres;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(
         name = "types"
@@ -21,7 +20,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class Type extends Nsi {
 
-    @ManyToMany(mappedBy = "types", cascade = CascadeType.ALL)
-    private Set<Attraction> attractions = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinTable(name = "attraction_type", joinColumns = {
+            @JoinColumn(name = "type", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "attraction")})
+    private List<Attraction> attractions = new ArrayList<>();
 
 }

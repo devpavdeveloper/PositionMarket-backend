@@ -6,7 +6,6 @@ import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.repository.RepositoryNsi;
 import by.psu.service.merger.AbstractNsiMerger;
 import javassist.tools.web.BadHttpRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -19,18 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
 public abstract class NsiService<T extends Nsi> {
 
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected RepositoryNsi<T> repositoryNsi;
 
-    @Autowired
     private AbstractNsiMerger<T> abstractNsiMerger;
 
     @PersistenceContext
@@ -39,8 +34,10 @@ public abstract class NsiService<T extends Nsi> {
     private Class<T> type;
 
 
-    public NsiService() {
+    public NsiService(RepositoryNsi<T> repositoryNsi, AbstractNsiMerger<T> abstractNsiMerger) {
         this.type = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.repositoryNsi = repositoryNsi;
+        this.abstractNsiMerger = abstractNsiMerger;
     }
 
 
@@ -149,16 +146,20 @@ public abstract class NsiService<T extends Nsi> {
     }
 
     @Transactional
-    public void deleteAll(List<UUID> uuid, final Consumer<T> consumer) {
-        uuid.stream()
+    public void deleteAll(final List<UUID> uuid) {
+        List<T> objects = uuid.stream()
                 .map(repositoryNsi::findById)
+                .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(nsi -> {
-                    consumer.accept(nsi);
+                .collect(Collectors.toList());
 
-                    entityManager.merge(nsi);
-                    entityManager.flush();
-                    entityManager.remove(nsi);
-                });
+        for (T it : objects) {
+            entityManager.remove(it);
+            entityManager.flush();
+        }
     }
+
+    @Transactional
+    abstract protected void deleteConsumer(T object);
+
 }

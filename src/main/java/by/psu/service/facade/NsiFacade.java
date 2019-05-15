@@ -51,7 +51,8 @@ public abstract class NsiFacade <T extends Nsi, E extends NsiDTO> {
         nsiService.delete(uuid);
     }
 
-    public void deleteAll(List<UUID> uuid) {
-
+    @Transactional
+    public void deleteAll(List<UUID> uuids) {
+        nsiService.deleteAll(uuids);
     }
 }

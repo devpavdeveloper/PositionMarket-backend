@@ -28,4 +28,5 @@ public class StringValue extends BasicEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference("string_value_translate")
     private Translate translate;
+
 }

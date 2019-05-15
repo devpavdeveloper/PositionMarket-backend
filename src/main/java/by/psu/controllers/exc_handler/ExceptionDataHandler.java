@@ -22,7 +22,7 @@ public class ExceptionDataHandler extends ExceptionAbstractHandler {
 
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(Exception ex) {
-        logger.severe(ex.getMessage());
+        ex.printStackTrace();
         return new ResponseEntity<>(new AwesomeException(HttpStatus.CONFLICT.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
