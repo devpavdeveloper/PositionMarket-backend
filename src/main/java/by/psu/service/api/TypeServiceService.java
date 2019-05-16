@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 public class TypeServiceService extends NsiService<TypeService> {
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     public TypeServiceService(RepositoryServiceType repositoryServiceType, AbstractNsiMerger<TypeService> abstractNsiMerger) {
         super(repositoryServiceType, abstractNsiMerger);
     }
 
     @Override
     protected void deleteConsumer(TypeService object) {
-        object.setProducts(null);
+        object.getProducts().clear();
     }
 
 }

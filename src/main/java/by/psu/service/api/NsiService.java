@@ -1,5 +1,6 @@
 package by.psu.service.api;
 
+import by.psu.model.postgres.BasicEntity;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
@@ -147,6 +148,10 @@ public abstract class NsiService<T extends Nsi> {
 
     @Transactional
     public void deleteAll(final List<UUID> uuid) {
+        if ( isNull(uuid) || uuid.isEmpty() ) {
+            return;
+        }
+
         List<T> objects = uuid.stream()
                 .map(repositoryNsi::findById)
                 .filter(Optional::isPresent)
@@ -154,10 +159,17 @@ public abstract class NsiService<T extends Nsi> {
                 .collect(Collectors.toList());
 
         for (T it : objects) {
-            entityManager.remove(it);
+            deleteConsumer(it);
+            entityManager.merge(it);
             entityManager.flush();
+            entityManager.clear();
         }
+
+        objects.stream()
+                .map(BasicEntity::getId)
+                .forEach(repositoryNsi::deleteById);
     }
+
 
     @Transactional
     abstract protected void deleteConsumer(T object);
