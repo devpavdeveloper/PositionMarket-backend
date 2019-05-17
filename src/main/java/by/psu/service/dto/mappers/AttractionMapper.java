@@ -37,7 +37,7 @@ public abstract class AttractionMapper {
             @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )"),
             @Mapping(source = "images", target = "images")
     })
-    public abstract AttractionDTO to(Attraction nsi);
+    public abstract AttractionDTO map(Attraction nsi);
 
     @Mappings(value = {
             @Mapping(source = "title", target = "title.values"),
@@ -45,7 +45,7 @@ public abstract class AttractionMapper {
             @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )"),
             @Mapping(source = "images", target = "images")
     })
-    public abstract Attraction from(AttractionDTO nsi);
+    public abstract Attraction map(AttractionDTO nsi);
 
     protected List<UUID> convertToString(List<? extends Nsi> collection) {
         if (nonNull(collection) && !collection.isEmpty()) {

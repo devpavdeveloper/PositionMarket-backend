@@ -12,4 +12,5 @@ public class TypeServiceFacade extends NsiFacade<TypeService, TypeServiceDTO> {
     public TypeServiceFacade(TypeServiceService typeServiceService, TypeServiceNsiMapper mapper) {
         super(typeServiceService, mapper);
     }
+
 }

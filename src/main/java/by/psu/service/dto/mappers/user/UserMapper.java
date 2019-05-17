@@ -14,11 +14,12 @@ public interface UserMapper {
             @Mapping(source = "login", target = "username"),
             @Mapping(source = "userProfile", target = "information")
     })
-    public UserDTO to(User user);
+    public UserDTO map(User user);
 
     @Mappings({
             @Mapping(source = "username", target = "login"),
             @Mapping(source = "information", target = "userProfile")
     })
-    public User from(UserDTO userDTO);
+    public User map(UserDTO userDTO);
+
 }

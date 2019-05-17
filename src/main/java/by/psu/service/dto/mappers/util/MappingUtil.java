@@ -28,7 +28,9 @@ public class MappingUtil {
 
     @ProductConverter
     public List<ProductDTO> productConverter(List<Product> products) {
-        return products.stream().map(product -> productMapper.to(product)).collect(Collectors.toList());
+        return products.stream()
+                .map(product -> productMapper.map(product))
+                .collect(Collectors.toList());
     }
 
 }

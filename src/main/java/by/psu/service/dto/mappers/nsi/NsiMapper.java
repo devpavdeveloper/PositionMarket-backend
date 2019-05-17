@@ -9,9 +9,9 @@ import org.mapstruct.Mapping;
 public interface NsiMapper <T extends Nsi, DTO extends NsiDTO> {
 
     @Mapping(source = "title.values", target = "values")
-    DTO to(T nsi);
+    DTO map(T nsi);
 
     @InheritInverseConfiguration
-    T from(DTO nsi);
+    T map(DTO nsi);
 
 }

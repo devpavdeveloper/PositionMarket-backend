@@ -27,4 +27,7 @@ public class Product extends BasicEntity {
   @Column(name = "price")
   private BigDecimal price;
 
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+  private Attraction attraction;
+
 }

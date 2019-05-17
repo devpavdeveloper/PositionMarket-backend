@@ -97,7 +97,7 @@ public class ImageFacade {
             throw new ResourceException("Resource isn't loaded, because an error occurred while writing the file", e);
         }
 
-        return imageMapper.to(image);
+        return imageMapper.map(image);
     }
 
 }

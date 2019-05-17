@@ -44,7 +44,7 @@ public class PositionImageMapperTest extends BaseTest {
 
     @Test
     public void testPositionMapperPositionImageDTOToPositionImage() {
-        PositionImage positionImage = positionImageMapper.from(positionImageDTO);
+        PositionImage positionImage = positionImageMapper.map(positionImageDTO);
 
         Assert.assertNotNull(positionImage);
         Assert.assertNotNull(positionImage.getImage());
@@ -55,7 +55,7 @@ public class PositionImageMapperTest extends BaseTest {
 
     @Test
     public void testPositionMapperPositionImageToPositionDTO() {
-        PositionImageDTO positionImageDTO = positionImageMapper.to(positionImage);
+        PositionImageDTO positionImageDTO = positionImageMapper.map(positionImage);
 
         Assert.assertNotNull(positionImageDTO);
         Assert.assertNotNull(positionImageDTO.getImage());

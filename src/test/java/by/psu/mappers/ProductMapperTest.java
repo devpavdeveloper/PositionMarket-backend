@@ -47,7 +47,7 @@ public class ProductMapperTest extends BaseTest {
         product.setPrice(new BigDecimal(1234));
         product.setId(UUID.randomUUID());
         product.setService(typeService);
-        ProductDTO productDTO = productMapper.to(product);
+        ProductDTO productDTO = productMapper.map(product);
 
         assertNotNull(productDTO);
         assertEquals(productDTO.getPrice(), product.getPrice());
@@ -72,7 +72,7 @@ public class ProductMapperTest extends BaseTest {
         nsiDTO.setValues(Arrays.asList(stringValueDTO, stringValueDTO2));
 
 
-        Product product = productMapper.from( productDTO );
+        Product product = productMapper.map( productDTO );
 
         assertNotNull(product);
         assertEquals(product.getPrice(), productDTO.getPrice());

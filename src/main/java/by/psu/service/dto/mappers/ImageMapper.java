@@ -7,8 +7,8 @@ import org.mapstruct.Mapper;
 @Mapper(config = MapperConfiguration.class)
 public interface ImageMapper {
 
-    ImageDTO to(Image nsi);
+    ImageDTO map(Image nsi);
 
-    Image from(ImageDTO nsi);
+    Image map(ImageDTO nsi);
 
 }

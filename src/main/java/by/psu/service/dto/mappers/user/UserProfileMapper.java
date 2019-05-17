@@ -8,7 +8,8 @@ import org.mapstruct.Mapper;
 @Mapper(config = MapperConfiguration.class)
 public interface UserProfileMapper {
 
-    public UserProfileDTO to(UserProfile userProfile);
+    public UserProfileDTO map(UserProfile userProfile);
 
-    public UserProfile from(UserProfileDTO userProfileDTO);
+    public UserProfile map(UserProfileDTO userProfileDTO);
+
 }

@@ -11,9 +11,9 @@ public interface PositionImageMapper {
 
     @Mapping(source = "image.id", target = "image")
     @Mapping(source = "image.url", target = "url")
-    PositionImageDTO to(PositionImage nsi);
+    PositionImageDTO map(PositionImage nsi);
 
     @InheritInverseConfiguration
-    PositionImage from(PositionImageDTO nsi);
+    PositionImage map(PositionImageDTO nsi);
 
 }

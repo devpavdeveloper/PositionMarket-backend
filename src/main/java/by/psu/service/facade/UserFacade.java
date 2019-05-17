@@ -20,24 +20,27 @@ public class UserFacade {
 
     @Transactional
     public UserDTO update(UserDTO userDTO) {
-        return userMapper.to(
+        return userMapper.map(
                 userService.update(
-                        userMapper.from(userDTO)
+                        userMapper.map(userDTO)
                 )
         );
     }
 
     @Transactional
     public UserDTO update(UserDTO userDTO, String username) {
-        return userMapper.to(
+        return userMapper.map(
                 userService.update(
-                        userMapper.from(userDTO), username
+                        userMapper.map(userDTO), username
                 )
         );
     }
 
     @Transactional(readOnly = true)
     public List<UserDTO> getAll() {
-        return userService.getAll().stream().map(userMapper::to).collect(Collectors.toList());
+        return userService.getAll().stream()
+                .map(userMapper::map)
+                .collect(Collectors.toList());
     }
+
 }

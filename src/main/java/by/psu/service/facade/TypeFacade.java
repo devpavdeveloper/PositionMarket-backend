@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TypeFacade extends NsiFacade<Type, TypeDTO> {
+
     public TypeFacade(TypeService typeService, NsiMapper<Type, TypeDTO> mapper) {
         super(typeService, mapper);
     }
+
 }

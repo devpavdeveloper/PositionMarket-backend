@@ -27,23 +27,23 @@ public abstract class NsiFacade <T extends Nsi, E extends NsiDTO> {
     @Transactional(readOnly = true)
     public List<E> getAll() {
         return nsiService.getAll().stream()
-                .map(nsi -> mapper.to(nsi))
+                .map(nsi -> mapper.map(nsi))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public E getOne(UUID id) {
-        return mapper.to(nsiService.getOne(id));
+        return mapper.map(nsiService.getOne(id));
     }
 
     @Transactional
     public E save(E nsiDTO) {
-        return mapper.to(nsiService.save(mapper.from(nsiDTO)));
+        return mapper.map(nsiService.save(mapper.map(nsiDTO)));
     }
 
     @Transactional
     public E update(E nsiDTO) {
-        return mapper.to(nsiService.update(mapper.from(nsiDTO)));
+        return mapper.map(nsiService.update(mapper.map(nsiDTO)));
     }
 
     @Transactional

@@ -18,7 +18,7 @@ public class MapperTest extends BaseTest {
 
     @Test
     public void testMapperNsiToNsiDTO() {
-        NsiDTO nsiDTO = nsiMapper.to(serviceTag.getAll().stream().findFirst().get());
+        NsiDTO nsiDTO = nsiMapper.map(serviceTag.getAll().stream().findFirst().get());
         Assert.assertNotNull(nsiDTO);
     }
 

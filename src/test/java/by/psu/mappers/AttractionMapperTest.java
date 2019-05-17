@@ -55,7 +55,7 @@ public class AttractionMapperTest extends BaseTest {
 
     @Test
     public void testMapperAttractionToAttractionDTOCommonInformation() {
-        AttractionDTO attractionDTO = mapper.to(attraction);
+        AttractionDTO attractionDTO = mapper.map(attraction);
 
         assertNotNull(attractionDTO);
         assertTrue(attractionDTO.getTitle().stream()

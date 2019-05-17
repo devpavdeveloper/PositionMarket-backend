@@ -29,29 +29,29 @@ public class AttractionFacade {
 
     @Transactional(readOnly = true)
     public AttractionDTO getOne(UUID uuid) {
-        return attractionMapper.to(attractionService.getOne(uuid));
+        return attractionMapper.map(attractionService.getOne(uuid));
     }
 
     @Transactional(readOnly = true)
     public List<AttractionDTO> getAll() {
         return attractionService.getAll().stream().map(
-                attractionMapper::to
+                attractionMapper::map
         ).collect(Collectors.toList());
     }
 
     @Transactional
     public AttractionDTO update(AttractionDTO attractionDTO) {
-        return attractionMapper.to(
+        return attractionMapper.map(
                 attractionService.update(
-                        attractionMapper.from(attractionDTO)
+                        attractionMapper.map(attractionDTO)
                 )
         );
     }
 
     public AttractionDTO save(AttractionDTO attractionDTO) {
-        return attractionMapper.to(
+        return attractionMapper.map(
                 attractionService.save(
-                        attractionMapper.from(attractionDTO)
+                        attractionMapper.map(attractionDTO)
                 )
         );
     }
