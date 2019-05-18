@@ -33,9 +33,10 @@ public class ImageService implements ServiceCRUD<Image> {
 
     @Override
     @Transactional(readOnly = true)
-    public Image getOne(UUID id) {
-        return repositoryImage.findById(id)
+    public Optional<Image> getOne(UUID id) {
+        Image image = repositoryImage.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Image isn't found by id " + id));
+        return Optional.of(image);
     }
 
     public Optional<Image> isExistsInStore(final Image image) {
@@ -48,29 +49,34 @@ public class ImageService implements ServiceCRUD<Image> {
 
     @Override
     @Transactional
-    public Image save(Image object) {
+    public Optional<Image> save(Image object) {
 
         if ( nonNull(object.getId()) ) {
             throw new BadRequestException("Image isn't saved. Id isn't null.");
         }
 
-        return repositoryImage.save(object);
+        return Optional.of(repositoryImage.save(object));
     }
 
     @Override
     @Transactional
-    public Image update(Image object) {
+    public Optional<Image> update(Image object) {
 
         if ( nonNull(object.getId()) ) {
             throw new BadRequestException("Image isn't updated. Id is null.");
         }
 
-        return repositoryImage.save(object);
+        return Optional.of(repositoryImage.save(object));
     }
 
     @Override
     @Transactional
     public void delete(UUID id) {
         repositoryImage.deleteById(id);
+    }
+
+    @Override
+    public void delete(Iterable<UUID> ids) {
+
     }
 }

@@ -1,5 +1,6 @@
 package by.psu.model.postgres;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -21,13 +22,14 @@ public class Product extends BasicEntity {
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
-  @JoinColumn(name = "id_service", nullable = false)
+  @JoinColumn(name = "id_service")
   private TypeService service;
 
   @Column(name = "price")
   private BigDecimal price;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+  @ManyToOne()
+  @JsonIgnore
   private Attraction attraction;
 
 }

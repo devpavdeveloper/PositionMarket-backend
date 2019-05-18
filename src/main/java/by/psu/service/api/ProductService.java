@@ -10,24 +10,57 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
+
 @Service
-public class ProductService {
+public class ProductService implements ServiceCRUD<Product> {
 
     @Autowired
     private TypeServiceService typeServiceService;
-    private final RepositoryProduct repositoryProduct;
-
     @Autowired
-    public ProductService(RepositoryProduct repositoryProduct) {
-        this.repositoryProduct = repositoryProduct;
-    }
+    private RepositoryProduct repositoryProduct;
+
 
     public List<Product> getAll() {
         return repositoryProduct.findAll();
     }
 
-    public Product getOne(UUID id) {
-        return repositoryProduct.getOne(id);
+    public Optional<Product> getOne(UUID id) {
+        return repositoryProduct.findById(id);
+    }
+
+    @Override
+    public Optional<Product> save(Product object) {
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public Optional<Product> update(Product object) {
+        return Optional.empty();
+    }
+
+    @Override
+    @Transactional
+    public void delete(UUID id) {
+        Optional<Product> product = repositoryProduct.findById(id);
+        if (product.isPresent()) {
+            product.get().setAttraction(null);
+            product.get().setService(null);
+            repositoryProduct.saveAndFlush(product.get());
+            repositoryProduct.deleteById(id);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void delete(Iterable<UUID> ids) {
+        if ( isNull(ids) ) {
+            return;
+        }
+
+        ids.iterator()
+                .forEachRemaining(this::delete);
     }
 
     @Transactional
@@ -52,7 +85,7 @@ public class ProductService {
 
                         product.setService(typeServiceService.getOne(product.getService().getId()));
                     })
-                    .collect(Collectors.toMap((key) -> key.getService().getId(), value -> value, (value, duplicate) -> value))
+                    .collect(Collectors.toMap(key -> key.getService().getId(), value -> value, (value, duplicate) -> value))
                     .values());
         }
         return Collections.emptyList();

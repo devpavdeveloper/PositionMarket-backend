@@ -78,7 +78,7 @@ public class ImageFacade {
         image.setUrl("/api/images/" + multipartFile.getOriginalFilename());
 
         try {
-            image = imageService.save(image);
+            image = imageService.save(image).get();
         } catch (Exception ex) {
             throw new BadRequestException("Error occurred while saving the image", ex);
         }

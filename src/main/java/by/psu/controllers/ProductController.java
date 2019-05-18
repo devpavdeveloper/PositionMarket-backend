@@ -6,54 +6,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/products")
-public class ProductController implements Controller<Product, UUID> {
-
-    private final ProductFacade productFacade;
+public class ProductController {
 
     @Autowired
-    public ProductController(ProductFacade productFacade) {
-        this.productFacade = productFacade;
-    }
+    private ProductFacade productFacade;
 
-    @Override
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Product>> get() {
-        return null;
+        return ResponseEntity.ok(productFacade.getAll());
     }
 
-    @Override
     @GetMapping("/{id}")
     public ResponseEntity<Product> get(@PathVariable("id") UUID id) {
-        return null;
+        return ResponseEntity.ok(productFacade.getOne(id).get());
     }
 
-    @Override
     @PostMapping()
-    public ResponseEntity<Product> create(Product obj) {
-        return null;
+    public ResponseEntity<Product> create(@RequestBody  Product obj) {
+        return ResponseEntity.ok(productFacade.save(obj).get());
     }
 
-    @Override
     @PutMapping()
-    public ResponseEntity<Product> update(Product obj) {
-        return null;
+    public ResponseEntity<Product> update(@RequestBody Product obj) {
+        return ResponseEntity.ok(productFacade.update(obj).get());
     }
 
-    @Override
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") UUID uuid) {
-        return null;
+        productFacade.delete(uuid);
+        return ResponseEntity.ok().build();
     }
 
-    @Override
-    public ResponseEntity delete(UUID[] uuid) {
-        return null;
+    @DeleteMapping("/[{uuid}]")
+    public ResponseEntity delete(@PathVariable UUID[] uuid) {
+        productFacade.delete(Arrays.asList(uuid));
+        return ResponseEntity.ok().build();
     }
 
 }

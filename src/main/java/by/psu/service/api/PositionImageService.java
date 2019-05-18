@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class PositionImageService implements ServiceCRUD<PositionImage> {
@@ -21,30 +24,45 @@ public class PositionImageService implements ServiceCRUD<PositionImage> {
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PositionImage> getAll() {
+        return repositoryPositionImage.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<PositionImage> getOne(UUID id) {
+        return repositoryPositionImage.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public Optional<PositionImage> save(PositionImage object) {
+        repositoryPositionImage.save(object);
         return null;
     }
 
     @Override
     @Transactional
-    public PositionImage getOne(UUID id) {
+    public Optional<PositionImage> update(PositionImage object) {
         return null;
     }
 
     @Override
     @Transactional
-    public PositionImage save(PositionImage object) {
-        return repositoryPositionImage.save(object);
-    }
-
-    @Override
-    public PositionImage update(PositionImage object) {
-        return null;
-    }
-
-    @Override
     public void delete(UUID id) {
+        repositoryPositionImage.deleteById(id);
+    }
 
+    @Override
+    @Transactional
+    public void delete(Iterable<UUID> ids) {
+
+        if ( isNull(ids) ) {
+            return;
+        }
+
+        ids.iterator()
+                .forEachRemaining(this::delete);
     }
 }
