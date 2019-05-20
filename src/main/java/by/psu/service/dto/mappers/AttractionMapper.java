@@ -7,7 +7,6 @@ import by.psu.service.api.TypeServiceService;
 import by.psu.service.dto.AttractionDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
@@ -31,20 +30,18 @@ public abstract class AttractionMapper {
     @Autowired
     protected TypeServiceService typeServiceService;
 
-    @Mappings(value = {
-            @Mapping(source = "title.values", target = "title"),
-            @Mapping(target = "tags", expression = "java( convertToString(nsi.getTags()) )"),
-            @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )"),
-            @Mapping(source = "images", target = "images")
-    })
+    @Mapping(source = "title.values", target = "title")
+    @Mapping(source = "description.values", target = "description")
+    @Mapping(target = "tags", expression = "java( convertToString(nsi.getTags()) )")
+    @Mapping(target = "types", expression = "java( convertToString(nsi.getTypes()) )")
+    @Mapping(source = "images", target = "images")
     public abstract AttractionDTO map(Attraction nsi);
 
-    @Mappings(value = {
-            @Mapping(source = "title", target = "title.values"),
-            @Mapping(target = "tags", expression = "java( convertToTag(nsi.getTags()) )"),
-            @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )"),
-            @Mapping(source = "images", target = "images")
-    })
+    @Mapping(source = "title", target = "title.values")
+    @Mapping(source = "description", target = "description.values")
+    @Mapping(target = "tags", expression = "java( convertToTag(nsi.getTags()) )")
+    @Mapping(target = "types", expression = "java( convertToType(nsi.getTypes()) )")
+    @Mapping(source = "images", target = "images")
     public abstract Attraction map(AttractionDTO nsi);
 
     protected List<UUID> convertToString(List<? extends Nsi> collection) {

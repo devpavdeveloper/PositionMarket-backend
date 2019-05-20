@@ -38,8 +38,7 @@ public class PositionImageService implements ServiceCRUD<PositionImage> {
     @Override
     @Transactional
     public Optional<PositionImage> save(PositionImage object) {
-        repositoryPositionImage.save(object);
-        return null;
+        return Optional.of(repositoryPositionImage.save(object));
     }
 
     @Override

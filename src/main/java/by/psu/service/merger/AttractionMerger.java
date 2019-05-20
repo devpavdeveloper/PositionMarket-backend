@@ -22,6 +22,7 @@ public class AttractionMerger implements BaseMerger<Attraction> {
     @Override
     public Attraction merge(Attraction first, Attraction second) {
         first.setTitle(translateObjectMerger.merge(first.getTitle(), second.getTitle()));
+        first.setDescription(translateObjectMerger.merge(first.getDescription(), second.getDescription()));
 
         first.getImages().clear();
         first.getImages().addAll( second.getImages() );

@@ -3,6 +3,7 @@ package by.psu.controllers;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.facade.AttractionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,9 @@ public class PositionController {
 
 
     @GetMapping()
-    public ResponseEntity getAll(){
-        return ResponseEntity.ok(attractionFacade.getAll());
+    public ResponseEntity getAll(@RequestParam(value = "page", defaultValue = "0") int pageIndex,
+                                 @RequestParam(value = "size", defaultValue = "99999") int pageSize){
+        return ResponseEntity.ok(attractionFacade.getAll(PageRequest.of(pageIndex, pageSize)));
     }
 
     @GetMapping("/{uuid}")
@@ -44,7 +46,7 @@ public class PositionController {
 
     @DeleteMapping("/[{uuids}]")
     public ResponseEntity multipleDelete(@PathVariable UUID[] uuids){
-        attractionFacade.multipleDelete(Arrays.asList(uuids));
+        attractionFacade.delete(Arrays.asList(uuids));
         return ResponseEntity.ok().build();
     }
 

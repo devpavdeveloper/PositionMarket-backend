@@ -26,27 +26,27 @@ public class ProductFacade implements Facade<Product, UUID> {
 
     @Override
     public Optional<Product> getOne(UUID uuid) {
-        return Optional.empty();
+        return productService.getOne(uuid);
     }
 
     @Override
     public Optional<Product> save(Product object) {
-        return Optional.empty();
+        return productService.save(object);
     }
 
     @Override
     public Optional<Product> update(Product object) {
-        return Optional.empty();
+        return productService.save(object);
     }
 
     @Override
     public void delete(UUID uuid) {
-
+        productService.delete(uuid);
     }
 
     @Override
     public void delete(List<UUID> uuids) {
-
+        productService.delete(uuids);
     }
 
 }

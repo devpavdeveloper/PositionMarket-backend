@@ -5,6 +5,7 @@ import by.psu.service.api.AttractionService;
 import by.psu.service.dto.AttractionDTO;
 import by.psu.service.dto.mappers.AttractionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Service
 public class AttractionFacade {
@@ -33,8 +33,8 @@ public class AttractionFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<AttractionDTO> getAll() {
-        return attractionService.getAll().stream().map(
+    public List<AttractionDTO> getAll(Pageable pageable) {
+        return attractionService.getAll(pageable).stream().map(
                 attractionMapper::map
         ).collect(Collectors.toList());
     }
@@ -57,16 +57,12 @@ public class AttractionFacade {
     }
 
     @Transactional
-    public void multipleDelete(List<UUID> uuids) {
+    public void delete(List<UUID> uuids) {
         if ( isNull(uuids) ) {
-            throw new BadRequestException("List cannot to be null");
+            throw new BadRequestException("List can't to be null");
         }
 
-        uuids.forEach(uuid -> {
-            if ( nonNull( attractionService.getOne(uuid) ) ) {
-                this.delete(uuid);
-            }
-        });
+        uuids.forEach(this::delete);
     }
 
     @Transactional

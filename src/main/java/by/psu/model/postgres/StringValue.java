@@ -22,7 +22,7 @@ public class StringValue extends BasicEntity {
     @Column(name = "language", nullable = false, length = 120)
     private UUID language;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", nullable = false, columnDefinition="TEXT")
     private String value;
 
     @ManyToOne(cascade = CascadeType.ALL)

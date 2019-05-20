@@ -28,7 +28,7 @@ public class Product extends BasicEntity {
   @Column(name = "price")
   private BigDecimal price;
 
-  @ManyToOne()
+  @ManyToOne
   @JsonIgnore
   private Attraction attraction;
 

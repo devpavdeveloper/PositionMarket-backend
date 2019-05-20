@@ -6,9 +6,13 @@ import by.psu.model.postgres.Product;
 import by.psu.model.postgres.repository.RepositoryAttraction;
 import by.psu.service.merger.AttractionMerger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +25,6 @@ public class AttractionService {
 
     @Autowired
     private RepositoryAttraction repositoryAttraction;
-
     @Autowired
     private TagService serviceTag;
     @Autowired
@@ -32,10 +35,13 @@ public class AttractionService {
     private AttractionMerger attractionMerger;
     @Autowired
     private PositionImageService positionImageService;
+    @PersistenceContext
+    private EntityManager entityManager;
+
 
     @Transactional(readOnly = true)
-    public List<Attraction> getAll() {
-        return repositoryAttraction.findAll();
+    public Page<Attraction> getAll(Pageable pageable) {
+        return repositoryAttraction.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -99,6 +105,17 @@ public class AttractionService {
 
     @Transactional
     public void delete(UUID uuid) {
-        repositoryAttraction.deleteById(uuid);
+        Optional<Attraction> optionalAttraction = repositoryAttraction.findById(uuid);
+
+        if ( optionalAttraction.isPresent() ) {
+            Attraction attraction = optionalAttraction.get();
+            attraction.setTypes(null);
+            attraction.setTags(null);
+            entityManager.merge(attraction);
+            entityManager.flush();
+            entityManager.clear();
+            repositoryAttraction.delete(attraction);
+        }
+
     }
 }
