@@ -20,6 +20,12 @@ import javax.persistence.Table;
 public class Image extends BasicEntity {
 
     @Column(name = "url", nullable = false)
-    public String url;
+    private String url;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "length", nullable = false)
+    private Long length;
 
 }
