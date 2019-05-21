@@ -123,11 +123,11 @@ public class ImageService implements ServiceCRUD<Image> {
     public Optional<File> convertImageToFile(Image image) {
         Path file = path.resolve(Paths.get(image.getName()));
         boolean existImage = Files.exists(file);
+
         if (existImage) {
             return Optional.of(file.toFile());
-        } else {
-            delete(image.getId());
         }
+
         return Optional.empty();
     }
 

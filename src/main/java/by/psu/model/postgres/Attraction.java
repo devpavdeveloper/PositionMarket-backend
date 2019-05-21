@@ -5,7 +5,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity(
@@ -28,9 +27,6 @@ public class Attraction extends BasicEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "description")
     private Translate description;
-
-    @Column(name = "rent_price_hour")
-    private BigDecimal rentPriceHour;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "attraction")

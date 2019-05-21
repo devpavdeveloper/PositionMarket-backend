@@ -22,4 +22,12 @@ public class TypeService extends Nsi {
     @OneToMany(mappedBy = "service", orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Product> products = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", length = 10)
+    private TypeServiceEnum type;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "description")
+    private Translate description;
+
 }

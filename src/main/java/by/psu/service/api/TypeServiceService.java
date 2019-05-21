@@ -4,6 +4,7 @@ import by.psu.model.postgres.BasicEntity;
 import by.psu.model.postgres.TypeService;
 import by.psu.model.postgres.repository.RepositoryServiceType;
 import by.psu.service.merger.AbstractNsiMerger;
+import by.psu.service.merger.TypeServiceMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ public class TypeServiceService extends NsiService<TypeService> {
 
     @Autowired
     private ProductService productService;
-
+    @Autowired
+    private TypeServiceMerger typeServiceMerger;
 
     public TypeServiceService(RepositoryServiceType repositoryServiceType,
                               AbstractNsiMerger<TypeService> abstractNsiMerger) {
@@ -36,7 +38,11 @@ public class TypeServiceService extends NsiService<TypeService> {
 
             object.getProducts().clear();
         }
-
     }
 
+    @Override
+    public TypeService update(TypeService nsi) {
+        TypeService first = super.update(nsi);
+        return super.save(typeServiceMerger.merge(first, nsi));
+    }
 }
