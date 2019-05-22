@@ -12,6 +12,7 @@ public class ProductDTO {
 
     private UUID id;
     private BigDecimal price;
+    private Long order;
     private UUID service;
 
 }

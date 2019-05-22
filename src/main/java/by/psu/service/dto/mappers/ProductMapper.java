@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
     @Mapping(source = "service.id", target = "service")
+    @Mapping(source = "order", target = "order")
     ProductDTO map(Product nsi);
 
     @Mapping(source = "service", target = "service.id")

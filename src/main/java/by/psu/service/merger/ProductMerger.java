@@ -34,6 +34,7 @@ public class ProductMerger implements BaseMerger<Product> {
 
         first.setService( typeServiceAbstractNsiMerger.merge(first.getService(), second.getService()) );
         first.setPrice( second.getPrice() );
+        first.setOrder( second.getOrder() );
 
         return first;
     }

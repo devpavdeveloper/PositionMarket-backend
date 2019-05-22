@@ -28,6 +28,9 @@ public class Product extends BasicEntity {
   @Column(name = "price")
   private BigDecimal price;
 
+  @Column(name = "order_value")
+  private Long order;
+
   @ManyToOne
   @JsonIgnore
   private Attraction attraction;
