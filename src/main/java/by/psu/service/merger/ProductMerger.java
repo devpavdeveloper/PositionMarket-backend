@@ -1,7 +1,6 @@
 package by.psu.service.merger;
 
 import by.psu.model.postgres.Product;
-import by.psu.model.postgres.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +10,11 @@ import java.util.stream.Collectors;
 @Component
 public class ProductMerger implements BaseMerger<Product> {
 
-    private final AbstractNsiMerger<TypeService> typeServiceAbstractNsiMerger;
+    private final TypeServiceMerger typeServiceMerger;
 
     @Autowired
-    public ProductMerger(AbstractNsiMerger<TypeService> typeServiceAbstractNsiMerger) {
-        this.typeServiceAbstractNsiMerger = typeServiceAbstractNsiMerger;
+    public ProductMerger(TypeServiceMerger typeServiceAbstractNsiMerger) {
+        this.typeServiceMerger = typeServiceAbstractNsiMerger;
     }
 
     public List<Product> merge(List<Product> first, List<Product> second) {
@@ -32,7 +31,7 @@ public class ProductMerger implements BaseMerger<Product> {
     @Override
     public Product merge(Product first, Product second) {
 
-        first.setService( typeServiceAbstractNsiMerger.merge(first.getService(), second.getService()) );
+        first.setService( second.getService() );
         first.setPrice( second.getPrice() );
         first.setOrder( second.getOrder() );
 

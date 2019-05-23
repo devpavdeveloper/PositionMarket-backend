@@ -15,7 +15,7 @@ public class TypeServiceMerger extends AbstractNsiMerger<TypeService> {
     @Override
     public TypeService merge(TypeService first, TypeService second) {
         super.merge(first, second);
-        translateObjectMerger.merge(first.getDescription(), second.getTitle());
+        translateObjectMerger.merge(first.getDescription(), second.getDescription());
         first.setType(second.getType());
         return first;
     }
