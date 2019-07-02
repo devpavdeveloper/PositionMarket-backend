@@ -3,7 +3,6 @@ package by.psu.service.api;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.TypeService;
 import by.psu.model.postgres.repository.RepositoryProduct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +14,13 @@ import static java.util.Objects.isNull;
 @Service
 public class ProductService implements ServiceCRUD<Product> {
 
-    @Autowired
-    private TypeServiceService typeServiceService;
-    @Autowired
-    private RepositoryProduct repositoryProduct;
+    private final TypeServiceService typeServiceService;
+    private final RepositoryProduct repositoryProduct;
+
+    public ProductService(TypeServiceService typeServiceService, RepositoryProduct repositoryProduct) {
+        this.typeServiceService = typeServiceService;
+        this.repositoryProduct = repositoryProduct;
+    }
 
 
     public List<Product> getAll() {
@@ -31,7 +33,11 @@ public class ProductService implements ServiceCRUD<Product> {
 
     @Override
     public Optional<Product> save(Product object) {
-        return Optional.empty();
+        if (isNull(object)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(repositoryProduct.save(object));
     }
 
     @Override
@@ -55,7 +61,7 @@ public class ProductService implements ServiceCRUD<Product> {
     @Override
     @Transactional
     public void delete(Iterable<UUID> ids) {
-        if ( isNull(ids) ) {
+        if (isNull(ids)) {
             return;
         }
 
@@ -65,29 +71,35 @@ public class ProductService implements ServiceCRUD<Product> {
 
     @Transactional
     public List<Product> place(List<Product> newProducts) {
-        if ( newProducts != null && !newProducts.isEmpty() ) {
-            return new ArrayList<>(newProducts.stream()
-                    .peek(product -> {
-                        if (product.getService() == null) {
-                            throw new RuntimeException("Product not supported null service");
-                        }
-
-                        if ( product.getPrice() == null || product.getPrice().intValue() < 0 ) {
-                            throw new RuntimeException("Product not supported price value [" +
-                                    (product.getPrice() == null ? "null" : product.getPrice().intValue()) + "]");
-                        }
-
-                        if ( product.getService().getId() == null ) {
-                            Optional<TypeService> typeService = typeServiceService.isExists(product.getService());
-                            TypeService service = typeService.orElseThrow(() -> new RuntimeException("Product not supported null service"));
-                            product.setService(service);
-                        }
-
-                        product.setService(typeServiceService.getOne(product.getService().getId()));
-                    })
-                    .collect(Collectors.toMap(key -> key.getService().getId(), value -> value, (value, duplicate) -> value))
-                    .values());
+        if (isNull(newProducts) || newProducts.isEmpty()) {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
+
+        return newProducts.stream()
+                .peek(this::isValidProduct)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+
+    public Product isValidProduct(Product product) {
+        if (product.getService() == null) {
+            throw new RuntimeException("Product not supported null service");
+        }
+
+        if (product.getPrice() == null || product.getPrice().intValue() < 0) {
+            throw new RuntimeException("Product not supported price value [" +
+                    (product.getPrice() == null ? "null" : product.getPrice().intValue()) + "]");
+        }
+
+        if (product.getService().getId() == null) {
+            Optional<TypeService> typeService = typeServiceService.isExists(product.getService());
+            TypeService service = typeService.orElseThrow(() -> new RuntimeException("Product not supported null service"));
+            product.setService(service);
+        }
+
+        product.setService(typeServiceService.getOne(product.getService().getId()));
+
+        return product;
     }
 }

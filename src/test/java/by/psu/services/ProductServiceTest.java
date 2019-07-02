@@ -1,129 +1,109 @@
 package by.psu.services;
 
 import by.psu.BaseTest;
+import by.psu.model.factory.FactoryProduct;
+import by.psu.model.factory.FactoryTypeService;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.TypeService;
+import by.psu.model.postgres.TypeServiceEnum;
 import by.psu.service.api.ProductService;
+import by.psu.service.api.TypeServiceService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
 import static org.junit.Assert.*;
 
 public class ProductServiceTest extends BaseTest {
 
-    private List<Product> products;
-    private List<TypeService> typeServices;
-
-    @Value(value = "classpath:projects.json")
-    private Resource projectJSON;
-    @Value(value = "classpath:typeServices.json")
-    private Resource typeServicesJSON;
+    @Autowired
+    private FactoryTypeService factoryTypeService;
+    @Autowired
+    private FactoryProduct factoryProduct;
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private TypeServiceService typeServiceService;
+
+    private Product product;
+    private TypeService typeService;
+
 
     @Before
-    public void init() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        typeServices = objectMapper.readValue(typeServicesJSON.getFile(), new TypeReference<List<TypeService>>(){});
-        products = objectMapper.readValue(projectJSON.getFile(), new TypeReference<List<Product>>(){});
-    }
+    public void setUp() {
+        product = factoryProduct.create(43, 0L);
 
-    @Test
-    public void testPlaceProductsWithExistService() {
-        TypeService typeService = typeServices.get(2);
-        Product product = products.get(0);
+        typeService = factoryTypeService.create("Тип сервиса", "Service type");
+        typeService = typeServiceService.save(typeService);
+
         product.setService(typeService);
 
-        List<Product> products = productService.place(Collections.singletonList(product));
+        product = productService.save(product).orElse(null);
 
-        assertNotNull(products);
-        assertEquals(products.size(), 1);
+        assertNotNull(product);
+        assertNotNull(productService.isValidProduct(product));
+
+        assertEquals(product.getService().getId(), typeService.getId());
+        assertNotNull(product.getId());
+    }
+
+    @After
+    public void tearDown() {
+        if (nonNull(product) && nonNull(product.getId()))
+            productService.delete(product.getId());
+        if (nonNull(typeService) && nonNull(typeService.getId()))
+            typeServiceService.delete(typeService.getId());
     }
 
     @Test
-    public void testPlaceProductThrowExceptionUUIDIsNullTypeService() {
-        TypeService typeService = typeServices.get(2);
-        typeService.setId(null);
-        Product product = products.get(0);
-        product.setService(typeService);
-        try {
-            productService.place(Collections.singletonList(product));
-            fail();
-        } catch (Exception e) {
-               assertTrue(e instanceof RuntimeException);
-               assertEquals(e.getMessage(),"Product not supported null service");
-        }
+    @Transactional
+    public void testPlaceProductWithValidTypeService() {
+        assertNotNull(product);
+        assertNotNull(product.getId());
+        assertNotNull(productService.isValidProduct(product));
+        assertEquals(product.getService().getId(), typeService.getId());
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testPlaceProductThrowExceptionTypeServiceIsNull() {
-        Product product = products.get(0);
         product.setService(null);
-        try {
-            productService.place(Collections.singletonList(product));
-            fail();
-        } catch (Exception e) {
-            assertTrue(e instanceof RuntimeException);
-            assertEquals(e.getMessage(),"Product not supported null service");
-        }
+        productService.isValidProduct(product);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testPlaceProductThrowExceptionTypeServiceHavePriceLessZero() {
-        TypeService typeService = typeServices.get(2);
-        Product product = products.get(0);
-        product.setService(typeService);
-        product.setPrice(new BigDecimal(-1));
-        try {
-            productService.place(Collections.singletonList(product));
-            fail();
-        } catch (Exception e) {
-            assertTrue(e instanceof RuntimeException);
-            assertEquals(e.getMessage(),"Product not supported price value [-1]");
-        }
+        product.setPrice(new BigDecimal(-3L));
+        productService.isValidProduct(product);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testPlaceProductThrowExceptionTypeServiceHavePriceNull() {
-        TypeService typeService = typeServices.get(2);
-        Product product = products.get(0);
-        product.setService(typeService);
         product.setPrice(null);
-        try {
-            productService.place(Collections.singletonList(product));
-            fail();
-        } catch (Exception e) {
-            assertTrue(e instanceof RuntimeException);
-            assertEquals(e.getMessage(),"Product not supported price value [null]");
-        }
+        productService.isValidProduct(product);
     }
-
 
     @Test
     public void testPlaceProductAddTwoEq() {
-        TypeService typeService = typeServices.get(2);
-
-        Product product = products.get(0);
-        product.setService(typeService);
-        Product product1 = products.get(1);
-        product1.setService(typeService);
-
-        List<Product> products = productService.place(Arrays.asList(product, product1));
+        List<Product> products = productService.place(new ArrayList<>(Arrays.asList(product, product, product, product)));
 
         assertNotNull(products);
+        assertFalse(products.isEmpty());
         assertEquals(products.size(), 1);
-        assertEquals(products.get(0).getPrice().intValue(), product1.getPrice().intValue());
     }
 }

@@ -7,6 +7,7 @@ import by.psu.service.api.TypeServiceService;
 import by.psu.service.dto.AttractionDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ import static java.util.Objects.nonNull;
 @Mapper(componentModel = "spring", uses = {
         ProductMapper.class,
         PositionImageMapper.class
-})
+}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class AttractionMapper {
 
     @Autowired

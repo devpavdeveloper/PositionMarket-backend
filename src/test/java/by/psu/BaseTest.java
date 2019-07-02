@@ -2,9 +2,13 @@ package by.psu;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(properties = "application-test.properties")
-public class BaseTest {
+@SpringBootTest(classes = {
+        StartAttractionProject.class
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles(profiles = "test")
+public abstract class BaseTest {
 }

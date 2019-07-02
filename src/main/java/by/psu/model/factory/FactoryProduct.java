@@ -13,10 +13,22 @@ public class FactoryProduct {
         return new Product();
     }
 
-    public Product create(Integer price, TypeService typeService) {
+    public Product create(Integer price) {
         Product product = create();
         product.setPrice( new BigDecimal(price) );
+        return product;
+    }
+
+    public Product create(Integer price, Long order) {
+        Product product = create(price);
+        product.setOrder(order);
+        return product;
+    }
+
+    public Product create(Integer price, TypeService typeService) {
+        Product product = create(price);
         product.setService( typeService );
         return product;
     }
+
 }

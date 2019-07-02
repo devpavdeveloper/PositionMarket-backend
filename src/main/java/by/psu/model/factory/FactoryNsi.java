@@ -5,6 +5,7 @@ import by.psu.model.postgres.Nsi;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.UUID;
 
 public abstract class FactoryNsi<T extends Nsi> {
 
@@ -34,6 +35,14 @@ public abstract class FactoryNsi<T extends Nsi> {
         nsi.setTitle( factoryTranslate.create(valueRu, valueEn) );
         return nsi;
     }
+
+    public T create(UUID uuid, String valueRu, String valueEn) {
+        T nsi = create();
+        nsi.setId(uuid);
+        nsi.setTitle( factoryTranslate.create(valueRu, valueEn) );
+        return nsi;
+    }
+
 
     public Nsi create(String valueRu, Language language) {
         T nsi = create();

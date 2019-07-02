@@ -25,7 +25,7 @@ public abstract class BasicEntity {
     @GeneratedValue(generator = "useIdOrGenerate")
     @Column(name = "id", nullable = false, unique = true)
     @JsonDeserialize(using = DeserializeUUID.class)
-    @Type(type="pg-uuid")
+    //@Type(type="pg-uuid")
     private UUID id;
 
 }
