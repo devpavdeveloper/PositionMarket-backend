@@ -1,10 +1,10 @@
 package by.psu.service.api;
 
+import by.psu.merger.AttractionMerger;
 import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.PositionImage;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.repository.RepositoryAttraction;
-import by.psu.service.merger.AttractionMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

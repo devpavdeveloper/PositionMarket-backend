@@ -1,8 +1,8 @@
 package by.psu.controllers;
 
 import by.psu.controllers.exc_handler.ExceptionDataHandler;
+import by.psu.facade.ImageFacade;
 import by.psu.service.dto.ImageDTO;
-import by.psu.service.facade.ImageFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

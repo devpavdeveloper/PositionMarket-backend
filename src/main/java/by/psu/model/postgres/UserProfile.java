@@ -1,7 +1,6 @@
 package by.psu.model.postgres;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +9,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_profile")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"email", "phone", "priceDistance"})
 public class UserProfile extends BasicEntity {
 

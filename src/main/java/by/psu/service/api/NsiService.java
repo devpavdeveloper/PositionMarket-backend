@@ -1,11 +1,11 @@
 package by.psu.service.api;
 
+import by.psu.merger.AbstractNsiMerger;
 import by.psu.model.postgres.BasicEntity;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.repository.RepositoryNsi;
-import by.psu.service.merger.AbstractNsiMerger;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.transaction.annotation.Transactional;
 

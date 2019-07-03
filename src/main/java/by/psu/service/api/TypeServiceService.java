@@ -1,10 +1,10 @@
 package by.psu.service.api;
 
+import by.psu.merger.AbstractNsiMerger;
+import by.psu.merger.TypeServiceMerger;
 import by.psu.model.postgres.BasicEntity;
 import by.psu.model.postgres.TypeService;
 import by.psu.model.postgres.repository.RepositoryServiceType;
-import by.psu.service.merger.AbstractNsiMerger;
-import by.psu.service.merger.TypeServiceMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

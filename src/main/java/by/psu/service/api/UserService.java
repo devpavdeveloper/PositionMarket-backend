@@ -1,10 +1,10 @@
 package by.psu.service.api;
 
 import by.psu.exceptions.authorization.UserNotFoundException;
+import by.psu.merger.UserMerger;
 import by.psu.security.SecurityUtil;
 import by.psu.security.model.User;
 import by.psu.security.service.UserRepository;
-import by.psu.service.merger.UserMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

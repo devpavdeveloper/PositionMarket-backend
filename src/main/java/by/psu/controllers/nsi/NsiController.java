@@ -1,8 +1,8 @@
 package by.psu.controllers.nsi;
 
+import by.psu.facade.NsiFacade;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.dto.NsiDTO;
-import by.psu.service.facade.NsiFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

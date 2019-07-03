@@ -5,7 +5,6 @@ import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.Image;
 import by.psu.model.postgres.PositionImage;
 import by.psu.service.dto.PositionImageDTO;
-import by.psu.service.dto.mappers.PositionImageMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

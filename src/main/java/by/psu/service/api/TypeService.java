@@ -1,8 +1,8 @@
 package by.psu.service.api;
 
+import by.psu.merger.AbstractNsiMerger;
 import by.psu.model.postgres.Type;
 import by.psu.model.postgres.repository.RepositoryType;
-import by.psu.service.merger.AbstractNsiMerger;
 import org.springframework.stereotype.Service;
 
 @Service

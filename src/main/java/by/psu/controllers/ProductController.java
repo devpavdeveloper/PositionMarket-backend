@@ -1,7 +1,7 @@
 package by.psu.controllers;
 
+import by.psu.facade.ProductFacade;
 import by.psu.model.postgres.Product;
-import by.psu.service.facade.ProductFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

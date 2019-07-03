@@ -5,12 +5,19 @@ import by.psu.model.postgres.TypeService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Component
 public class FactoryProduct {
 
     public Product create() {
         return new Product();
+    }
+
+    public Product create(UUID uuid, Integer price, TypeService typeService) {
+        Product product = create(price, typeService);
+        product.setId(uuid);
+        return product;
     }
 
     public Product create(Integer price) {

@@ -1,31 +1,28 @@
 package by.psu.mappers;
 
 import by.psu.BaseTest;
+import by.psu.mappers.nsi.TagNsiMapper;
+import by.psu.mappers.nsi.TypeNsiMapper;
 import by.psu.model.factory.*;
 import by.psu.model.postgres.*;
-import by.psu.service.api.TagService;
-import by.psu.service.api.TranslateUtil;
 import by.psu.service.api.TypeService;
-import by.psu.service.api.TypeServiceService;
+import by.psu.service.api.*;
 import by.psu.service.dto.AttractionDTO;
-import by.psu.service.dto.mappers.AttractionMapper;
-import by.psu.service.dto.mappers.ProductMapper;
-import by.psu.service.dto.mappers.nsi.TagNsiMapper;
-import by.psu.service.dto.mappers.nsi.TypeNsiMapper;
-import by.psu.service.dto.mappers.nsi.TypeServiceNsiMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class AttractionMapperTest extends BaseTest {
 
@@ -42,7 +39,10 @@ public class AttractionMapperTest extends BaseTest {
     private FactoryProduct factoryProduct;
     @Autowired
     private FactoryTag factoryTag;
-
+    @MockBean
+    private ProductService productService;
+    @MockBean
+    private TypeServiceService typeServiceService;
 
     @Autowired
     private TagNsiMapper tagNsiMapper;
@@ -55,12 +55,10 @@ public class AttractionMapperTest extends BaseTest {
 
     private Attraction attraction;
 
-    @Autowired
+    @MockBean
     private TypeService typeService;
-    @Autowired
+    @MockBean
     private TagService tagService;
-    @Autowired
-    private TypeServiceService typeServiceService;
 
 
     @Before
@@ -81,11 +79,14 @@ public class AttractionMapperTest extends BaseTest {
 
 
     @Test
-    public void testMapperAttractionToAttractionDTOAllInformationExistsProducts() {
-        attraction.setProducts(Arrays.asList(
-                factoryProduct.create(10, factoryTypeService.create("Доставка", "Pick Service")),
-                factoryProduct.create(12, factoryTypeService.create("Установка", "Install Service"))
-        ));
+    public void testMapperAttractionToAttractionDTOWithProductAndSetService() {
+        by.psu.model.postgres.TypeService typeService1 = factoryTypeService.create(UUID.randomUUID(), "Доставка", "Pick Service");
+        by.psu.model.postgres.TypeService typeService2 = factoryTypeService.create(UUID.randomUUID(), "Установка", "Install Service");
+
+        Product product1 = factoryProduct.create(UUID.randomUUID(), 10, typeService1);
+        Product product2 = factoryProduct.create(UUID.randomUUID(), 12, typeService2);
+
+        attraction.setProducts(Arrays.asList(product1, product2));
 
         AttractionDTO attractionDTO = mapper.map(attraction);
 
@@ -98,35 +99,22 @@ public class AttractionMapperTest extends BaseTest {
                 .map(productMapper::map)
                 .collect(toList());
 
-        assertTrue(products.stream().anyMatch(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.EN).isPresent()));
-        assertTrue(products.stream().anyMatch(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.RU).isPresent()));
-
-        List<StringValue> stringValuesRu = products.stream()
-                .map(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.RU))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
-
-        assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Доставка")));
-        assertTrue(stringValuesRu.stream().anyMatch(stringValue -> stringValue.getValue().equals("Установка")));
-
-        List<StringValue> stringValuesEn = products.stream()
-                .map(product -> TranslateUtil.getValueOrEmpty(product.getService(), Language.EN))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
-
-        assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Pick Service")));
-        assertTrue(stringValuesEn.stream().anyMatch(stringValue -> stringValue.getValue().equals("Install Service")));
+        assertTrue(products.stream().anyMatch(product -> product.getService().getId().equals(typeService1.getId())));
+        assertTrue(products.stream().anyMatch(product -> product.getService().getId().equals(typeService2.getId())));
     }
 
 
     @Test
     public void testMapperAttractionToAttractionDTOAllInformationExistsTags() {
-        attraction.setTags(Arrays.asList(
-                factoryTag.create("Спортивные 2018", "Sport 2018"),
-                factoryTag.create("Интерактивные 2019", "Interactive 2019")
-        ));
+        Tag tag1 = factoryTag.create(UUID.randomUUID(),"Спортивные 2018", "Sport 2018");
+        Tag tag2 = factoryTag.create(UUID.randomUUID(), "Интерактивные 2019", "Interactive 2019");
+
+        when(tagService.getOne(tag1.getId()))
+                .thenReturn(tag1);
+        when(tagService.getOne(tag2.getId()))
+                .thenReturn(tag2);
+
+        attraction.setTags(Arrays.asList(tag1, tag2));
 
         AttractionDTO attractionDTO = mapper.map(attraction);
 
@@ -161,10 +149,15 @@ public class AttractionMapperTest extends BaseTest {
 
     @Test
     public void testMapperAttractionToAttractionDTOAllInformationExistsTypes() {
-        attraction.setTypes(Arrays.asList(
-                factoryType.create("Спортивные", "Sport"),
-                factoryType.create("Интерактивные", "Interactive")
-        ));
+        Type type1 = factoryType.create(UUID.randomUUID(), "Спортивные", "Sport");
+        Type type2 = factoryType.create(UUID.randomUUID(), "Интерактивные", "Interactive");
+
+        attraction.setTypes(Arrays.asList(type1, type2));
+
+        when(typeService.getOne(type1.getId()))
+                .thenReturn(type1);
+        when(typeService.getOne(type2.getId()))
+                .thenReturn(type2);
 
         AttractionDTO attractionDTO = mapper.map(attraction);
 

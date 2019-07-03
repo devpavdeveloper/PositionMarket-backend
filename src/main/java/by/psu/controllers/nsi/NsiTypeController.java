@@ -1,8 +1,8 @@
 package by.psu.controllers.nsi;
 
+import by.psu.facade.TypeFacade;
 import by.psu.model.postgres.Type;
 import by.psu.service.dto.TypeDTO;
-import by.psu.service.facade.TypeFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

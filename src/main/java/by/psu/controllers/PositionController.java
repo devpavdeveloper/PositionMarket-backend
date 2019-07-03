@@ -1,7 +1,7 @@
 package by.psu.controllers;
 
+import by.psu.facade.AttractionFacade;
 import by.psu.service.dto.AttractionDTO;
-import by.psu.service.facade.AttractionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
