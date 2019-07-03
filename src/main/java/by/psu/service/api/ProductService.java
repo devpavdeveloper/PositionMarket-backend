@@ -3,10 +3,14 @@ package by.psu.service.api;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.TypeService;
 import by.psu.model.postgres.repository.RepositoryProduct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -14,11 +18,12 @@ import static java.util.Objects.isNull;
 @Service
 public class ProductService implements ServiceCRUD<Product> {
 
-    private final TypeServiceService typeServiceService;
+    @Autowired
+    private TypeServiceService typeServiceService;
+
     private final RepositoryProduct repositoryProduct;
 
-    public ProductService(TypeServiceService typeServiceService, RepositoryProduct repositoryProduct) {
-        this.typeServiceService = typeServiceService;
+    public ProductService(RepositoryProduct repositoryProduct) {
         this.repositoryProduct = repositoryProduct;
     }
 

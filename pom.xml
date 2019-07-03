@@ -8,7 +8,7 @@
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>Attraction Application WAR</name>
+    <name>Attraction Application JAR</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -18,7 +18,6 @@
     </parent>
 
     <properties>
-        <!--<start-class>by.psu.StartAttractionProject</start-class>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
