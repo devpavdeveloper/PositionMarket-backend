@@ -557,7 +557,7 @@ ALTER TABLE ONLY public.verification_tokens
 --
 
 ALTER TABLE ONLY public.products
-    ADD CONSTRAINT fk7lqagw1qny7cikooc914cmi4m FOREIGN KEY (attraction) REFERENCES public.attractions(id);
+    ADD CONSTRAINT fk7lqagw1qny7cikooc914cmi4m FOREIGN KEY (attraction_id) REFERENCES public.attractions(id);
 
 
 --

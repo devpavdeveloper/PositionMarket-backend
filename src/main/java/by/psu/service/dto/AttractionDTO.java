@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter @Setter
-public class AttractionDTO {
+public class AttractionDTO extends AbstractDTO {
 
     private UUID id;
     private List<StringValueDTO> title;

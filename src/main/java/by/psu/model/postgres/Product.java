@@ -1,5 +1,6 @@
 package by.psu.model.postgres;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
@@ -23,6 +24,7 @@ public class Product extends BasicEntity {
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
   @JoinColumn(name = "id_service")
+  @JsonBackReference("product-service")
   private TypeService service;
 
   @Column(name = "price")

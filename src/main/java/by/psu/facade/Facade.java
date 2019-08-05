@@ -1,17 +1,18 @@
 package by.psu.facade;
 
+import by.psu.service.dto.AbstractDTO;
+
 import java.util.List;
-import java.util.Optional;
 
-public interface Facade<T, ID> {
+public interface Facade<DTO extends AbstractDTO, ID> {
 
-    public List<T> getAll();
+    public List<DTO> getAll();
 
-    public Optional<T> getOne(ID id);
+    public DTO getOne(ID id);
 
-    public Optional<T> save(T object);
+    public DTO save(DTO object);
 
-    public Optional<T> update(T object);
+    public DTO update(DTO object);
 
     public void delete(ID id);
 

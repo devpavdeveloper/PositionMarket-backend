@@ -2,6 +2,7 @@ package by.psu.controllers;
 
 import by.psu.facade.ProductFacade;
 import by.psu.model.postgres.Product;
+import by.psu.service.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,23 +19,23 @@ public class ProductController {
     private ProductFacade productFacade;
 
     @GetMapping
-    public ResponseEntity<List<Product>> get() {
+    public ResponseEntity<List<ProductDTO>> get() {
         return ResponseEntity.ok(productFacade.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> get(@PathVariable("id") UUID id) {
+    public ResponseEntity<ProductDTO> get(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(productFacade.getOne(id).get());
     }
 
     @PostMapping()
-    public ResponseEntity<Product> create(@RequestBody  Product obj) {
+    public ResponseEntity<ProductDTO> create(@RequestBody  Product obj) {
         return ResponseEntity.ok(productFacade.save(obj).get());
     }
 
     @PutMapping()
-    public ResponseEntity<Product> update(@RequestBody Product obj) {
-        return ResponseEntity.ok(productFacade.update(obj).get());
+    public ResponseEntity<ProductDTO> update(@RequestBody Product obj) {
+        return ResponseEntity.ok(productFacade.update(obj));
     }
 
     @DeleteMapping("/{id}")

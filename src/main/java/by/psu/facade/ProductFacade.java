@@ -1,42 +1,51 @@
 package by.psu.facade;
 
+import by.psu.exceptions.EntityNotFoundException;
+import by.psu.mappers.ProductMapper;
 import by.psu.model.postgres.Product;
 import by.psu.service.api.ProductService;
+import by.psu.service.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductFacade implements Facade<Product, UUID> {
+public class ProductFacade implements Facade<ProductDTO, UUID> {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @Autowired
-    public ProductFacade(ProductService productService) {
+    public ProductFacade(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
+        this.productMapper = productMapper;
     }
 
     @Override
-    public List<Product> getAll() {
-        return productService.getAll();
+    public List<ProductDTO> getAll() {
+        return productService.getAll().stream()
+                .map(productMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Product> getOne(UUID uuid) {
-        return productService.getOne(uuid);
+    public ProductDTO getOne(UUID uuid) {
+        Product product = productService.getOne(uuid)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with uuid: [%s]", uuid)));
+        return productMapper.map(product);
     }
 
     @Override
-    public Optional<Product> save(Product object) {
-        return productService.save(object);
+    public ProductDTO save(Product object) {
+        return productService.save(object).map(productMapper::map).orElse(null);
     }
 
     @Override
-    public Optional<Product> update(Product object) {
-        return productService.save(object);
+    public ProductDTO update(Product object) {
+        return productService.save(object).map(productMapper::map).orElse(null);
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Setter
 @Getter
-public class StringValueDTO {
+public class StringValueDTO extends AbstractDTO {
 
     private String value;
     private UUID language;

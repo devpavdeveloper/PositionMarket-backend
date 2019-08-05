@@ -11,6 +11,7 @@ public interface ProductMapper extends AbstractMapper<Product, ProductDTO> {
 
     @Mapping(source = "service.id", target = "service")
     @Mapping(source = "order", target = "order")
+    @Mapping(source = "attraction.id", target = "positionId")
     ProductDTO map(Product nsi);
 
     @Mapping(source = "service", target = "service.id")

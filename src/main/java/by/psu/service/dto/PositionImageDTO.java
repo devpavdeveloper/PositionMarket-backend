@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class PositionImageDTO {
+public class PositionImageDTO extends AbstractDTO {
 
     private UUID id;
     private UUID image;

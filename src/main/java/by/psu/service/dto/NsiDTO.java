@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Setter
 @Getter
-public class NsiDTO {
+public class NsiDTO extends AbstractDTO {
 
     private UUID id;
     private List<StringValueDTO> values = new ArrayList<>();

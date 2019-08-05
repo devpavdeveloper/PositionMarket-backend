@@ -8,11 +8,12 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductDTO extends AbstractDTO {
 
     private UUID id;
     private BigDecimal price;
     private Long order;
     private UUID service;
+    private UUID positionId;
 
 }

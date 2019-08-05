@@ -1,44 +1,50 @@
 package by.psu.facade;
 
+import by.psu.exceptions.EntityNotFoundException;
+import by.psu.mappers.AbstractMapper;
 import by.psu.model.postgres.BasicEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import by.psu.service.api.ServiceCRUD;
+import by.psu.service.dto.AbstractDTO;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public abstract class AbstractFacade<T extends BasicEntity> implements Facade<T, UUID> {
+public abstract class AbstractFacade<T extends BasicEntity, DTO extends AbstractDTO> implements Facade<DTO, UUID> {
 
-    private JpaRepository<T, UUID> repository;
+    private ServiceCRUD<T> service;
+    private AbstractMapper<T, DTO> mapper;
 
-    public AbstractFacade(JpaRepository<T, UUID> repository) {
-        this.repository = repository;
+    public AbstractFacade(ServiceCRUD<T> service, AbstractMapper<T, DTO> mapper) {
+        this.service = service;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<T> getAll() {
-        return repository.findAll();
+    public List<DTO> getAll() {
+        return service.getAll().stream()
+                .map(mapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<T> getOne(UUID uuid) {
-        return repository.findById(uuid);
+    public DTO getOne(UUID uuid) {
+        T obj = service.getOne(uuid).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Entity uuid [%s]", uuid.toString())));
+        return mapper.map(obj);
     }
 
     @Override
-    public Optional<T> save(T object) {
-
-        if ( isNull(object) ) {
-            return Optional.empty();
-        }
-
-        return Optional.of(repository.save(object));
+    public DTO save(DTO object) {
+        return service.save(mapper.map(object)).map(mapper::map).orElseThrow(() ->
+                new RuntimeException("Entity can't be save"));
     }
 
     @Override
-    public Optional<T> update(T object) {
+    public DTO update(DTO object) {
 
         if ( isNull(object) || isNull(object.getId()) ) {
             return Optional.empty();
@@ -48,7 +54,7 @@ public abstract class AbstractFacade<T extends BasicEntity> implements Facade<T,
                 .map(t -> repository.save(updatePlace(t, object)));
     }
 
-    protected abstract T updatePlace(T oldEntity, T newEntity);
+    protected abstract DTO updatePlace(T oldEntity, T newEntity);
 
     @Override
     public void delete(UUID uuid) {
@@ -57,6 +63,6 @@ public abstract class AbstractFacade<T extends BasicEntity> implements Facade<T,
 
     @Override
     public void delete(List<UUID> uuids) {
-        //repository.deleteAll(uuids);
+
     }
 }
