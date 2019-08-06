@@ -22,32 +22,32 @@ public class ExceptionAbstractHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     private ResponseEntity<AwesomeException> handleUserNotFoundException(UserNotFoundException userNotFoundException) {
         logger.severe(userNotFoundException.getMessage());
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND.value(), "The user is not found"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND, "The user is not found"), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     private ResponseEntity<AwesomeException> handleUserBlockedException(UserBlockedException userBlockedException) {
         logger.severe(userBlockedException.getMessage());
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.PRECONDITION_FAILED.value(), "The user is temporarily blocked"), HttpStatus.PRECONDITION_FAILED);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.PRECONDITION_FAILED, "The user is temporarily blocked"), HttpStatus.PRECONDITION_FAILED);
     }
 
     @ExceptionHandler({UserIncorrectException.class})
     private ResponseEntity<AwesomeException> handleUserIncorrectException(UserIncorrectException userIncorrectException) {
         logger.severe(userIncorrectException.getMessage());
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.BAD_REQUEST.value(), "Incorrect username or password"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.BAD_REQUEST, "Incorrect username or password"), HttpStatus.BAD_REQUEST);
     }
 
     @Data
     @AllArgsConstructor
     static class AwesomeException {
-        private int code;
+        private HttpStatus code;
         private String message;
     }
 
     @Data
     @AllArgsConstructor
     static class MessageException {
-        private int code;
+        private HttpStatus code;
         private String message;
         private String reason;
     }

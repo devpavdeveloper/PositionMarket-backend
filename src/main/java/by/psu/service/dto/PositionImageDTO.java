@@ -9,7 +9,6 @@ import java.util.UUID;
 @Setter
 public class PositionImageDTO extends AbstractDTO {
 
-    private UUID id;
     private UUID image;
     private String url;
     private boolean mainImage;

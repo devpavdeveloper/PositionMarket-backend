@@ -16,7 +16,7 @@ public class ExceptionResourcesHandler {
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleImageNotFoundException(ImageNotFoundException imageNotFoundException) {
         logger.severe(imageNotFoundException.getMessage());
-        return new ResponseEntity<>(new ExceptionAbstractHandler.AwesomeException(HttpStatus.PRECONDITION_FAILED.value(), imageNotFoundException.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ExceptionAbstractHandler.AwesomeException(HttpStatus.PRECONDITION_FAILED, imageNotFoundException.getMessage()), HttpStatus.PRECONDITION_FAILED);
     }
 
 }

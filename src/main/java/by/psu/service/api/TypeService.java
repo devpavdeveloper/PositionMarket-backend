@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TypeService extends NsiService<Type> {
 
-    public TypeService(RepositoryType repositoryType, AbstractNsiMerger<Type> abstractNsiMerger) {
+    public TypeService(RepositoryType repositoryType,
+                       AbstractNsiMerger<Type> abstractNsiMerger) {
         super(repositoryType, abstractNsiMerger);
     }
 

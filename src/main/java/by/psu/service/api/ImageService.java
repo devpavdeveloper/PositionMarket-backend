@@ -1,7 +1,5 @@
 package by.psu.service.api;
 
-import by.psu.exceptions.BadRequestException;
-import by.psu.exceptions.EntityNotFoundException;
 import by.psu.model.postgres.Image;
 import by.psu.model.postgres.repository.RepositoryImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +15,15 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Service
-public class ImageService implements ServiceCRUD<Image> {
+public class ImageService extends AbstractService<Image> {
 
     private final RepositoryImage repositoryImage;
 
@@ -35,68 +34,8 @@ public class ImageService implements ServiceCRUD<Image> {
 
     @Autowired
     public ImageService(RepositoryImage repositoryImage) {
-
+        super(repositoryImage, Image.class);
         this.repositoryImage = repositoryImage;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Image> getAll() {
-        return repositoryImage.findAll();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Image> getOne(UUID id) {
-        Image image = repositoryImage.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Image isn't found by id " + id));
-        return Optional.of(image);
-    }
-
-    public Boolean isExistsInStore(final Image image) {
-        if (isNull(image) || isNull(image.getUrl())) {
-            return false;
-        }
-
-        return false;
-    }
-
-    @Override
-    @Transactional
-    public Optional<Image> save(Image object) {
-
-        if (nonNull(object.getId())) {
-            throw new BadRequestException("Image isn't saved. Id isn't null.");
-        }
-
-        return Optional.of(repositoryImage.save(object));
-    }
-
-    @Override
-    @Transactional
-    public Optional<Image> update(Image object) {
-
-        if (nonNull(object.getId())) {
-            throw new BadRequestException("Image isn't updated. Id is null.");
-        }
-
-        return Optional.of(repositoryImage.save(object));
-    }
-
-    @Override
-    @Transactional
-    public void delete(UUID id) {
-        Optional<Image> optionalImage = repositoryImage.findById(id);
-        if ( optionalImage.isPresent() ) {
-            Image image = optionalImage.get();
-
-        }
-        repositoryImage.deleteById(id);
-    }
-
-    @Override
-    public void delete(Iterable<UUID> ids) {
-
     }
 
     @Transactional

@@ -1,68 +1,58 @@
 package by.psu.facade;
 
-import by.psu.exceptions.EntityNotFoundException;
 import by.psu.mappers.AbstractMapper;
 import by.psu.model.postgres.BasicEntity;
-import by.psu.service.api.ServiceCRUD;
+import by.psu.service.api.Service;
 import by.psu.service.dto.AbstractDTO;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
+import java.util.function.Function;
 
 public abstract class AbstractFacade<T extends BasicEntity, DTO extends AbstractDTO> implements Facade<DTO, UUID> {
 
-    private ServiceCRUD<T> service;
+    private Service<T> service;
     private AbstractMapper<T, DTO> mapper;
 
-    public AbstractFacade(ServiceCRUD<T> service, AbstractMapper<T, DTO> mapper) {
+    protected AbstractFacade(Service<T> service, AbstractMapper<T, DTO> mapper) {
         this.service = service;
         this.mapper = mapper;
     }
 
     @Override
     public List<DTO> getAll() {
-        return service.getAll().stream()
-                .map(mapper::map)
-                .collect(Collectors.toList());
+        return mapper.mapToDTOS(service.findAll());
     }
 
     @Override
     public DTO getOne(UUID uuid) {
-        T obj = service.getOne(uuid).orElseThrow(() ->
-                new EntityNotFoundException(String.format("Entity uuid [%s]", uuid.toString())));
+        T obj = service.findById(uuid);
         return mapper.map(obj);
     }
 
     @Override
     public DTO save(DTO object) {
-        return service.save(mapper.map(object)).map(mapper::map).orElseThrow(() ->
-                new RuntimeException("Entity can't be save"));
+        return action(object, service::save);
     }
 
     @Override
     public DTO update(DTO object) {
-
-        if ( isNull(object) || isNull(object.getId()) ) {
-            return Optional.empty();
-        }
-
-        return repository.findById(object.getId())
-                .map(t -> repository.save(updatePlace(t, object)));
+        return action(object, service::update);
     }
 
-    protected abstract DTO updatePlace(T oldEntity, T newEntity);
+    private DTO action(final DTO obj, final Function<T, T> function) {
+        T entity = mapper.map(obj);
+        T actionEntity = function.apply(entity);
+        return mapper.map(actionEntity);
+    }
 
     @Override
     public void delete(UUID uuid) {
-        repository.deleteById(uuid);
+        service.delete(uuid);
     }
 
     @Override
     public void delete(List<UUID> uuids) {
-
+        service.delete(uuids);
     }
 }

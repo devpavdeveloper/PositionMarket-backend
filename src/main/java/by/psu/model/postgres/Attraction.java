@@ -47,6 +47,7 @@ public class Attraction extends BasicEntity {
     private List<Type> types;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "attraction")
+    @JoinColumn(name = "attraction_id")
     private List<Product> products;
+
 }

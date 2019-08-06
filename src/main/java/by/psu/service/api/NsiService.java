@@ -42,10 +42,12 @@ public abstract class NsiService<T extends Nsi> {
     }
 
 
+    @Transactional(readOnly = true)
     public List<T> getAll() {
         return repositoryNsi.findAll();
     }
 
+    @Transactional(readOnly = true)
     public T getOne(UUID uuid) {
         return repositoryNsi.getOne(uuid);
     }

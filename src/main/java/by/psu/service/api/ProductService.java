@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 @Service
-public class ProductService implements ServiceCRUD<Product> {
+public class ProductService extends AbstractService<Product> {
 
     @Autowired
     private TypeServiceService typeServiceService;
@@ -24,35 +24,11 @@ public class ProductService implements ServiceCRUD<Product> {
     private final RepositoryProduct repositoryProduct;
 
     public ProductService(RepositoryProduct repositoryProduct) {
+        super(repositoryProduct, Product.class);
         this.repositoryProduct = repositoryProduct;
     }
 
-
-    public List<Product> getAll() {
-        return repositoryProduct.findAll();
-    }
-
-    public Optional<Product> getOne(UUID id) {
-        return repositoryProduct.findById(id);
-    }
-
     @Override
-    public Optional<Product> save(Product object) {
-        if (isNull(object)) {
-            return Optional.empty();
-        }
-
-        return Optional.of(repositoryProduct.save(object));
-    }
-
-    @Override
-    @Transactional
-    public Optional<Product> update(Product object) {
-        return Optional.empty();
-    }
-
-    @Override
-    @Transactional
     public void delete(UUID id) {
         Optional<Product> product = repositoryProduct.findById(id);
         if (product.isPresent()) {
@@ -61,17 +37,6 @@ public class ProductService implements ServiceCRUD<Product> {
             repositoryProduct.saveAndFlush(product.get());
             repositoryProduct.deleteById(id);
         }
-    }
-
-    @Override
-    @Transactional
-    public void delete(Iterable<UUID> ids) {
-        if (isNull(ids)) {
-            return;
-        }
-
-        ids.iterator()
-                .forEachRemaining(this::delete);
     }
 
     @Transactional
@@ -107,4 +72,5 @@ public class ProductService implements ServiceCRUD<Product> {
 
         return product;
     }
+
 }

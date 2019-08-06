@@ -3,7 +3,6 @@ package by.psu.controllers.nsi;
 import by.psu.facade.NsiFacade;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.dto.NsiDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,6 @@ public class NsiController<T extends Nsi, E extends NsiDTO> {
 
     protected NsiFacade<T, E> nsiFacade;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
     public NsiController(NsiFacade<T, E> nsiFacade) {
         this.nsiFacade = nsiFacade;
     }

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class ImageFacade {
+public class ImageFacade extends AbstractFacade<Image, ImageDTO> {
 
     private final ImageService imageService;
     private final ImageMapper imageMapper;
@@ -37,6 +37,7 @@ public class ImageFacade {
     @Autowired
     public ImageFacade(ImageService imageService,
                        ImageMapper imageMapper) {
+        super(imageService, imageMapper);
         this.imageService = imageService;
         this.imageMapper = imageMapper;
     }
@@ -102,14 +103,12 @@ public class ImageFacade {
         }
 
         try {
-            image = imageService.save(image).get();
+            image = imageService.save(image);
         } catch (Exception ex) {
             throw new BadRequestException("Error occurred while saving the image", ex);
         }
 
         return imageMapper.map(image);
     }
-
-
 
 }

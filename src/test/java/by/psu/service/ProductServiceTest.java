@@ -46,7 +46,7 @@ public class ProductServiceTest extends BaseTest {
 
         product.setService(typeService);
 
-        product = productService.save(product).orElse(null);
+        product = productService.save(product);
 
         assertNotNull(product);
         assertNotNull(productService.isValidProduct(product));

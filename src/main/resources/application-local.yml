@@ -1,4 +1,5 @@
 spring:
+
   #Profile setting
   profiles:
     active: local

@@ -17,19 +17,21 @@ public class ExceptionDataHandler extends ExceptionAbstractHandler {
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException) {
         logger.severe(entityNotFoundException.getMessage());
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.PRECONDITION_FAILED.value(), "Entity is not founded"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND, "Entity is not founded"), HttpStatus.NOT_FOUND);
     }
 
+/*
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(Exception ex) {
         ex.printStackTrace();
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.CONFLICT.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.CONFLICT, ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+*/
 
     @ExceptionHandler
     private ResponseEntity<ExceptionAbstractHandler.MessageException> handleEntityNotFoundException(BadRequestException ex) {
         logger.severe(ex.getMessage());
-        return new ResponseEntity<>(new MessageException(HttpStatus.BAD_REQUEST.value(), ex.getReason(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MessageException(HttpStatus.BAD_REQUEST, ex.getReason(), ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 }

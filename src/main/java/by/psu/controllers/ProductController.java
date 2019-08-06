@@ -1,9 +1,7 @@
 package by.psu.controllers;
 
 import by.psu.facade.ProductFacade;
-import by.psu.model.postgres.Product;
 import by.psu.service.dto.ProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +13,11 @@ import java.util.UUID;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    @Autowired
-    private ProductFacade productFacade;
+    private final ProductFacade productFacade;
+
+    public ProductController(ProductFacade productFacade) {
+        this.productFacade = productFacade;
+    }
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> get() {
@@ -25,16 +26,16 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> get(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(productFacade.getOne(id).get());
+        return ResponseEntity.ok(productFacade.getOne(id));
     }
 
     @PostMapping()
-    public ResponseEntity<ProductDTO> create(@RequestBody  Product obj) {
-        return ResponseEntity.ok(productFacade.save(obj).get());
+    public ResponseEntity<ProductDTO> create(@RequestBody  ProductDTO obj) {
+        return ResponseEntity.ok(productFacade.save(obj));
     }
 
     @PutMapping()
-    public ResponseEntity<ProductDTO> update(@RequestBody Product obj) {
+    public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO obj) {
         return ResponseEntity.ok(productFacade.update(obj));
     }
 

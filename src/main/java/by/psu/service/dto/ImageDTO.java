@@ -1,13 +1,12 @@
 package by.psu.service.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.UUID;
-
-@Data
+@Getter
+@Setter
 public class ImageDTO extends AbstractDTO {
 
-    private UUID id;
     private String url;
 
 }
