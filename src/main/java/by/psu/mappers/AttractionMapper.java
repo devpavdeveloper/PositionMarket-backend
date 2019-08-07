@@ -32,8 +32,8 @@ public interface AttractionMapper extends AbstractMapper<Attraction, AttractionD
     @Mapping(source = "title", target = "title.values")
     @Mapping(source = "description", target = "description.values")
     @Mapping(source = "images", target = "images")
-    @Mapping(target = "tags", source = "tags")
-    @Mapping(target = "types", source = "tags")
+    @Mapping(target = "tags", expression = "java(getTags(nsi.getTags()))")
+    @Mapping(target = "types", expression = "java(getTypes(nsi.getTypes()))")
     Attraction map(AttractionDTO nsi);
 
     default List<Tag> getTags(List<UUID> uuids) {

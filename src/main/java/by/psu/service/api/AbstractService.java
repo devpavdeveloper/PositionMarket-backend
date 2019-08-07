@@ -10,10 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -21,10 +18,9 @@ import static java.util.Objects.nonNull;
 
 public class AbstractService<T extends BasicEntity> implements Service<T> {
 
-    private final Logger logger;
+    final Logger logger;
 
-
-    private final AbstractRepository<T> abstractRepository;
+    final AbstractRepository<T> abstractRepository;
     private final Class<?> loggerClass;
 
 
@@ -54,7 +50,8 @@ public class AbstractService<T extends BasicEntity> implements Service<T> {
     @Transactional(readOnly = true)
     public Page<T> findAll(Pageable pageable) {
         logger.info("findAll entities [{}] with pageable", loggerClass, pageable);
-        return abstractRepository.findAll(pageable);
+        Page<T> objects = abstractRepository.findAll(pageable);
+        return objects;
     }
 
     @Override
@@ -62,11 +59,15 @@ public class AbstractService<T extends BasicEntity> implements Service<T> {
     public T save(T object) {
         logger.info("Save entity [{}]", object);
 
+        isValidSaveObject(object);
+
+        return abstractRepository.save(object);
+    }
+
+    protected void isValidSaveObject(T object) {
         if (isNull(object) || nonNull(object.getId())) {
             throw new BadRequestException("Entity can't saves, because entity is NULL or has ID is't NULL");
         }
-
-        return abstractRepository.save(object);
     }
 
     @Override
@@ -77,6 +78,7 @@ public class AbstractService<T extends BasicEntity> implements Service<T> {
         }
 
         return uuids.stream()
+                .filter(Objects::nonNull)
                 .map(abstractRepository::getOne)
                 .collect(Collectors.toList());
     }
@@ -86,10 +88,15 @@ public class AbstractService<T extends BasicEntity> implements Service<T> {
     public T update(T object) {
         logger.info("Update entity [{}]", object);
 
+        isValidUpdateObject(object);
+
+        return abstractRepository.save(object);
+    }
+
+    protected void isValidUpdateObject(T object) {
         if (isNull(object) || isNull(object.getId())) {
             throw new BadRequestException("Entity can't saves, because entity is NULL or has ID is NULL");
         }
-        return abstractRepository.save(object);
     }
 
     @Override

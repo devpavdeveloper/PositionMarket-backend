@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class NsiTypeServiceController extends NsiController<TypeService, TypeServiceDTO> {
 
     public NsiTypeServiceController(TypeServiceFacade typeServiceFacade) {
-        super(typeServiceFacade);
+        super(typeServiceFacade, TypeService.class);
     }
 
+    @Override
+    public ResponseEntity<TypeServiceDTO> create(@RequestBody TypeServiceDTO obj) {
+        return super.create(obj);
+    }
 
     @Override
     public ResponseEntity<TypeServiceDTO> update(@RequestBody TypeServiceDTO obj) {

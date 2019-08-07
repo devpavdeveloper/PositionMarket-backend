@@ -4,4 +4,4 @@ import by.psu.model.postgres.Attraction;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositoryAttraction extends AbstractRepository<Attraction> { }
+public interface RepositoryAttraction extends AbstractRepository<Attraction> {}

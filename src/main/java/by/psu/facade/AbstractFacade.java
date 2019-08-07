@@ -4,11 +4,15 @@ import by.psu.mappers.AbstractMapper;
 import by.psu.model.postgres.BasicEntity;
 import by.psu.service.api.Service;
 import by.psu.service.dto.AbstractDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Transactional
 public abstract class AbstractFacade<T extends BasicEntity, DTO extends AbstractDTO> implements Facade<DTO, UUID> {
 
     private Service<T> service;
@@ -23,6 +27,11 @@ public abstract class AbstractFacade<T extends BasicEntity, DTO extends Abstract
     public List<DTO> getAll() {
         return mapper.mapToDTOS(service.findAll());
     }
+
+    public Page<DTO> findAll(Pageable pageable) {
+        return service.findAll(pageable).map(mapper::map);
+    }
+
 
     @Override
     public DTO getOne(UUID uuid) {

@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"products", "type", "description"}, callSuper = true)
 public class TypeService extends Nsi {
 
     @OneToMany(mappedBy = "service", orphanRemoval = true, fetch = FetchType.EAGER)

@@ -14,16 +14,12 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public abstract class NsiService<T extends Nsi> {
+public abstract class NsiService<T extends Nsi> extends AbstractService<T> {
 
     protected RepositoryNsi<T> repositoryNsi;
 
@@ -32,11 +28,12 @@ public abstract class NsiService<T extends Nsi> {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    private Class<T> type;
+    private Class<T> loggerClass;
 
 
-    public NsiService(RepositoryNsi<T> repositoryNsi, AbstractNsiMerger<T> abstractNsiMerger) {
-        this.type = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    public NsiService(RepositoryNsi<T> repositoryNsi, AbstractNsiMerger<T> abstractNsiMerger, Class<T> loggerClass) {
+        super(repositoryNsi, loggerClass);
+        this.loggerClass = loggerClass;
         this.repositoryNsi = repositoryNsi;
         this.abstractNsiMerger = abstractNsiMerger;
     }
@@ -60,8 +57,8 @@ public abstract class NsiService<T extends Nsi> {
         }
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
-        Root<T> root = criteriaQuery.from(type);
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(loggerClass);
+        Root<T> root = criteriaQuery.from(loggerClass);
 
         Subquery<StringValue> stringValueSubquery = criteriaQuery.subquery(StringValue.class);
         Root<StringValue> stringValueRoot = stringValueSubquery.from(StringValue.class);
@@ -172,6 +169,26 @@ public abstract class NsiService<T extends Nsi> {
                 .forEach(repositoryNsi::deleteById);
     }
 
+    protected List<T> getReferencesIds(List<UUID> uuids) {
+        if (isNull(uuids) || uuids.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        return uuids.stream()
+                .map(repositoryNsi::getOne)
+                .collect(Collectors.toList());
+    }
+
+    protected List<T> getReferencesByEntities(List<T> uuids) {
+        if (isNull(uuids) || uuids.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        return uuids.stream()
+                .map(BasicEntity::getId)
+                .map(repositoryNsi::getOne)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     abstract protected void deleteConsumer(T object);

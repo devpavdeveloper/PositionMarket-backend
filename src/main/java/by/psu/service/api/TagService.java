@@ -11,7 +11,7 @@ import static java.util.Objects.nonNull;
 public class TagService extends NsiService<Tag> {
 
     public TagService(RepositoryTag repositoryTag, AbstractNsiMerger<Tag> tagAbstractNsiMerger) {
-        super(repositoryTag, tagAbstractNsiMerger);
+        super(repositoryTag, tagAbstractNsiMerger, Tag.class);
     }
 
     @Override

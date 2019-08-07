@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NsiTagController extends NsiController<Tag, TagDTO> {
 
     public NsiTagController(TagFacade tagFacade) {
-        super(tagFacade);
+        super(tagFacade, Tag.class);
     }
 
 }

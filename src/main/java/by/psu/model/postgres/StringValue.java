@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"language", "value", "translate"})
+@ToString(exclude = {"language", "value"})
 public class StringValue extends BasicEntity {
 
     @Column(name = "language", nullable = false, length = 120)

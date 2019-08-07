@@ -1,5 +1,6 @@
 package by.psu.mappers.nsi;
 
+import by.psu.mappers.AbstractMapper;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.dto.NsiDTO;
 import org.mapstruct.InheritInverseConfiguration;
@@ -9,7 +10,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.UUID;
 
 
-public interface NsiMapper <T extends Nsi, DTO extends NsiDTO> {
+public interface NsiMapper <T extends Nsi, DTO extends NsiDTO>
+        extends AbstractMapper<T, DTO> {
 
     @Mapping(source = "title.values", target = "values")
     DTO map(T nsi);

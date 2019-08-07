@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NsiTypeController extends NsiController<Type, TypeDTO> {
 
     public NsiTypeController(TypeFacade typeFacade) {
-        super(typeFacade);
+        super(typeFacade, Type.class);
     }
 
 }

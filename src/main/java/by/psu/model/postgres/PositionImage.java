@@ -3,6 +3,7 @@ package by.psu.model.postgres;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true, exclude = {"image", "mainImage"})
+@ToString(exclude = {"image", "mainImage"})
 public class PositionImage extends BasicEntity {
 
     @ManyToOne

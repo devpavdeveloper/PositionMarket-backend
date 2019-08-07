@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"email", "phone", "priceDistance"})
+@ToString(exclude = {"email", "phone", "priceDistance"})
 public class UserProfile extends BasicEntity {
 
     @Column(name = "email")
@@ -23,6 +24,7 @@ public class UserProfile extends BasicEntity {
 
     @Column(name = "price_distance")
     private Integer priceDistance;
+
 }
 
 

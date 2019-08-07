@@ -24,7 +24,7 @@ public class TypeServiceService extends NsiService<TypeService> {
 
     public TypeServiceService(RepositoryServiceType repositoryServiceType,
                               AbstractNsiMerger<TypeService> abstractNsiMerger) {
-        super(repositoryServiceType, abstractNsiMerger);
+        super(repositoryServiceType, abstractNsiMerger, TypeService.class);
     }
 
     @Override

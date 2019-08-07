@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"title", "images", "tags", "types", "products"})
+@ToString(exclude = {"title", "description", "images", "tags", "types", "products"}, callSuper = true)
 public class Attraction extends BasicEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -28,26 +29,25 @@ public class Attraction extends BasicEntity {
     @JoinColumn(name = "description")
     private Translate description;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "attraction")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "position_id")
     private List<PositionImage> images;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
-    @JoinTable(name = "attraction_tag", joinColumns = {
-            @JoinColumn(name = "attraction", nullable = false)},
+    @JoinTable(name = "position_tag", joinColumns = {
+            @JoinColumn(name = "position_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "tag")})
     private List<Tag> tags;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
-    @JoinTable(name = "attraction_type", joinColumns = {
-            @JoinColumn(name = "attraction", nullable = false)},
+    @JoinTable(name = "position_type", joinColumns = {
+            @JoinColumn(name = "position_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "type")})
     private List<Type> types;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "attraction_id")
+    @OneToMany(orphanRemoval = true, mappedBy = "attraction", cascade = CascadeType.ALL)
     private List<Product> products;
 
 }

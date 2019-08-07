@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"service", "price"})
+@ToString(exclude = {"service", "price", "order"})
 public class Product extends BasicEntity {
 
   @LazyCollection(LazyCollectionOption.FALSE)
@@ -33,8 +34,10 @@ public class Product extends BasicEntity {
   @Column(name = "order_value")
   private Long order;
 
-  @ManyToOne
+
   @JsonIgnore
+  @ManyToOne()
+  @JoinColumn(name="position_id")
   private Attraction attraction;
 
 }

@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "url")
+@ToString(exclude = {"url", "name", "length"}, callSuper = true)
 public class Image extends BasicEntity {
 
     @Column(name = "url", nullable = false)

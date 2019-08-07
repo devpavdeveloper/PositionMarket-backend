@@ -30,6 +30,7 @@ public class TranslateObjectMerger implements BaseMerger<Translate> {
         }
 
         first.setListValues( stringValueMerger.merge( first.getValues(), second.getValues() ) );
+
         return first;
     }
 
