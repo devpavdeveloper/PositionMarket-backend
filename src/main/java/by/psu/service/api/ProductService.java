@@ -1,5 +1,6 @@
 package by.psu.service.api;
 
+import by.psu.exceptions.EntityNotFoundException;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.TypeService;
 import by.psu.model.postgres.repository.RepositoryProduct;
@@ -64,7 +65,16 @@ public class ProductService extends AbstractService<Product> {
 
         if (product.getService().getId() == null) {
             Optional<TypeService> typeService = typeServiceService.isExists(product.getService());
-            TypeService service = typeService.orElseThrow(() -> new RuntimeException("Product not supported null service"));
+            TypeService service = typeService
+                    .orElseThrow(() ->
+                            new EntityNotFoundException(
+                                    String.format(
+                                            "Product [%s] not supported service [%s]",
+                                            product.getClass(),
+                                            product.getService().getId()
+                                    )
+                            )
+                    );
             product.setService(service);
         }
 

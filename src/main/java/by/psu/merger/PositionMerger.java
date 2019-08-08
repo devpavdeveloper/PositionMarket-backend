@@ -35,7 +35,9 @@ public class PositionMerger implements BaseMerger<Position> {
         first.getImages().clear();
         first.getImages().addAll(second.getImages());
 
-        List<Product> products = productMerger.merge(first.getProducts(), second.getProducts());
+        List<Product> originProduct = first.getProducts();
+
+        List<Product> products = productMerger.merge(originProduct, second.getProducts());
 
         first.getProducts().clear();
         first.getProducts().addAll(products);

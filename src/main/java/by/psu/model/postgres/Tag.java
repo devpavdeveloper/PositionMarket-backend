@@ -23,9 +23,9 @@ public class Tag extends Nsi {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
-    @JoinTable(name = "attraction_tag", joinColumns = {
-            @JoinColumn(name = "tag", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "position")})
+    @JoinTable(name = "position_tag", joinColumns = {
+            @JoinColumn(name = "tag_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "position_id")})
     private List<Position> positions = new ArrayList<>();
 
 }

@@ -47,12 +47,12 @@ public class PositionService extends AbstractService<Position> {
             throw new EntityNotFoundException("Entity not found with ID [" + object.getId() + "]");
         }
 
-        positionMerger.merge(position, object);
-
         setTagsInPosition(position, object.getTags());
         setTypesInPosition(position, object.getTypes());
 
-        return super.update(position);
+        Position updatedPosition = super.update(positionMerger.merge(position, object));
+
+        return updatedPosition;
     }
 
     @Override
@@ -74,12 +74,12 @@ public class PositionService extends AbstractService<Position> {
     }
 
     private void setTagsInPosition(@NonNull final Position position,
-                         final List<Tag> tags) {
+                                   final List<Tag> tags) {
         position.setTags(tagService.getReferencesByEntities(tags));
     }
 
     private void setTypesInPosition(@NonNull final Position position,
-                          final List<Type> types) {
+                                    final List<Type> types) {
         position.setTypes(typeService.getReferencesByEntities(types));
     }
 }

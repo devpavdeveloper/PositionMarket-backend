@@ -14,10 +14,12 @@ public class ExceptionDataHandler extends ExceptionAbstractHandler {
 
     private final Logger logger = Logger.getLogger(ExceptionDataHandler.class.getName());
 
-    @ExceptionHandler
-    private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    private ResponseEntity<ExceptionAbstractHandler.AwesomeException> handleEntityNotFoundException(
+            EntityNotFoundException entityNotFoundException) {
         logger.severe(entityNotFoundException.getMessage());
-        return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND, "Entity is not founded"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AwesomeException(HttpStatus.NOT_FOUND, entityNotFoundException.getMessage()),
+                HttpStatus.NOT_FOUND);
     }
 
 /*

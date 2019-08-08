@@ -23,9 +23,9 @@ public class Type extends Nsi {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
-    @JoinTable(name = "attraction_type", joinColumns = {
-            @JoinColumn(name = "type", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "position")})
+    @JoinTable(name = "position_type", joinColumns = {
+            @JoinColumn(name = "type_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "position_id")})
     private List<Position> positions = new ArrayList<>();
 
 }

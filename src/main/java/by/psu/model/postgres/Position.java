@@ -37,14 +37,14 @@ public class Position extends BasicEntity {
     @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "position_tag", joinColumns = {
             @JoinColumn(name = "position_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "tag")})
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private List<Tag> tags;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "position_type", joinColumns = {
             @JoinColumn(name = "position_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "type")})
+            inverseJoinColumns = {@JoinColumn(name = "type_id")})
     private List<Type> types;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
