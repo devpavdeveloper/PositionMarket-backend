@@ -25,7 +25,7 @@ public class Tag extends Nsi {
     @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "attraction_tag", joinColumns = {
             @JoinColumn(name = "tag", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "attraction")})
-    private List<Attraction> attractions = new ArrayList<>();
+            inverseJoinColumns = {@JoinColumn(name = "position")})
+    private List<Position> positions = new ArrayList<>();
 
 }

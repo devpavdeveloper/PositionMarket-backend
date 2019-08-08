@@ -12,48 +12,62 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class AbstractResource<DTO extends AbstractDTO> {
+public abstract class AbstractResource<D extends AbstractDTO> {
 
     protected final Logger logger;
 
-    private final AbstractFacade<? extends BasicEntity, DTO> abstractFacade;
+    private final AbstractFacade<? extends BasicEntity, D> abstractFacade;
     private final Class<?> loggerClass;
 
-    public AbstractResource(AbstractFacade<? extends BasicEntity, DTO> abstractFacade, Class<?> loggerClass) {
+    public AbstractResource(AbstractFacade<? extends BasicEntity, D> abstractFacade, Class<?> loggerClass) {
         this.abstractFacade = abstractFacade;
         this.loggerClass = loggerClass;
         this.logger = LoggerFactory.getLogger(loggerClass);
+        this.logger.info("Constructor AbstractResource initialized");
     }
 
     @GetMapping
-    public ResponseEntity<List<DTO>> get() {
+    public ResponseEntity<List<D>> get() {
+        logger.info("Get all entities [{}]", loggerClass);
+
         return ResponseEntity.ok(abstractFacade.getAll());
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<DTO> get(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<D> get(@PathVariable("uuid") UUID uuid) {
+        logger.info("Get entity [{}] by id {}", loggerClass, uuid);
+
         return ResponseEntity.ok(abstractFacade.getOne(uuid));
     }
 
     @PostMapping
-    public ResponseEntity<DTO> create(@RequestBody DTO obj) {
+    public ResponseEntity<D> create(D obj) {
+        logger.info("Create entity [{}] body {}", loggerClass, obj);
+
         return ResponseEntity.ok(abstractFacade.save(obj));
     }
 
     @PutMapping
-    public ResponseEntity<DTO> update(@RequestBody DTO obj) {
+    public ResponseEntity<D> update(D obj) {
+        logger.info("Update entity [{}] body {}", loggerClass, obj);
+
         return ResponseEntity.ok(abstractFacade.update(obj));
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<DTO> delete(@PathVariable UUID uuid) {
+    public ResponseEntity<D> delete(@PathVariable UUID uuid) {
+        logger.info("Delete entity [{}] by id {}", loggerClass, uuid);
+
         abstractFacade.delete(uuid);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/[{uuid}]")
     public ResponseEntity delete(@PathVariable UUID[] uuid) {
+        logger.info("Delete entities [{}] by ids {}", loggerClass, uuid);
+
         abstractFacade.delete(Arrays.asList(uuid));
         return ResponseEntity.ok().build();
     }
+
 }

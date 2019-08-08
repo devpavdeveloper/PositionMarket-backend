@@ -15,7 +15,7 @@ public class TypeService extends NsiService<Type> {
 
     @Override
     protected void deleteConsumer(Type object) {
-        object.getAttractions().clear();
+        object.getPositions().clear();
     }
 
 }

@@ -1,8 +1,8 @@
 package by.psu.service.api;
 
 import by.psu.exceptions.EntityNotFoundException;
-import by.psu.merger.AttractionMerger;
-import by.psu.model.postgres.Attraction;
+import by.psu.merger.PositionMerger;
+import by.psu.model.postgres.Position;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.Tag;
 import by.psu.model.postgres.Type;
@@ -16,65 +16,69 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 @Service
-public class AttractionService extends AbstractService<Attraction> {
+public class PositionService extends AbstractService<Position> {
 
     private final TypeService typeService;
     private final TagService tagService;
 
     private final ProductService productService;
-    private final AttractionMerger attractionMerger;
+    private final PositionMerger positionMerger;
 
-    public AttractionService(RepositoryAttraction abstractRepository,
-                             TypeService typeService,
-                             TagService tagService,
-                             ProductService productService,
-                             AttractionMerger attractionMerger) {
-        super(abstractRepository, Attraction.class);
+    public PositionService(RepositoryAttraction abstractRepository,
+                           TypeService typeService,
+                           TagService tagService,
+                           ProductService productService,
+                           PositionMerger positionMerger) {
+        super(abstractRepository, Position.class);
         this.typeService = typeService;
         this.tagService = tagService;
         this.productService = productService;
-        this.attractionMerger = attractionMerger;
+        this.positionMerger = positionMerger;
     }
 
     @Override
     @Transactional
-    public Attraction update(Attraction object) {
+    public Position update(Position object) {
         isValidUpdateObject(object);
 
-        Attraction attraction = findById(object.getId());
+        Position position = findById(object.getId());
 
-        if (isNull(attraction)) {
+        if (isNull(position)) {
             throw new EntityNotFoundException("Entity not found with ID [" + object.getId() + "]");
         }
 
-        attractionMerger.merge(attraction, object);
+        positionMerger.merge(position, object);
 
-        setTagsInPosition(attraction, object.getTags());
-        setTypesInPosition(attraction, object.getTypes());
+        setTagsInPosition(position, object.getTags());
+        setTypesInPosition(position, object.getTypes());
 
-        return super.update(attraction);
+        return super.update(position);
     }
 
     @Override
     @Transactional
-    public Attraction save(Attraction object) {
+    public Position save(Position object) {
         isValidSaveObject(object);
 
         setTagsInPosition(object, object.getTags());
         setTypesInPosition(object, object.getTypes());
 
         List<Product> placedProducts = productService.place(object.getProducts());
-        object.setProducts(placedProducts);
+        object.getProducts().clear();
 
-        return super.save(object);
+        super.save(object);
+
+        object.getProducts().addAll(placedProducts);
+
+        return object;
     }
 
-    private void setTagsInPosition(@NonNull final Attraction position,
+    private void setTagsInPosition(@NonNull final Position position,
                          final List<Tag> tags) {
         position.setTags(tagService.getReferencesByEntities(tags));
     }
 
-    private void setTypesInPosition(@NonNull final Attraction position,
+    private void setTypesInPosition(@NonNull final Position position,
                           final List<Type> types) {
         position.setTypes(typeService.getReferencesByEntities(types));
     }

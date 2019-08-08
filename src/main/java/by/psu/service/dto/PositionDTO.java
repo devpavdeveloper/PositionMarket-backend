@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter @Setter
-public class AttractionDTO extends AbstractDTO {
+public class PositionDTO extends AbstractDTO {
 
     private List<StringValueDTO> title;
     private List<StringValueDTO> description;

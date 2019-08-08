@@ -34,10 +34,8 @@ public class Product extends BasicEntity {
   @Column(name = "order_value")
   private Long order;
 
-
   @JsonIgnore
-  @ManyToOne()
-  @JoinColumn(name="position_id")
-  private Attraction attraction;
+  @ManyToOne
+  private Position position;
 
 }

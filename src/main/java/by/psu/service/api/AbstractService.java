@@ -49,9 +49,8 @@ public class AbstractService<T extends BasicEntity> implements Service<T> {
     @Override
     @Transactional(readOnly = true)
     public Page<T> findAll(Pageable pageable) {
-        logger.info("findAll entities [{}] with pageable", loggerClass, pageable);
-        Page<T> objects = abstractRepository.findAll(pageable);
-        return objects;
+        logger.info("findAll entities [{}] with pageable {}", loggerClass, pageable);
+        return abstractRepository.findAll(pageable);
     }
 
     @Override

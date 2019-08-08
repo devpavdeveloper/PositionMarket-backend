@@ -7,7 +7,7 @@ import by.psu.model.factory.*;
 import by.psu.model.postgres.*;
 import by.psu.service.api.TypeService;
 import by.psu.service.api.*;
-import by.psu.service.dto.AttractionDTO;
+import by.psu.service.dto.PositionDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-public class AttractionMapperTest extends BaseTest {
+public class PositionMapperTest extends BaseTest {
 
     @Autowired
-    private AttractionMapper mapper;
+    private PositionMapper mapper;
 
     @Autowired
     private FactoryAttraction factoryAttraction;
@@ -53,7 +53,7 @@ public class AttractionMapperTest extends BaseTest {
     @Autowired
     private ProductMapper productMapper;
 
-    private Attraction attraction;
+    private Position position;
 
     @MockBean
     private TypeService typeService;
@@ -63,17 +63,17 @@ public class AttractionMapperTest extends BaseTest {
 
     @Before
     public void init() {
-        attraction = factoryAttraction.create("Новый", "New");
+        position = factoryAttraction.create("Новый", "New");
     }
 
     @Test
     public void testMapperAttractionToAttractionDTOCommonInformation() {
-        AttractionDTO attractionDTO = mapper.map(attraction);
+        PositionDTO positionDTO = mapper.map(position);
 
-        assertNotNull(attractionDTO);
-        assertTrue(attractionDTO.getTitle().stream()
+        assertNotNull(positionDTO);
+        assertTrue(positionDTO.getTitle().stream()
                 .anyMatch(item -> item.getLanguage().equals(Language.RU.getUuid()) && item.getValue().equals("Новый")));
-        assertTrue(attractionDTO.getTitle().stream()
+        assertTrue(positionDTO.getTitle().stream()
                 .anyMatch(item -> item.getLanguage().equals(Language.EN.getUuid()) && item.getValue().equals("New")));
     }
 
@@ -86,16 +86,16 @@ public class AttractionMapperTest extends BaseTest {
         Product product1 = factoryProduct.create(UUID.randomUUID(), 10, typeService1);
         Product product2 = factoryProduct.create(UUID.randomUUID(), 12, typeService2);
 
-        attraction.setProducts(Arrays.asList(product1, product2));
+        position.setProducts(Arrays.asList(product1, product2));
 
-        AttractionDTO attractionDTO = mapper.map(attraction);
+        PositionDTO positionDTO = mapper.map(position);
 
-        assertNotNull(attractionDTO);
+        assertNotNull(positionDTO);
 
-        assertTrue(attractionDTO.getProducts().stream().anyMatch(product -> product.getPrice().equals(new BigDecimal(10))));
-        assertTrue(attractionDTO.getProducts().stream().anyMatch(product -> product.getPrice().equals( new BigDecimal(12))));
+        assertTrue(positionDTO.getProducts().stream().anyMatch(product -> product.getPrice().equals(new BigDecimal(10))));
+        assertTrue(positionDTO.getProducts().stream().anyMatch(product -> product.getPrice().equals( new BigDecimal(12))));
 
-        List<Product> products = attractionDTO.getProducts().stream()
+        List<Product> products = positionDTO.getProducts().stream()
                 .map(productMapper::map)
                 .collect(toList());
 
@@ -114,13 +114,13 @@ public class AttractionMapperTest extends BaseTest {
         when(tagService.getOne(tag2.getId()))
                 .thenReturn(tag2);
 
-        attraction.setTags(Arrays.asList(tag1, tag2));
+        position.setTags(Arrays.asList(tag1, tag2));
 
-        AttractionDTO attractionDTO = mapper.map(attraction);
+        PositionDTO positionDTO = mapper.map(position);
 
-        assertNotNull(attractionDTO);
+        assertNotNull(positionDTO);
 
-        List<Tag> tags = attractionDTO.getTags().stream()
+        List<Tag> tags = positionDTO.getTags().stream()
                 .map(tagService::getOne)
                 .collect(toList());
 
@@ -152,18 +152,18 @@ public class AttractionMapperTest extends BaseTest {
         Type type1 = factoryType.create(UUID.randomUUID(), "Спортивные", "Sport");
         Type type2 = factoryType.create(UUID.randomUUID(), "Интерактивные", "Interactive");
 
-        attraction.setTypes(Arrays.asList(type1, type2));
+        position.setTypes(Arrays.asList(type1, type2));
 
         when(typeService.getOne(type1.getId()))
                 .thenReturn(type1);
         when(typeService.getOne(type2.getId()))
                 .thenReturn(type2);
 
-        AttractionDTO attractionDTO = mapper.map(attraction);
+        PositionDTO positionDTO = mapper.map(position);
 
-        assertNotNull(attractionDTO);
+        assertNotNull(positionDTO);
 
-        List<Type> types = attractionDTO.getTypes().stream()
+        List<Type> types = positionDTO.getTypes().stream()
                 .map(typeService::getOne)
                 .collect(toList());
 

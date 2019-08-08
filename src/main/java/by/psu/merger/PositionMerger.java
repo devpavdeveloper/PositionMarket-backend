@@ -1,6 +1,6 @@
 package by.psu.merger;
 
-import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.Position;
 import by.psu.model.postgres.Product;
 import by.psu.model.postgres.Translate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +9,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class AttractionMerger implements BaseMerger<Attraction> {
+public class PositionMerger implements BaseMerger<Position> {
 
     private final TranslateObjectMerger translateObjectMerger;
     private final ProductMerger productMerger;
 
     @Autowired
-    public AttractionMerger(TranslateObjectMerger translateObjectMerger, ProductMerger productMerger) {
+    public PositionMerger(TranslateObjectMerger translateObjectMerger, ProductMerger productMerger) {
         this.translateObjectMerger = translateObjectMerger;
         this.productMerger = productMerger;
     }
 
     @Override
-    public Attraction merge(Attraction first, Attraction second) {
+    public Position merge(Position first, Position second) {
         Translate title =
                 translateObjectMerger.merge(first.getTitle(), second.getTitle());
 

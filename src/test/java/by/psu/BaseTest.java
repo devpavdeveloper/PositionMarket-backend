@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @SpringBootTest(classes = {
-        StartAttractionProject.class
+        StartDevpavMarketProject.class
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(profiles = "test")

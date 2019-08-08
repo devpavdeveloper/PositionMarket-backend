@@ -26,9 +26,9 @@ TAG=2-d52c0c52
 PROFILE_MVN=prod
 PROFILE_SPRING=prod
 
-REPOSITORY=server-attraction
-PROJECT=server-attraction
-ARTIFACTID=server-attraction
+REPOSITORY=server-position
+PROJECT=server-position
+ARTIFACTID=server-position
 VERSION=0.0.1
 ```
 

@@ -11,7 +11,7 @@ import java.util.List;
         name = "attractions"
 )
 @Table(
-        name = "attractions"
+        name = "positions"
 )
 @Getter
 @Setter
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"title", "images", "tags", "types", "products"})
 @ToString(exclude = {"title", "description", "images", "tags", "types", "products"}, callSuper = true)
-public class Attraction extends BasicEntity {
+public class Position extends BasicEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "title", nullable = false)
@@ -47,7 +47,8 @@ public class Attraction extends BasicEntity {
             inverseJoinColumns = {@JoinColumn(name = "type")})
     private List<Type> types;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "attraction", cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="position_id")
     private List<Product> products;
 
 }

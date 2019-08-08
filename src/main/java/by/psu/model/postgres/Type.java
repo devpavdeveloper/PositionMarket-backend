@@ -25,7 +25,7 @@ public class Type extends Nsi {
     @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "attraction_type", joinColumns = {
             @JoinColumn(name = "type", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "attraction")})
-    private List<Attraction> attractions = new ArrayList<>();
+            inverseJoinColumns = {@JoinColumn(name = "position")})
+    private List<Position> positions = new ArrayList<>();
 
 }

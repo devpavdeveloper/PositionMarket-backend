@@ -1,8 +1,8 @@
 package by.psu.mappers;
 
 import by.psu.BaseTest;
-import by.psu.model.postgres.Attraction;
 import by.psu.model.postgres.Image;
+import by.psu.model.postgres.Position;
 import by.psu.model.postgres.PositionImage;
 import by.psu.service.dto.PositionImageDTO;
 import org.junit.Assert;
@@ -24,8 +24,8 @@ public class PositionImageMapperTest extends BaseTest {
     public void setUp() throws Exception {
         positionImage = new PositionImage();
 
-        Attraction attraction = new Attraction();
-        attraction.setId(UUID.randomUUID());
+        Position position = new Position();
+        position.setId(UUID.randomUUID());
 
         positionImage.setMainImage(false);
 

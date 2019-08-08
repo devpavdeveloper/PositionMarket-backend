@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/typeservices")
+@RequestMapping("/api/product-types")
 public class NsiTypeServiceController extends NsiController<TypeService, TypeServiceDTO> {
 
     public NsiTypeServiceController(TypeServiceFacade typeServiceFacade) {
         super(typeServiceFacade, TypeService.class);
+        logger.info("Constructor NsiTypeServiceController init");
     }
 
     @Override
@@ -25,4 +26,5 @@ public class NsiTypeServiceController extends NsiController<TypeService, TypeSer
     public ResponseEntity<TypeServiceDTO> update(@RequestBody TypeServiceDTO obj) {
         return super.update(obj);
     }
+    
 }

@@ -32,7 +32,7 @@ public class ProductService extends AbstractService<Product> {
     public void delete(UUID id) {
         Optional<Product> product = repositoryProduct.findById(id);
         if (product.isPresent()) {
-            product.get().setAttraction(null);
+            product.get().setPosition(null);
             product.get().setService(null);
             repositoryProduct.saveAndFlush(product.get());
             repositoryProduct.deleteById(id);

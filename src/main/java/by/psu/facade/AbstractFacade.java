@@ -18,10 +18,12 @@ public abstract class AbstractFacade<T extends BasicEntity, DTO extends Abstract
     private Service<T> service;
     private AbstractMapper<T, DTO> mapper;
 
+
     protected AbstractFacade(Service<T> service, AbstractMapper<T, DTO> mapper) {
         this.service = service;
         this.mapper = mapper;
     }
+
 
     @Override
     public List<DTO> getAll() {
@@ -31,7 +33,6 @@ public abstract class AbstractFacade<T extends BasicEntity, DTO extends Abstract
     public Page<DTO> findAll(Pageable pageable) {
         return service.findAll(pageable).map(mapper::map);
     }
-
 
     @Override
     public DTO getOne(UUID uuid) {
@@ -64,4 +65,5 @@ public abstract class AbstractFacade<T extends BasicEntity, DTO extends Abstract
     public void delete(List<UUID> uuids) {
         service.delete(uuids);
     }
+
 }

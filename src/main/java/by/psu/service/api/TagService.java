@@ -17,7 +17,7 @@ public class TagService extends NsiService<Tag> {
     @Override
     protected void deleteConsumer(Tag object) {
         if ( nonNull(object) ) {
-            object.getAttractions().clear();
+            object.getPositions().clear();
         }
     }
 

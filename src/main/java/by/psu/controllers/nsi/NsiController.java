@@ -7,23 +7,10 @@ import by.psu.service.dto.NsiDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-import java.util.UUID;
-
-public class NsiController<T extends Nsi, E extends NsiDTO> extends AbstractResource<E> {
+public abstract class NsiController<T extends Nsi, E extends NsiDTO> extends AbstractResource<E> {
 
     public NsiController(NsiFacade<T, E> nsiFacade, Class<?> loggerClass) {
         super(nsiFacade, loggerClass);
-    }
-
-    @Override
-    public ResponseEntity<List<E>> get() {
-        return super.get();
-    }
-
-    @Override
-    public ResponseEntity<E> get(UUID uuid) {
-        return super.get(uuid);
     }
 
     @Override
@@ -36,13 +23,4 @@ public class NsiController<T extends Nsi, E extends NsiDTO> extends AbstractReso
         return super.update(obj);
     }
 
-    @Override
-    public ResponseEntity<E> delete(UUID uuid) {
-        return super.delete(uuid);
-    }
-
-    @Override
-    public ResponseEntity delete(UUID[] uuid) {
-        return super.delete(uuid);
-    }
 }
