@@ -24,7 +24,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.attraction_tag (
-    attraction uuid NOT NULL,
+    position uuid NOT NULL,
     tag uuid NOT NULL
 );
 
@@ -36,7 +36,7 @@ ALTER TABLE public.attraction_tag OWNER TO devpav;
 --
 
 CREATE TABLE public.attraction_type (
-    attraction uuid NOT NULL,
+    position uuid NOT NULL,
     type uuid NOT NULL
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE public.attraction_type (
 ALTER TABLE public.attraction_type OWNER TO devpav;
 
 --
--- Name: attractions; Type: TABLE; Schema: public; Owner: devpav
+-- Name: positions; Type: TABLE; Schema: public; Owner: devpav
 --
 
 CREATE TABLE public.attractions (
@@ -103,7 +103,7 @@ CREATE TABLE public.products (
     id uuid NOT NULL,
     price numeric(19,2),
     id_service uuid NOT NULL,
-    attraction uuid
+    position uuid
 );
 
 
@@ -269,7 +269,7 @@ ALTER TABLE ONLY public.verification_tokens ALTER COLUMN id SET DEFAULT nextval(
 -- Data for Name: attraction_tag; Type: TABLE DATA; Schema: public; Owner: artteam
 --
 
-COPY public.attraction_tag (attraction, tag) FROM stdin;
+COPY public.attraction_tag (position, tag) FROM stdin;
 ff6612e3-8406-4a4b-a446-205bf08bb239	2f6b0859-2120-4bcc-9bc1-bec3bc545561
 \.
 
@@ -278,16 +278,16 @@ ff6612e3-8406-4a4b-a446-205bf08bb239	2f6b0859-2120-4bcc-9bc1-bec3bc545561
 -- Data for Name: attraction_type; Type: TABLE DATA; Schema: public; Owner: artteam
 --
 
-COPY public.attraction_type (attraction, type) FROM stdin;
+COPY public.attraction_type (position, type) FROM stdin;
 ff6612e3-8406-4a4b-a446-205bf08bb239	2fa0b7fc-1bb4-4f51-a1d7-b7388d9e84e7
 \.
 
 
 --
--- Data for Name: attractions; Type: TABLE DATA; Schema: public; Owner: artteam
+-- Data for Name: positions; Type: TABLE DATA; Schema: public; Owner: artteam
 --
 
-COPY public.attractions (id, image, link_source, title) FROM stdin;
+COPY public.positions (id, image, link_source, title) FROM stdin;
 ff6612e3-8406-4a4b-a446-205bf08bb239	http://image.jpg	http://image.jpg	a79d0474-d022-421c-9a20-273163bc75ca
 \.
 
@@ -313,7 +313,7 @@ COPY public.databasechangeloglock (id, locked, lockgranted, lockedby) FROM stdin
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: artteam
 --
 
-COPY public.products (id, price, id_service, attraction) FROM stdin;
+COPY public.products (id, price, id_service, position) FROM stdin;
 5ecf84f7-a45b-48a2-bcb5-67dae451efe1	246673.00	bf7dd3a4-05e7-4805-9694-44a9cd4dffe2	ff6612e3-8406-4a4b-a446-205bf08bb239
 \.
 
@@ -425,10 +425,10 @@ SELECT pg_catalog.setval('public.verification_tokens_id_seq', 1, false);
 
 
 --
--- Name: attractions attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: artteam
+-- Name: positions attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: artteam
 --
 
-ALTER TABLE ONLY public.attractions
+ALTER TABLE ONLY public.positions
     ADD CONSTRAINT attractions_pkey PRIMARY KEY (id);
 
 
@@ -557,7 +557,7 @@ ALTER TABLE ONLY public.verification_tokens
 --
 
 ALTER TABLE ONLY public.products
-    ADD CONSTRAINT fk7lqagw1qny7cikooc914cmi4m FOREIGN KEY (attraction) REFERENCES public.attractions(id);
+    ADD CONSTRAINT fk7lqagw1qny7cikooc914cmi4m FOREIGN KEY (attraction_id) REFERENCES public.positions(id);
 
 
 --
@@ -577,10 +577,10 @@ ALTER TABLE ONLY public.products
 
 
 --
--- Name: attractions fkb5ek6e3tybwdyim3j4vlmmtgd; Type: FK CONSTRAINT; Schema: public; Owner: artteam
+-- Name: positions fkb5ek6e3tybwdyim3j4vlmmtgd; Type: FK CONSTRAINT; Schema: public; Owner: artteam
 --
 
-ALTER TABLE ONLY public.attractions
+ALTER TABLE ONLY public.positions
     ADD CONSTRAINT fkb5ek6e3tybwdyim3j4vlmmtgd FOREIGN KEY (title) REFERENCES public.translate(id);
 
 
@@ -605,7 +605,7 @@ ALTER TABLE ONLY public.type_service
 --
 
 ALTER TABLE ONLY public.attraction_type
-    ADD CONSTRAINT fkioass2blokum8layldxs8agee FOREIGN KEY (attraction) REFERENCES public.attractions(id);
+    ADD CONSTRAINT fkioass2blokum8layldxs8agee FOREIGN KEY (position) REFERENCES public.positions(id);
 
 
 --
@@ -613,7 +613,7 @@ ALTER TABLE ONLY public.attraction_type
 --
 
 ALTER TABLE ONLY public.attraction_tag
-    ADD CONSTRAINT fkju79re617ev0f1qsahg6gypyo FOREIGN KEY (attraction) REFERENCES public.attractions(id);
+    ADD CONSTRAINT fkju79re617ev0f1qsahg6gypyo FOREIGN KEY (position) REFERENCES public.positions(id);
 
 
 --

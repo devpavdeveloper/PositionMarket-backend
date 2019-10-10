@@ -1,6 +1,6 @@
 package by.psu.model.factory;
 
-import by.psu.model.postgres.Attraction;
+import by.psu.model.postgres.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,21 +10,14 @@ public class FactoryAttraction {
     @Autowired
     private FactoryTranslate factoryTranslate;
 
-    public Attraction create() {
-        return new Attraction();
+    public Position create() {
+        return new Position();
     }
 
-    private Attraction create(String titleRu, String titleEn) {
-        Attraction attraction = create();
-        attraction.setTitle( factoryTranslate.create(titleRu, titleEn) );
-        return attraction;
-    }
-
-    public Attraction create(String titleRu, String titleEn, String link, String image) {
-        Attraction attraction = create(titleRu, titleEn);
-        attraction.setImage(image);
-        attraction.setLinkSource(link);
-        return attraction;
+    public Position create(String titleRu, String titleEn) {
+        Position position = create();
+        position.setTitle( factoryTranslate.create(titleRu, titleEn) );
+        return position;
     }
 
 }

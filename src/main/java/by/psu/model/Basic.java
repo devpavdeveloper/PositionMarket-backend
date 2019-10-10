@@ -15,4 +15,5 @@ public class Basic {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 }

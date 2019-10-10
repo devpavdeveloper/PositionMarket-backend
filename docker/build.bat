@@ -1,1 +1,1 @@
-docker-compose build --no-cache
+docker-compose -f build.yml build --no-cache

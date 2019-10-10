@@ -1,8 +1,7 @@
 package by.psu.security.service;
 
+import by.psu.exceptions.BadRequestException;
 import by.psu.exceptions.EntityNotFoundException;
-import by.psu.exceptions.ServerDataBaseException;
-import by.psu.exceptions.transaction.UserTransactionException;
 import by.psu.security.JwtTokenUtil;
 import by.psu.security.model.Role;
 import by.psu.security.model.User;
@@ -18,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 @Service
@@ -68,19 +69,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        User user =  userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
         if (Objects.isNull(user))
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("User isn't found by login " + login);
 
         return user;
     }
 
     @Override
     public User update(User obj, UUID id) {
-        userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        obj.setId(id);
-        return Optional.of(userRepository.save(obj)).orElseThrow(ServerDataBaseException::new);
+        return null;
     }
 
     @Override
@@ -89,7 +87,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User alreadyExists(User user) {
-        return Optional.ofNullable(userRepository.findByLogin(user.getLogin())).orElseThrow(EntityNotFoundException::new);
+        return Optional.ofNullable(userRepository.findByLogin(user.getLogin()))
+                .orElseThrow(() -> new EntityNotFoundException("User isn't found by login " + user.getLogin()));
     }
 
     @Transactional
@@ -111,9 +110,9 @@ public class UserServiceImpl implements UserService {
         try {
             tokenRepository
                     .delete(tokenRepository.findById(token.getId())
-                            .orElseThrow(EntityNotFoundException::new));
+                            .orElseThrow(() -> new EntityNotFoundException("Token isn't found by id " + token.getId())));
         } catch (RuntimeException ex) {
-            throw new ServerDataBaseException();
+            throw new BadRequestException("An error occurred while deleting the token", ex);
         }
     }
 
@@ -135,43 +134,30 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(username);
 
         if (Objects.isNull(user))
-            throw new UserTransactionException("User [" + username + "] not found");
+            throw new BadRequestException("User [" + username + "] not found");
 
-        List<Role> roleList = new ArrayList<>();
+        final List<Role> roleList;
         try {
-            for (Role r : roles) {
-                roleList.add(roleRepository.findByTitle(r.getTitle()));
-            }
+            roleList = Stream.of(roles)
+                    .map(role -> roleRepository.findByTitle(role.getTitle()))
+                    .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new UserTransactionException("Role not found");
+            throw new BadRequestException("Role not found", e);
         }
 
         if (roleList.isEmpty())
-            throw new UserTransactionException("List roles is empty");
+            throw new BadRequestException("List roles is empty");
 
         try {
             user.setAuthorities(roleList);
             userRepository.save(user);
         } catch (Exception e) {
-            throw new UserTransactionException("User [" + username + "] not be add new authorities");
+            throw new BadRequestException("User [" + username + "] not be add new authorities");
         }
     }
 
     @Override
     public void setDiscountUser(Integer discount, String username) {
-        if (discount < 0 || discount > 100)
-            throw new UserTransactionException("discount < 0 or discount > 100");
-        User user = userRepository.findByLogin(username);
-
-        if (Objects.isNull(user))
-            throw new UserTransactionException("User [" + username + "] not found");
-
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new UserTransactionException("User [" + username + "] not be add new authorities");
-        }
-
     }
 
     @Override
@@ -179,13 +165,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(username);
 
         if (Objects.isNull(user))
-            throw new UserTransactionException("User [" + username + "] not found");
+            throw new BadRequestException("User [" + username + "] not found");
 
         try {
             user.setEnabled(statusUser);
             userRepository.save(user);
         } catch (Exception e) {
-            throw new UserTransactionException("User [" + username + "] not be add new authorities");
+            throw new BadRequestException("User [" + username + "] not be add new authorities");
         }
     }
 
@@ -194,13 +180,13 @@ public class UserServiceImpl implements UserService {
     public User updateUserData(HttpServletRequest request, User user) {
         User us = getUser(request);
         if (Objects.isNull(us)) {
-            throw new UserTransactionException("User not found");
+            throw new BadRequestException("User not found");
         }
 
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new UserTransactionException(e.getMessage());
+            throw new BadRequestException(e.getMessage());
         }
 
         return user;

@@ -1,11 +1,10 @@
 package by.psu.model.postgres;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(
         name = "type_service"
@@ -16,4 +15,20 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TypeService extends Nsi { }
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"products", "type", "description"}, callSuper = true)
+public class TypeService extends Nsi {
+
+    @OneToMany(mappedBy = "service", orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Product> products = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", length = 10)
+    private TypeServiceEnum type;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "description")
+    private Translate description;
+
+}

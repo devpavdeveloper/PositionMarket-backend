@@ -1,12 +1,12 @@
 package by.psu.service.api;
 
+import by.psu.merger.AbstractNsiMerger;
+import by.psu.model.postgres.BasicEntity;
 import by.psu.model.postgres.Language;
 import by.psu.model.postgres.Nsi;
 import by.psu.model.postgres.StringValue;
 import by.psu.model.postgres.repository.RepositoryNsi;
-import by.psu.service.merger.AbstractNsiMerger;
 import javassist.tools.web.BadHttpRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -14,52 +14,51 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
-public abstract class NsiService<T extends Nsi> {
+public abstract class NsiService<T extends Nsi> extends AbstractService<T> {
 
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected RepositoryNsi<T> repositoryNsi;
 
-    @Autowired
     private AbstractNsiMerger<T> abstractNsiMerger;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
-    private Class<T> type;
+    private Class<T> loggerClass;
 
 
-    public NsiService() {
-        this.type = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    public NsiService(RepositoryNsi<T> repositoryNsi, AbstractNsiMerger<T> abstractNsiMerger, Class<T> loggerClass) {
+        super(repositoryNsi, loggerClass);
+        this.loggerClass = loggerClass;
+        this.repositoryNsi = repositoryNsi;
+        this.abstractNsiMerger = abstractNsiMerger;
     }
 
 
+    @Transactional(readOnly = true)
     public List<T> getAll() {
         return repositoryNsi.findAll();
     }
 
+    @Transactional(readOnly = true)
     public T getOne(UUID uuid) {
         return repositoryNsi.getOne(uuid);
     }
 
     @Transactional
     protected Optional<T> isExists(T nsi) {
+
         if (nsi == null) {
             return Optional.empty();
         }
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
-        Root<T> root = criteriaQuery.from(type);
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(loggerClass);
+        Root<T> root = criteriaQuery.from(loggerClass);
 
         Subquery<StringValue> stringValueSubquery = criteriaQuery.subquery(StringValue.class);
         Root<StringValue> stringValueRoot = stringValueSubquery.from(StringValue.class);
@@ -94,7 +93,7 @@ public abstract class NsiService<T extends Nsi> {
 
         criteriaQuery.select(root).where(criteriaBuilder.exists(stringValueSubquery));
         TypedQuery<T> tTypedQuery = entityManager.createQuery(criteriaQuery);
-        //tTypedQuery.unwrap(org.hibernate.Query.class).getQueryString();
+
         List<T> objList = tTypedQuery.getResultList();
         return objList.stream().findFirst();
     }
@@ -145,4 +144,53 @@ public abstract class NsiService<T extends Nsi> {
     public void delete(UUID uuid) {
         repositoryNsi.deleteById(uuid);
     }
+
+    @Transactional
+    public void deleteAll(final List<UUID> uuid) {
+        if ( isNull(uuid) || uuid.isEmpty() ) {
+            return;
+        }
+
+        List<T> objects = uuid.stream()
+                .map(repositoryNsi::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        for (T it : objects) {
+            deleteConsumer(it);
+            entityManager.merge(it);
+            entityManager.flush();
+            entityManager.clear();
+        }
+
+        objects.stream()
+                .map(BasicEntity::getId)
+                .forEach(repositoryNsi::deleteById);
+    }
+
+    protected List<T> getReferencesIds(List<UUID> uuids) {
+        if (isNull(uuids) || uuids.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        return uuids.stream()
+                .map(repositoryNsi::getOne)
+                .collect(Collectors.toList());
+    }
+
+    protected List<T> getReferencesByEntities(List<T> uuids) {
+        if (isNull(uuids) || uuids.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        return uuids.stream()
+                .map(BasicEntity::getId)
+                .map(repositoryNsi::getOne)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    abstract protected void deleteConsumer(T object);
+
 }

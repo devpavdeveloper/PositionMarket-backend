@@ -1,1 +1,1 @@
-docker-compose up -d --build
+docker-compose -f build.yml up -d

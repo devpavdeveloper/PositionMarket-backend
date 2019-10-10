@@ -1,8 +1,6 @@
 package by.psu.model.postgres;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -19,6 +17,8 @@ import java.util.stream.Collectors;
 )
 @Getter @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = "values")
+@ToString(exclude = "values", callSuper = true)
 public class Translate extends BasicEntity {
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -66,3 +66,4 @@ public class Translate extends BasicEntity {
                 );
     }
 }
+

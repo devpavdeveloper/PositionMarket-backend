@@ -1,9 +1,11 @@
 package by.psu.service.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class UserDTO {
+@Setter
+@Getter
+public class UserDTO extends AbstractDTO {
     private String username;
     private Boolean enabled;
     private UserProfileDTO information;

@@ -2,10 +2,11 @@ package by.psu.model.postgres;
 
 import by.psu.model.postgres.converters.DeserializeUUID;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,8 @@ import java.util.UUID;
 @MappedSuperclass
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "id")
+@ToString(exclude = "id")
 public abstract class BasicEntity {
 
     @Id
@@ -23,7 +26,6 @@ public abstract class BasicEntity {
     @GeneratedValue(generator = "useIdOrGenerate")
     @Column(name = "id", nullable = false, unique = true)
     @JsonDeserialize(using = DeserializeUUID.class)
-    @Type(type="pg-uuid")
     private UUID id;
 
 }

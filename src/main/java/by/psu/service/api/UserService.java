@@ -1,10 +1,10 @@
 package by.psu.service.api;
 
 import by.psu.exceptions.authorization.UserNotFoundException;
+import by.psu.merger.UserMerger;
 import by.psu.security.SecurityUtil;
 import by.psu.security.model.User;
 import by.psu.security.service.UserRepository;
-import by.psu.service.merger.UserMerger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +15,16 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final SecurityUtil securityUtil;
+    private final UserRepository userRepository;
+    private final UserMerger userMerger;
+
     @Autowired
-    private SecurityUtil securityUtil;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMerger userMerger;
+    public UserService(SecurityUtil securityUtil, UserRepository userRepository, UserMerger userMerger) {
+        this.securityUtil = securityUtil;
+        this.userRepository = userRepository;
+        this.userMerger = userMerger;
+    }
 
 
     @Transactional

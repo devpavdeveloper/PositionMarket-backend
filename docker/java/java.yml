@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+    rest:
+      container_name: "rest"
+      image: devpav/positions:rest
+      ports:
+        - "8080:8080"
+      env_file:
+        - ../.env

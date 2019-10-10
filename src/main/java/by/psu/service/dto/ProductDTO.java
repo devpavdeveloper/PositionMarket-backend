@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductDTO extends AbstractDTO {
 
     private BigDecimal price;
-    private TypeServiceDTO service;
+    private Long order;
+    private UUID service;
+    private UUID positionId;
 
 }

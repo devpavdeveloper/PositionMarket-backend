@@ -1,7 +1,5 @@
 package by.psu.utility;
 
-import by.psu.exceptions.TokenExpiredException;
-
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,20 +10,14 @@ import static java.lang.Math.abs;
 public class Util {
     final static long DAY_MILLIS = 86400000*2;
 
-    public enum dateFormatTypes{DATE_ONLY, TIME_ONLY};
+    public enum dateFormatTypes{DATE_ONLY, TIME_ONLY}
 
     public static boolean isOneDayAway(Date order, Date currentOrder){
-        if((abs(order.getTime() - currentOrder.getTime()) <= DAY_MILLIS )){
-            return true;
-        }
-        return false;
+        return (abs(order.getTime() - currentOrder.getTime()) <= DAY_MILLIS);
     }
     public static boolean isOverTime(long expiryTime){
         Calendar cal = Calendar.getInstance();
-        if(expiryTime - cal.getTime().getTime() <= 0){
-            return true;
-        }
-        return false;
+        return expiryTime - cal.getTime().getTime() <= 0;
     }
 
     public static Date incrementDateByHours(Date date, int hours){

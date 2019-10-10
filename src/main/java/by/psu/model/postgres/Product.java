@@ -1,9 +1,8 @@
 package by.psu.model.postgres;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -19,14 +18,24 @@ import java.math.BigDecimal;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = {"service", "price"})
+@ToString(exclude = {"service", "price", "order"})
 public class Product extends BasicEntity {
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
-  @JoinColumn(name = "id_service", nullable = false)
+  @JoinColumn(name = "id_service")
+  @JsonBackReference("product-service")
   private TypeService service;
 
   @Column(name = "price")
   private BigDecimal price;
+
+  @Column(name = "order_value")
+  private Long order;
+
+  @JsonIgnore
+  @ManyToOne
+  private Position position;
 
 }

@@ -1,44 +1,26 @@
 package by.psu.controllers.nsi;
 
+import by.psu.controllers.AbstractResource;
+import by.psu.facade.NsiFacade;
 import by.psu.model.postgres.Nsi;
 import by.psu.service.dto.NsiDTO;
-import by.psu.service.facade.NsiFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-import java.util.UUID;
+public abstract class NsiController<T extends Nsi, E extends NsiDTO> extends AbstractResource<E> {
 
-public class NsiController<T extends Nsi, E extends NsiDTO> {
-
-    @Autowired
-    protected NsiFacade<T, E> nsiFacade;
-
-    @GetMapping
-    public ResponseEntity<List<E>> get() {
-        return ResponseEntity.ok(nsiFacade.getAll());
+    public NsiController(NsiFacade<T, E> nsiFacade, Class<?> loggerClass) {
+        super(nsiFacade, loggerClass);
     }
 
-    @GetMapping("/{uuid}")
-    public ResponseEntity<E> get(@PathVariable("uuid") UUID uuid) {
-        return ResponseEntity.ok(nsiFacade.getOne(uuid));
-    }
-
-    @PostMapping
+    @Override
     public ResponseEntity<E> create(@RequestBody E obj) {
-        return ResponseEntity.ok(nsiFacade.save(obj));
+        return super.create(obj);
     }
 
-    @PutMapping
+    @Override
     public ResponseEntity<E> update(@RequestBody E obj) {
-        return ResponseEntity.ok(nsiFacade.update(obj));
-    }
-
-    @DeleteMapping("/{uuid}")
-    public ResponseEntity<E> delete(@PathVariable UUID uuid) {
-        nsiFacade.delete(uuid);
-        return ResponseEntity.ok().build();
+        return super.update(obj);
     }
 
 }

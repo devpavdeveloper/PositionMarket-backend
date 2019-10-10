@@ -66,39 +66,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
-
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-
-                // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
                 .authorizeRequests()
+                .antMatchers("/api/**/**", "/auth").permitAll();
 
-                // Un-secure H2 Database
-                .antMatchers("/api/**/**")
-                    .permitAll()
-                .antMatchers("/auth")
-                    .permitAll()
-
-                .anyRequest().authenticated();
-
-        // Custom JWT based security filter
         JwtAuthorizationTokenFilter authenticationTokenFilter = new JwtAuthorizationTokenFilter(userDetailsService(), jwtTokenUtil, tokenHeader);
         httpSecurity
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // disable page caching
         httpSecurity
                 .headers()
-                .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
+                .frameOptions().sameOrigin()
                 .cacheControl();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        // AuthenticationTokenFilter will ignore the below paths
         web
                 .ignoring()
                 .antMatchers(
@@ -109,6 +94,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow anonymous resource requests
                 .and()
                 .ignoring()
+                .antMatchers("/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**")
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -132,10 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.OPTIONS,
                         "/**"
-                )
-
-                // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
-                .and()
+                ).and()
                 .ignoring()
                 .antMatchers("/h2-console/**/**");
     }

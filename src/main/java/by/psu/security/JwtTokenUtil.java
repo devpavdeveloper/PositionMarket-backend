@@ -1,6 +1,6 @@
 package by.psu.security;
 
-import by.psu.StartAttractionProject;
+import by.psu.StartDevpavMarketProject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +25,7 @@ public class JwtTokenUtil implements Serializable {
     static final String CLAIM_KEY_ROLES = "roles";
 
     private static final long serialVersionUID = -3301605591108950415L;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(StartAttractionProject.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(StartDevpavMarketProject.class);
 
     private Clock clock = DefaultClock.INSTANCE;
 
