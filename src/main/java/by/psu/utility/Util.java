@@ -8,9 +8,13 @@ import java.util.Locale;
 import static java.lang.Math.abs;
 
 public class Util {
-    final static long DAY_MILLIS = 86400000*2;
 
-    public enum dateFormatTypes{DATE_ONLY, TIME_ONLY}
+    private final static long DAY_MILLIS = 86400000*2;
+
+    public enum DateFormatTypes {
+        DATE_ONLY,
+        TIME_ONLY
+    }
 
     public static boolean isOneDayAway(Date order, Date currentOrder){
         return (abs(order.getTime() - currentOrder.getTime()) <= DAY_MILLIS);
@@ -27,7 +31,7 @@ public class Util {
         return cal.getTime();
     }
 
-    public static String convertDateToReadableLocalFormat(Date date, dateFormatTypes dft){
+    public static String convertDateToReadableLocalFormat(Date date, DateFormatTypes dft){
         Locale locale = new Locale("ru", "RU");
         DateFormat df = null;
         switch(dft){

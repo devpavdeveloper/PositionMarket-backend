@@ -1,21 +1,14 @@
 package by.psu.security.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.io.Serializable;
 
-/**
- * Created by stephan on 20.03.16.
- */
+@Getter
+@AllArgsConstructor
 public class JwtAuthenticationResponse implements Serializable {
 
-    private static final long serialVersionUID = 1_250_166_508_152_483_573L;
+    private String token;
 
-    private final String token;
-
-    public JwtAuthenticationResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return this.token;
-    }
 }

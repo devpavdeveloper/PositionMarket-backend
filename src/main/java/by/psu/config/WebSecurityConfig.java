@@ -39,7 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private String authenticationPath;
 
     @Autowired
-    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
+    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler,
+                             JwtTokenUtil jwtTokenUtil,
+                             JwtUserDetailsService jwtUserDetailsService) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsService = jwtUserDetailsService;
@@ -47,8 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(jwtUserDetailsService)
+        auth.userDetailsService(jwtUserDetailsService)
                 .passwordEncoder(passwordEncoderBean());
     }
 
@@ -63,6 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public JwtAuthorizationTokenFilter getJwtAuthorizationTokenFilter() {
+        return new JwtAuthorizationTokenFilter(userDetailsService(), jwtTokenUtil, tokenHeader);
+    }
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -72,9 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/**/**", "/auth").permitAll();
 
-        JwtAuthorizationTokenFilter authenticationTokenFilter = new JwtAuthorizationTokenFilter(userDetailsService(), jwtTokenUtil, tokenHeader);
-        httpSecurity
-                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        final JwtAuthorizationTokenFilter authenticationTokenFilter = getJwtAuthorizationTokenFilter();
+        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity
                 .headers()
@@ -83,18 +88,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web
                 .ignoring()
-                .antMatchers(
-                        HttpMethod.POST,
-                        authenticationPath
-                )
-
-                // allow anonymous resource requests
+                .antMatchers(HttpMethod.POST, authenticationPath)
                 .and()
                 .ignoring()
-                .antMatchers("/v2/api-docs",
+                .antMatchers(
+                        "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources",
                         "/configuration/security",
@@ -120,10 +121,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .and()
                 .ignoring()
-                .antMatchers(
-                        HttpMethod.OPTIONS,
-                        "/**"
-                ).and()
+                .antMatchers(HttpMethod.OPTIONS, "/**")
+                .and()
                 .ignoring()
                 .antMatchers("/h2-console/**/**");
     }

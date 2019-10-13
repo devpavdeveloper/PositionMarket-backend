@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
+
     User findByLogin(String username);
 
     List<User> findAllByOrderByLoginAsc();
+
 }

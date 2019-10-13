@@ -6,25 +6,26 @@ import by.psu.security.model.VerificationToken;
 import by.psu.service.BasicService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService extends BasicService<User, UUID>{
 
-    public User save(User user);
+    User save(User user);
 
-    public User findByLogin(String login);
+    User findByLogin(String login);
 
-    public User alreadyExists(User user);
+    User alreadyExists(User user);
 
-    public void createVerificationToken(User user, String token);
+    void createVerificationToken(User user, String token);
 
-    public VerificationToken getVerificationToken(String token, String email);
+    VerificationToken getVerificationToken(String token, String email);
 
-    public void deleteVerificationToken(VerificationToken token);
+    void deleteVerificationToken(VerificationToken token);
 
-    public User alreadyExistsByEmail(User user);
+    User alreadyExistsByEmail(User user);
 
-    User getUser(HttpServletRequest request);
+    Optional<User> getUser(HttpServletRequest request);
 
     void setAuthoritiesUser(Role[] roles, String username);
 
@@ -35,4 +36,5 @@ public interface UserService extends BasicService<User, UUID>{
     User updateUserData(HttpServletRequest request, User user);
 
     Boolean existsByEmail(String email);
+
 }

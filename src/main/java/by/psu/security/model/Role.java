@@ -1,6 +1,5 @@
 package by.psu.security.model;
 
-import by.psu.model.Basic;
 import by.psu.model.postgres.BasicEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -20,4 +19,5 @@ public class Role extends BasicEntity {
     @JsonIgnore
     @ManyToMany(mappedBy = "authorities", fetch = FetchType.LAZY)
     private List<User> users;
+
 }

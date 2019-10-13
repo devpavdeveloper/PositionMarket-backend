@@ -2,16 +2,15 @@ package by.psu.security.controller;
 
 import by.psu.exceptions.authorization.UserBlockedException;
 import by.psu.exceptions.authorization.UserIncorrectException;
-import by.psu.exceptions.authorization.UserNotFoundException;
-import by.psu.security.*;
-import by.psu.security.model.User;
+import by.psu.security.JwtAuthenticationRequest;
+import by.psu.security.JwtTokenUtil;
+import by.psu.security.JwtUser;
 import by.psu.security.service.JwtAuthenticationResponse;
 import by.psu.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 @CrossOrigin
@@ -34,36 +32,28 @@ public class AuthenticationRestController {
     private String tokenHeader;
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    ApplicationEventPublisher eventPublisher;
-
-
-    @Autowired
-    UserService userService;
-
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserService userService;
     private final UserDetailsService userDetailsService;
 
     @Autowired
     public AuthenticationRestController(AuthenticationManager authenticationManager,
                                         JwtTokenUtil jwtTokenUtil,
-                                        @Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService) {
+                                        @Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService,
+                                        ApplicationEventPublisher eventPublisher,
+                                        UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
+        this.eventPublisher = eventPublisher;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
-        by.psu.security.model.User user = new by.psu.security.model.User(authenticationRequest.getUsername());
-        User findUser = null;
-        try {
-            findUser = userService.alreadyExists(user);
-        } catch (Exception e) {
-            throw new UserNotFoundException();
-        }
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)
+            throws AuthenticationException {
+
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -74,10 +64,10 @@ public class AuthenticationRestController {
 
     @RequestMapping(value = "/auth/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
-        String authToken = request.getHeader(tokenHeader);
+        final String authToken = request.getHeader(tokenHeader);
         final String token = authToken.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        final String username = jwtTokenUtil.getUsernameFromToken(token);
+        final JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);

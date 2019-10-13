@@ -18,7 +18,6 @@ public abstract class AbstractFacade<T extends BasicEntity, DTO extends Abstract
     private Service<T> service;
     private AbstractMapper<T, DTO> mapper;
 
-
     protected AbstractFacade(Service<T> service, AbstractMapper<T, DTO> mapper) {
         this.service = service;
         this.mapper = mapper;
