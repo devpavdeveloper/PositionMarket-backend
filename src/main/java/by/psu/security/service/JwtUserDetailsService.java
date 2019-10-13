@@ -14,16 +14,16 @@ import org.springframework.stereotype.Service;
 @Repository
 public class JwtUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public JwtUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public JwtUserDetailsService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(username);
+        User user = userService.findByLogin(username);
 
         if (user == null) {
             throw new UserNotFoundException();

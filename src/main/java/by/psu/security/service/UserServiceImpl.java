@@ -20,13 +20,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
+
 @Repository
 @Service
 public class UserServiceImpl implements UserService {
 
     private final TokenRepository tokenRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final RoleRepository roleRepository;
 
@@ -38,9 +40,12 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoderBean, TokenRepository tokenRepository, JwtTokenUtil jwtTokenUtil) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserService userService,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoderBean,
+                           TokenRepository tokenRepository,
+                           JwtTokenUtil jwtTokenUtil) {
+        this.userService = userService;
         this.roleRepository = roleRepository;
         this.passwordEncoderBean = passwordEncoderBean;
         this.tokenRepository = tokenRepository;
@@ -49,28 +54,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAllByOrderByLoginAsc();
+        return userService.findAll();
     }
 
     @Override
     public User findById(UUID id) {
-        return null;
+        return userService.findById(id);
     }
 
     @Transactional
     @Override
     public User save(User user) {
+
+        if (isNull(user)) {
+            throw new BadRequestException("User mustn't be is null");
+        }
+
         user.setPassword(passwordEncoderBean.encode(user.getPassword()));
+
         List<Role> listRoles = roleRepository.findAll();
-        user.setAuthorities(new ArrayList<>(listRoles));
+
+        user.setAuthorities(listRoles);
         user.setLastPasswordResetDate(new Date());
-        return userRepository.save(user);
+
+        return userService.save(user);
     }
 
     @Override
     public User findByLogin(String login) {
-        User user = userRepository.findByLogin(login);
-        if (Objects.isNull(user))
+        User user = userService.findByLogin(login);
+        if (isNull(user))
             throw new EntityNotFoundException("User isn't found by login " + login);
 
         return user;
@@ -82,21 +95,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(UUID id) {}
+    public void remove(UUID id) {
+    }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User alreadyExists(User user) {
-        return Optional.ofNullable(userRepository.findByLogin(user.getLogin()))
-                .orElseThrow(() -> new EntityNotFoundException("User isn't found by login " + user.getLogin()));
+        if (isNull(user))
+            throw new BadRequestException("Username mustn't be null");
+
+        final User foundUser = userService.findByLogin(user.getLogin());
+
+        if (isNull(foundUser))
+            throw new EntityNotFoundException("User isn't found by login " + user.getLogin());
+
+        return foundUser;
     }
 
     @Transactional
     @Override
     public void createVerificationToken(User user, String token) {
-        VerificationToken myToken = new VerificationToken(user,
+        final VerificationToken myToken = new VerificationToken(user,
                 passwordEncoderBean.encode(token),
                 VerificationToken.VerificationTokenGenerationMode.STANDARD);
+
         tokenRepository.save(myToken);
     }
 
@@ -107,13 +129,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteVerificationToken(VerificationToken token) {
-        try {
-            tokenRepository
-                    .delete(tokenRepository.findById(token.getId())
-                            .orElseThrow(() -> new EntityNotFoundException("Token isn't found by id " + token.getId())));
-        } catch (RuntimeException ex) {
-            throw new BadRequestException("An error occurred while deleting the token", ex);
-        }
+        final VerificationToken foundVerificationToken = tokenRepository.findById(token.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Token isn't found by id " + token.getId()));
+
+        tokenRepository.delete(foundVerificationToken);
     }
 
     @Override
@@ -122,38 +141,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(HttpServletRequest request) {
-        String token = request.getHeader(tokenHeader).substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        return userRepository.findByLogin(username);
+    public Optional<User> getUser(HttpServletRequest request) {
+        final String requestHeader = request.getHeader(tokenHeader);
+
+        if (isNull(requestHeader)) {
+            return Optional.empty();
+        }
+
+        final String token = requestHeader.substring(7);
+        final String username = jwtTokenUtil.getUsernameFromToken(token);
+
+        return Optional.ofNullable(userService.findByLogin(username));
     }
 
     @Override
     @Transactional
     public void setAuthoritiesUser(Role[] roles, String username) {
-        User user = userRepository.findByLogin(username);
+        final User user = userService.findByLogin(username);
 
-        if (Objects.isNull(user))
+        if ( isNull(user) )
             throw new BadRequestException("User [" + username + "] not found");
 
-        final List<Role> roleList;
-        try {
-            roleList = Stream.of(roles)
-                    .map(role -> roleRepository.findByTitle(role.getTitle()))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new BadRequestException("Role not found", e);
-        }
+        final List<Role> roleList = Stream.of(roles)
+                .filter(Objects::nonNull)
+                .map(role -> roleRepository.findByTitle(role.getTitle()))
+                .collect(Collectors.toList());
 
-        if (roleList.isEmpty())
-            throw new BadRequestException("List roles is empty");
-
-        try {
-            user.setAuthorities(roleList);
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new BadRequestException("User [" + username + "] not be add new authorities");
-        }
+        user.setAuthorities(roleList);
+        userService.save(user);
     }
 
     @Override
@@ -162,14 +177,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setStatusUser(Boolean statusUser, String username) {
-        User user = userRepository.findByLogin(username);
+        User user = userService.findByLogin(username);
 
-        if (Objects.isNull(user))
+        if (isNull(user))
             throw new BadRequestException("User [" + username + "] not found");
 
         try {
             user.setEnabled(statusUser);
-            userRepository.save(user);
+            userService.save(user);
         } catch (Exception e) {
             throw new BadRequestException("User [" + username + "] not be add new authorities");
         }
@@ -178,30 +193,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUserData(HttpServletRequest request, User user) {
-        User us = getUser(request);
-        if (Objects.isNull(us)) {
+        Optional<User> optionalUser = getUser(request);
+
+        if (!optionalUser.isPresent()) {
             throw new BadRequestException("User not found");
         }
 
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
-
-        return user;
+        return userService.save(user);
     }
 
     @Override
     public Boolean existsByEmail(String email) {
-        return null;
+        return false;
     }
-/*
-    @Override
-    public Boolean existsByEmail(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new UserTransactionException("User with email");
-        }
-        return true;
-    }*/
 }

@@ -48,6 +48,7 @@ public class User extends BasicEntity {
         this.password = password;
         this.enabled = false;
     }
+
     public User(String login){
         this.login = login;
     }
@@ -61,4 +62,5 @@ public class User extends BasicEntity {
 
     @OneToOne(mappedBy = "user")
     private VerificationToken verificationTokens;
+
 }

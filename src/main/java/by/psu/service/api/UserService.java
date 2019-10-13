@@ -1,5 +1,6 @@
 package by.psu.service.api;
 
+import by.psu.exceptions.BadRequestException;
 import by.psu.exceptions.authorization.UserNotFoundException;
 import by.psu.merger.UserMerger;
 import by.psu.security.SecurityUtil;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class UserService {
@@ -29,21 +32,38 @@ public class UserService {
 
     @Transactional
     public User update(User user, String username) {
-        User merge = userMerger.merge(getUser(username), user);
+        if (isNull(user)) {
+            throw new BadRequestException("User mustn't be null");
+        }
+
+        final User foundUser = getUser(username);
+
+        if (isNull(foundUser)) {
+            throw new UserNotFoundException();
+        }
+
+        final User merge = userMerger.merge(foundUser, user);
+
         return userRepository.save(merge);
     }
 
     @Transactional
     public User update(User user) {
-        User merge = userMerger.merge(getUser(securityUtil.getUsername()), user);
-        return userRepository.save(merge);
+        final Optional<String> optionalUsername = securityUtil.getUsername();
+
+        if (!optionalUsername.isPresent()) {
+            throw new BadRequestException("Username from authorization mustn't be null");
+        }
+
+        return this.update(user, optionalUsername.get());
     }
 
     @Transactional(readOnly = true)
     public User getUser(String username) {
-        return userRepository.findByLogin(
-                Optional.of(username.toLowerCase()).orElseThrow(UserNotFoundException::new)
-        );
+        if (isNull(username))
+            throw new BadRequestException("Username mustn't be null");
+
+        return userRepository.findByLogin(username);
     }
 
     @Transactional(readOnly = true)
